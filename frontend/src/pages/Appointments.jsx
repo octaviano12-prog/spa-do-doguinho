@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React { useState } from "react";
 import toast from "react-hot-toast";
 import client from "../api/client";
 import CrudPage from "../components/CrudPage";
