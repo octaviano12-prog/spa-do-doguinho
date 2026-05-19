@@ -18,6 +18,8 @@ import Vaccines from "./pages/Vaccines";
 import Gallery from "./pages/Gallery";
 import Settings from "./pages/Settings";
 
+import PublicHome from "./public/PublicHome";
+
 export default function App() {
   return (
     <>
@@ -39,10 +41,11 @@ export default function App() {
       />
 
       <Routes>
+        <Route path="/" element={<PublicHome />} />
         <Route path="/login" element={<Login />} />
 
         <Route
-          path="/*"
+          path="/admin/*"
           element={
             <ProtectedRoute>
               <Layout>
@@ -58,7 +61,6 @@ export default function App() {
                   <Route path="vacinas" element={<Vaccines />} />
                   <Route path="galeria" element={<Gallery />} />
                   <Route path="configuracoes" element={<Settings />} />
-
                   <Route path="*" element={<Dashboard />} />
                 </Routes>
               </Layout>
