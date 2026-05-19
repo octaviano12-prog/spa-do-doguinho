@@ -1,7 +1,7 @@
 const router = require("express").Router();
-const auth = require("../middlewares/auth");
 const c = require("../controllers/availabilityController");
 
-router.get("/slots", auth, c.slots);
+// Público: usado pelo site para mostrar horários disponíveis
+router.get("/slots", c.slots);
 
 module.exports = router;
