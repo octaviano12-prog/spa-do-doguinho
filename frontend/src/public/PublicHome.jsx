@@ -1,227 +1,207 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  CalendarDays,
+  Award,
+  CalendarCheck,
+  CheckCircle2,
+  Clock,
   Dog,
-  HeartHandshake,
+  Gift,
+  Heart,
+  Leaf,
+  MapPin,
+  MessageCircle,
   PawPrint,
+  Phone,
+  Quote,
   Scissors,
   ShieldCheck,
   Sparkles,
   Star,
 } from "lucide-react";
 
+const whatsappHref = "https://wa.me/5518999999999";
+
 export default function PublicHome() {
+  const services = [
+    { title: "Banho & Tosa", icon: Scissors, desc: "Higiene completa, pelagem bem cuidada e finalização cheia de charme." },
+    { title: "Spa Relaxante", icon: Heart, desc: "Momento tranquilo para o pet relaxar e se sentir acolhido." },
+    { title: "Agendamento Online", icon: CalendarCheck, desc: "Escolha serviço, data e horário pelo site de forma rápida." },
+  ];
+
   return (
     <div className="publicSite">
+      <a href={whatsappHref} target="_blank" rel="noreferrer" className="whatsappFloat">
+        <MessageCircle size={30} />
+      </a>
+
       <header className="publicHeader">
         <div className="publicLogo">
-          <div className="brandIcon">
-            <Dog />
-          </div>
-
+          <div className="brandIcon"><Dog /></div>
           <div>
             <strong>SPA do Doguinho</strong>
-            <span>Carinho, cuidado e beleza pet</span>
+            <span>Cuidado com amor para seu melhor amigo</span>
           </div>
         </div>
 
         <nav className="publicNav">
           <a href="#servicos">Serviços</a>
           <a href="#sobre">Sobre</a>
-          <a href="#galeria">Galeria</a>
+          <a href="#depoimentos">Depoimentos</a>
           <a href="#contato">Contato</a>
-          <a href="/login" className="btn gold">
-            Painel
-          </a>
+          <Link to="/agendar" className="btn gold">Agendar</Link>
         </nav>
       </header>
 
-      <section className="heroSection">
+      <section className="publicHero">
         <div className="heroGlow glowLeft" />
         <div className="heroGlow glowRight" />
 
-        <motion.div
-          className="heroContent"
-          initial={{ opacity: 0, y: 28 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55 }}
-        >
+        <motion.div className="heroContent" initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }}>
           <div className="heroBadge">
-            <Sparkles size={16} />
-            SPA Premium para Pets
+            <Star size={16} />
+            Referência em estética pet
           </div>
 
           <h1>
-            O cuidado que seu pet merece 💚
+            Cuidado, carinho e beleza para o seu <span>melhor amigo</span>
           </h1>
 
           <p>
-            Banho, tosa, hidratação,
-            vacinas e atendimento premium
-            com carinho e segurança.
+            Banho, tosa, vacinas e relaxamento com atendimento premium,
+            carinho de verdade e agendamento online.
           </p>
 
           <div className="heroButtons">
-            <button className="btn gold">
-              <CalendarDays size={18} />
-              Agendar agora
-            </button>
+            <Link to="/agendar" className="btn gold">
+              <CalendarCheck size={18} />
+              Agendar horário
+            </Link>
 
-            <button className="btn ghost">
-              <PawPrint size={18} />
-              Conhecer serviços
-            </button>
+            <a href={whatsappHref} target="_blank" rel="noreferrer" className="btn ghost">
+              <Phone size={18} />
+              WhatsApp
+            </a>
+          </div>
+
+          <div className="heroMiniCards">
+            <div><ShieldCheck size={24} /><strong>Ambiente seguro</strong><span>Atendimento cuidadoso</span></div>
+            <div><Heart size={24} /><strong>Profissionais</strong><span>Carinho em cada detalhe</span></div>
+            <div><Leaf size={24} /><strong>Produtos premium</strong><span>Conforto e qualidade</span></div>
           </div>
         </motion.div>
 
-        <motion.div
-          className="heroCard"
-          initial={{ opacity: 0, scale: 0.94 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6 }}
-        >
-          <div className="heroImage">
-            <Dog size={80} />
-          </div>
-
-          <div className="heroInfo">
-            <strong>Atendimento premium</strong>
-
-            <span>
-              Ambiente confortável,
-              seguro e preparado
-              para o bem-estar do seu pet.
-            </span>
+        <motion.div className="heroPetCard" initial={{ opacity: 0, scale: 0.94 }} animate={{ opacity: 1, scale: 1 }}>
+          <div className="petCircle"><Dog size={100} /></div>
+          <div className="ratingCard">
+            <div>
+              {[1,2,3,4,5].map((i) => <Star key={i} size={18} fill="currentColor" />)}
+            </div>
+            <strong>5.0 de avaliação</strong>
+            <span>Clientes e pets felizes</span>
           </div>
         </motion.div>
+      </section>
+
+      <section className="publicStats">
+        {[
+          { icon: PawPrint, value: "+3.500", label: "Pets atendidos" },
+          { icon: Award, value: "5 anos", label: "De experiência" },
+          { icon: Clock, value: "Online", label: "Agendamento fácil" },
+          { icon: Gift, value: "Premium", label: "Benefícios exclusivos" },
+        ].map(({ icon: Icon, value, label }) => (
+          <div className="statBox" key={value}>
+            <Icon size={26} />
+            <strong>{value}</strong>
+            <span>{label}</span>
+          </div>
+        ))}
       </section>
 
       <section className="servicesSection" id="servicos">
         <div className="sectionTitle">
-          <span>Nossos serviços</span>
-          <h2>Serviços premium para seu pet</h2>
+          <span><Sparkles size={16} /> Serviços especiais</span>
+          <h2>Tudo que seu pet precisa em um só lugar</h2>
         </div>
 
         <div className="servicesGrid">
-          <div className="card publicCard">
-            <Scissors size={28} />
-            <strong>Banho & Tosa</strong>
-            <p>
-              Higiene completa com
-              produtos premium.
-            </p>
-          </div>
-
-          <div className="card publicCard">
-            <ShieldCheck size={28} />
-            <strong>Vacinação</strong>
-            <p>
-              Controle completo
-              de vacinas e reforços.
-            </p>
-          </div>
-
-          <div className="card publicCard">
-            <HeartHandshake size={28} />
-            <strong>Atendimento VIP</strong>
-            <p>
-              Carinho, segurança e
-              conforto para seu pet.
-            </p>
-          </div>
+          {services.map(({ title, icon: Icon, desc }) => (
+            <div className="card publicCard" key={title}>
+              <Icon size={32} />
+              <strong>{title}</strong>
+              <p>{desc}</p>
+              <Link to="/agendar">Agendar agora</Link>
+            </div>
+          ))}
         </div>
       </section>
 
       <section className="aboutSection" id="sobre">
-        <div className="sectionTitle">
-          <span>Sobre nós</span>
-          <h2>Amor e cuidado animal</h2>
-        </div>
-
         <div className="aboutBox card">
-          <p>
-            O SPA do Doguinho nasceu
-            para oferecer atendimento
-            premium com carinho,
-            responsabilidade e qualidade.
-          </p>
+          <div>
+            <span className="pageKicker">Por que escolher a gente?</span>
+            <h2>Um atendimento pensado para o pet e para o tutor</h2>
+            <p>
+              O SPA do Doguinho une visual profissional, agendamento fácil,
+              carinho, segurança e uma experiência premium para encantar clientes.
+            </p>
+          </div>
 
-          <div className="aboutStats">
-            <div>
-              <strong>+1000</strong>
-              <span>Pets atendidos</span>
-            </div>
-
-            <div>
-              <strong>5★</strong>
-              <span>Avaliação clientes</span>
-            </div>
-
-            <div>
-              <strong>Premium</strong>
-              <span>Experiência pet</span>
-            </div>
+          <div className="aboutChecklist">
+            {[
+              "Ambiente seguro e acolhedor.",
+              "Produtos especiais para pele e pelagem.",
+              "Agendamento online simples e rápido.",
+            ].map((text) => (
+              <div key={text}>
+                <CheckCircle2 size={20} />
+                <span>{text}</span>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      <section className="testimonialsSection">
+      <section className="testimonialsSection" id="depoimentos">
         <div className="sectionTitle">
           <span>Depoimentos</span>
           <h2>Quem conhece recomenda</h2>
         </div>
 
         <div className="testimonialGrid">
-          <div className="card testimonialCard">
-            <Star size={22} />
-
-            <p>
-              “Atendimento maravilhoso,
-              meu cachorro ama!”
-            </p>
-
-            <strong>Mariana</strong>
-          </div>
-
-          <div className="card testimonialCard">
-            <Star size={22} />
-
-            <p>
-              “Ambiente lindo e equipe
-              extremamente cuidadosa.”
-            </p>
-
-            <strong>Carlos</strong>
-          </div>
+          {[
+            "Meu pet voltou cheiroso, calmo e muito bem cuidado.",
+            "Gostei muito do agendamento online. Rápido e fácil.",
+            "Equipe atenciosa e espaço organizado. Recomendo!",
+          ].map((text, index) => (
+            <div className="card testimonialCard" key={text}>
+              <Quote size={26} />
+              <p>“{text}”</p>
+              <strong>Cliente {index + 1}</strong>
+            </div>
+          ))}
         </div>
       </section>
 
       <section className="contactSection" id="contato">
-        <div className="sectionTitle">
-          <span>Contato</span>
-          <h2>Agende agora mesmo</h2>
-        </div>
-
         <div className="contactBox card">
-          <p>
-            Entre em contato pelo WhatsApp
-            e agende um horário para seu pet.
-          </p>
+          <div>
+            <span className="pageKicker"><MapPin size={15} /> Agendamento fácil</span>
+            <h2>Pronto para mimar seu doguinho?</h2>
+            <p>Escolha o melhor horário pelo site ou fale direto no WhatsApp.</p>
+          </div>
 
-          <button className="btn gold">
-            <CalendarDays size={18} />
-            Chamar no WhatsApp
-          </button>
+          <div className="heroButtons">
+            <Link to="/agendar" className="btn gold">Começar agendamento</Link>
+            <a href={whatsappHref} target="_blank" rel="noreferrer" className="btn ghost">WhatsApp</a>
+          </div>
         </div>
       </section>
 
       <footer className="publicFooter">
         <strong>SPA do Doguinho</strong>
-
-        <span>
-          © 2026 — Sistema premium pet
-        </span>
+        <span>© 2026 — Cuidado, carinho e beleza pet</span>
       </footer>
     </div>
   );
