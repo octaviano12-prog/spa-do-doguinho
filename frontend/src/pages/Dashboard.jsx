@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { motion } from "framer-motion";
 import {
   AlertCircle,
   AlertTriangle,
@@ -45,6 +46,65 @@ const emptyData = {
   nextAppointment: null,
 };
 
+const fadeUp = {
+  hidden: { opacity: 0, y: 22, scale: 0.98 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
+  },
+};
+
+const stagger = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.05,
+    },
+  },
+};
+
+const chartMotion = {
+  hidden: { opacity: 0, y: 26, filter: "blur(8px)" },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+  },
+};
+
+function CustomTooltip({ active, payload, label }) {
+  if (!active || !payload?.length) return null;
+
+  return (
+    <div className="chartTooltip premiumPanel">
+      {label && <strong>{label}</strong>}
+      {payload.map((item) => (
+        <div key={item.dataKey || item.name} className="tooltipRow">
+          <span>{item.name || item.dataKey}</span>
+          <b>
+            {item.dataKey === "entradas" || item.dataKey === "saidas"
+              ? money(item.value)
+              : item.value}
+          </b>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function EmptyChart({ text = "Sem dados suficientes" }) {
+  return (
+    <div className="emptyChart premiumEmpty">
+      <AlertCircle size={22} />
+      <span>{text}</span>
+    </div>
+  );
+}
+
 export default function Dashboard() {
   const [data, setData] = useState(emptyData);
   const [loading, setLoading] = useState(true);
@@ -78,35 +138,75 @@ export default function Dashboard() {
     };
   }, []);
 
+  const cards = data.cards || {};
+
   const statusData = useMemo(() => {
-    return (data.byStatus || []).filter((item) => Number(item.value || 0) > 0);
+    return (data.byStatus || [])
+      .filter((item) => Number(item.value || 0) > 0)
+      .map((item) => ({
+        ...item,
+        name: item.name || item.status || "Sem status",
+        value: Number(item.value || 0),
+      }));
   }, [data.byStatus]);
 
   const popularServices = useMemo(() => {
-    return (data.popularServices || []).filter((item) => Number(item.count || 0) > 0);
+    return (data.popularServices || [])
+      .filter((item) => Number(item.count || 0) > 0)
+      .map((item) => ({
+        ...item,
+        name: item.name || "Serviço",
+        count: Number(item.count || 0),
+      }));
   }, [data.popularServices]);
 
-  const cards = data.cards || {};
-  const pieColors = ["#d8b45a", "#38bdf8", "#22c55e", "#ef4444"];
+  const cashFlow = useMemo(() => {
+    return (data.cashFlow || []).map((item) => ({
+      ...item,
+      entradas: Number(item.entradas || 0),
+      saidas: Number(item.saidas || 0),
+    }));
+  }, [data.cashFlow]);
+
+  const pieColors = ["#d8b45a", "#1db56a", "#38bdf8", "#ef4444", "#a78bfa"];
 
   return (
-    <>
-      <PageHeader
-        title="Visão Geral"
-        subtitle="Acompanhe os principais indicadores do SPA do Doguinho"
-      />
+    <motion.div
+      className="dashboardPremiumPage"
+      initial="hidden"
+      animate="visible"
+      variants={stagger}
+    >
+      <motion.div variants={fadeUp}>
+        <PageHeader
+          title="Visão Geral"
+          subtitle="Acompanhe os principais indicadores do SPA do Doguinho"
+        />
+      </motion.div>
 
-      <div className="grid cards">
-        <StatCard title="Clientes" value={cards.customers || 0} icon={Users} />
-        <StatCard title="Pets" value={cards.pets || 0} icon={PawPrint} />
-        <StatCard title="Agendamentos" value={cards.appointments || 0} icon={CalendarDays} />
-        <StatCard title="Hoje" value={cards.todayAppointments || 0} icon={Clock} />
-        <StatCard title="Faturamento" value={money(cards.revenue)} icon={Wallet} />
-        <StatCard title="Estoque baixo" value={cards.lowStock || 0} icon={AlertTriangle} />
-      </div>
+      <motion.div className="grid cards" variants={stagger}>
+        <motion.div variants={fadeUp} whileHover={{ y: -6 }}>
+          <StatCard title="Clientes" value={cards.customers || 0} icon={Users} />
+        </motion.div>
+        <motion.div variants={fadeUp} whileHover={{ y: -6 }}>
+          <StatCard title="Pets" value={cards.pets || 0} icon={PawPrint} />
+        </motion.div>
+        <motion.div variants={fadeUp} whileHover={{ y: -6 }}>
+          <StatCard title="Agendamentos" value={cards.appointments || 0} icon={CalendarDays} />
+        </motion.div>
+        <motion.div variants={fadeUp} whileHover={{ y: -6 }}>
+          <StatCard title="Hoje" value={cards.todayAppointments || 0} icon={Clock} />
+        </motion.div>
+        <motion.div variants={fadeUp} whileHover={{ y: -6 }}>
+          <StatCard title="Faturamento" value={money(cards.revenue)} icon={Wallet} />
+        </motion.div>
+        <motion.div variants={fadeUp} whileHover={{ y: -6 }}>
+          <StatCard title="Estoque baixo" value={cards.lowStock || 0} icon={AlertTriangle} />
+        </motion.div>
+      </motion.div>
 
-      <div className="grid charts">
-        <div className="card chart premiumPanel">
+      <motion.div className="grid charts" variants={stagger}>
+        <motion.div className="card chart premiumPanel animatedPanel" variants={chartMotion}>
           <div className="panelTitle">
             <div>
               <h2>Fluxo de caixa</h2>
@@ -115,19 +215,57 @@ export default function Dashboard() {
             <Wallet size={22} />
           </div>
 
-          <ResponsiveContainer width="100%" height={300}>
-            <AreaChart data={data.cashFlow || []}>
-              <CartesianGrid strokeDasharray="3 3" opacity={0.18} />
-              <XAxis dataKey="day" />
-              <YAxis />
-              <Tooltip />
-              <Area type="monotone" dataKey="entradas" stroke="#d8b45a" fill="#d8b45a" fillOpacity={0.18} />
-              <Area type="monotone" dataKey="saidas" stroke="#ff6b6b" fill="#ff6b6b" fillOpacity={0.1} />
-            </AreaChart>
-          </ResponsiveContainer>
-        </div>
+          <ResponsiveContainer width="100%" height={310}>
+            {cashFlow.length > 0 ? (
+              <AreaChart data={cashFlow} margin={{ top: 18, right: 14, left: 0, bottom: 4 }}>
+                <defs>
+                  <linearGradient id="goldGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#d8b45a" stopOpacity={0.45} />
+                    <stop offset="95%" stopColor="#d8b45a" stopOpacity={0.02} />
+                  </linearGradient>
+                  <linearGradient id="redGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#ff6b6b" stopOpacity={0.32} />
+                    <stop offset="95%" stopColor="#ff6b6b" stopOpacity={0.02} />
+                  </linearGradient>
+                </defs>
 
-        <div className="card chart premiumPanel">
+                <CartesianGrid strokeDasharray="3 3" opacity={0.14} vertical={false} />
+                <XAxis dataKey="day" tickLine={false} axisLine={false} />
+                <YAxis tickLine={false} axisLine={false} tickFormatter={(v) => `R$ ${v}`} />
+                <Tooltip content={<CustomTooltip />} />
+
+                <Area
+                  type="monotone"
+                  dataKey="entradas"
+                  name="Entradas"
+                  stroke="#d8b45a"
+                  fill="url(#goldGradient)"
+                  strokeWidth={3}
+                  fillOpacity={1}
+                  activeDot={{ r: 7 }}
+                  animationDuration={1500}
+                  animationEasing="ease-out"
+                />
+                <Area
+                  type="monotone"
+                  dataKey="saidas"
+                  name="Saídas"
+                  stroke="#ff6b6b"
+                  fill="url(#redGradient)"
+                  strokeWidth={3}
+                  fillOpacity={1}
+                  activeDot={{ r: 7 }}
+                  animationDuration={1700}
+                  animationEasing="ease-out"
+                />
+              </AreaChart>
+            ) : (
+              <EmptyChart />
+            )}
+          </ResponsiveContainer>
+        </motion.div>
+
+        <motion.div className="card chart premiumPanel animatedPanel" variants={chartMotion}>
           <div className="panelTitle">
             <div>
               <h2>Agendamentos por status</h2>
@@ -136,34 +274,47 @@ export default function Dashboard() {
             <CheckCircle2 size={22} />
           </div>
 
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={310}>
             {statusData.length > 0 ? (
               <PieChart>
+                <defs>
+                  <filter id="pieGlow" x="-30%" y="-30%" width="160%" height="160%">
+                    <feGaussianBlur stdDeviation="4" result="coloredBlur" />
+                    <feMerge>
+                      <feMergeNode in="coloredBlur" />
+                      <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                  </filter>
+                </defs>
+
                 <Pie
                   data={statusData}
                   cx="50%"
                   cy="50%"
-                  innerRadius={65}
-                  outerRadius={105}
+                  innerRadius={68}
+                  outerRadius={108}
                   paddingAngle={5}
                   dataKey="value"
                   label={({ name }) => name}
+                  animationDuration={1400}
+                  animationEasing="ease-out"
+                  filter="url(#pieGlow)"
                 >
                   {statusData.map((entry, index) => (
                     <Cell key={entry.name} fill={pieColors[index % pieColors.length]} />
                   ))}
                 </Pie>
-                <Tooltip />
+                <Tooltip content={<CustomTooltip />} />
               </PieChart>
             ) : (
-              <div className="emptyChart">Sem dados suficientes</div>
+              <EmptyChart />
             )}
           </ResponsiveContainer>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
-      <div className="grid charts">
-        <div className="card chart premiumPanel">
+      <motion.div className="grid charts" variants={stagger}>
+        <motion.div className="card chart premiumPanel animatedPanel" variants={chartMotion}>
           <div className="panelTitle">
             <div>
               <h2>Serviços mais populares</h2>
@@ -172,22 +323,36 @@ export default function Dashboard() {
             <Scissors size={22} />
           </div>
 
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={310}>
             {popularServices.length > 0 ? (
-              <BarChart data={popularServices} layout="vertical">
-                <CartesianGrid strokeDasharray="3 3" opacity={0.18} />
-                <XAxis type="number" />
-                <YAxis dataKey="name" type="category" width={130} />
-                <Tooltip />
-                <Bar dataKey="count" fill="#1db56a" radius={[0, 10, 10, 0]} />
+              <BarChart data={popularServices} layout="vertical" margin={{ top: 12, right: 18, left: 18, bottom: 4 }}>
+                <defs>
+                  <linearGradient id="greenBarGradient" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stopColor="#1db56a" stopOpacity={0.55} />
+                    <stop offset="100%" stopColor="#d8b45a" stopOpacity={0.95} />
+                  </linearGradient>
+                </defs>
+
+                <CartesianGrid strokeDasharray="3 3" opacity={0.14} horizontal={false} />
+                <XAxis type="number" tickLine={false} axisLine={false} />
+                <YAxis dataKey="name" type="category" width={130} tickLine={false} axisLine={false} />
+                <Tooltip content={<CustomTooltip />} />
+                <Bar
+                  dataKey="count"
+                  name="Quantidade"
+                  fill="url(#greenBarGradient)"
+                  radius={[0, 12, 12, 0]}
+                  animationDuration={1500}
+                  animationEasing="ease-out"
+                />
               </BarChart>
             ) : (
-              <div className="emptyChart">Sem dados suficientes</div>
+              <EmptyChart />
             )}
           </ResponsiveContainer>
-        </div>
+        </motion.div>
 
-        <div className="card premiumPanel quickPanel">
+        <motion.div className="card premiumPanel quickPanel animatedPanel" variants={chartMotion}>
           <div className="panelTitle">
             <div>
               <h2>Resumo de hoje</h2>
@@ -196,7 +361,7 @@ export default function Dashboard() {
             <CalendarDays size={22} />
           </div>
 
-          <div className="summaryList">
+          <div className="summaryList premiumSummaryList">
             <div>
               <span>Agendamentos hoje</span>
               <strong>{cards.todayAppointments || 0}</strong>
@@ -214,11 +379,11 @@ export default function Dashboard() {
               <strong>{cards.vaccines || 0}</strong>
             </div>
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
-      <div className="grid dashboardBottom">
-        <div className="card premiumPanel">
+      <motion.div className="grid dashboardBottom" variants={stagger}>
+        <motion.div className="card premiumPanel animatedPanel" variants={fadeUp} whileHover={{ y: -5 }}>
           <div className="panelTitle">
             <div>
               <h2>Próximo atendimento</h2>
@@ -228,7 +393,7 @@ export default function Dashboard() {
           </div>
 
           {data.nextAppointment ? (
-            <div className="nextBox">
+            <div className="nextBox premiumNextBox">
               <h3>{data.nextAppointment.petName || "Pet não informado"}</h3>
               <p>Cliente: {data.nextAppointment.clientName || "Não informado"}</p>
               <p>Serviço: {data.nextAppointment.serviceName || "Não informado"}</p>
@@ -237,9 +402,9 @@ export default function Dashboard() {
           ) : (
             <p className="mutedText">Nenhum próximo atendimento encontrado.</p>
           )}
-        </div>
+        </motion.div>
 
-        <div className="card premiumPanel">
+        <motion.div className="card premiumPanel animatedPanel" variants={fadeUp} whileHover={{ y: -5 }}>
           <div className="panelTitle">
             <div>
               <h2>Ações rápidas</h2>
@@ -248,15 +413,15 @@ export default function Dashboard() {
             <Plus size={22} />
           </div>
 
-          <div className="quickActions">
-            <button><CalendarDays size={18} /> Novo agendamento</button>
-            <button><Users size={18} /> Novo cliente</button>
-            <button><PawPrint size={18} /> Novo pet</button>
-            <button><Syringe size={18} /> Nova vacina</button>
+          <div className="quickActions premiumQuickActions">
+            <button type="button"><CalendarDays size={18} /> Novo agendamento</button>
+            <button type="button"><Users size={18} /> Novo cliente</button>
+            <button type="button"><PawPrint size={18} /> Novo pet</button>
+            <button type="button"><Syringe size={18} /> Nova vacina</button>
           </div>
-        </div>
+        </motion.div>
 
-        <div className="card premiumPanel">
+        <motion.div className="card premiumPanel animatedPanel" variants={fadeUp} whileHover={{ y: -5 }}>
           <div className="panelTitle">
             <div>
               <h2>Status do sistema</h2>
@@ -265,7 +430,7 @@ export default function Dashboard() {
             <AlertCircle size={22} />
           </div>
 
-          <div className="summaryList">
+          <div className="summaryList premiumSummaryList">
             <div>
               <span>API</span>
               <strong>Online</strong>
@@ -279,10 +444,10 @@ export default function Dashboard() {
               <strong>Administrador</strong>
             </div>
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
-      <div className="card premiumPanel">
+      <motion.div className="card premiumPanel animatedPanel" variants={fadeUp}>
         <div className="panelTitle">
           <div>
             <h2>Últimos agendamentos</h2>
@@ -290,7 +455,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="tableWrap">
+        <div className="tableWrap premiumTableWrap">
           <table>
             <thead>
               <tr>
@@ -304,9 +469,13 @@ export default function Dashboard() {
 
             <tbody>
               {loading ? (
-                <tr>
-                  <td colSpan="5">Carregando dados...</td>
-                </tr>
+                Array.from({ length: 4 }).map((_, index) => (
+                  <tr key={`loading-${index}`}>
+                    <td colSpan="5">
+                      <span className="skeletonLine" />
+                    </td>
+                  </tr>
+                ))
               ) : (data.recentAppointments || []).length === 0 ? (
                 <tr>
                   <td colSpan="5">Nenhum agendamento recente.</td>
@@ -329,7 +498,7 @@ export default function Dashboard() {
             </tbody>
           </table>
         </div>
-      </div>
-    </>
+      </motion.div>
+    </motion.div>
   );
 }
