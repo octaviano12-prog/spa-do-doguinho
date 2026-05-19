@@ -1,8 +1,10 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
+
 import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./components/Layout";
+
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Customers from "./pages/Customers";
@@ -19,26 +21,45 @@ import Settings from "./pages/Settings";
 export default function App() {
   return (
     <>
-      <Toaster position="top-right" />
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          style: {
+            background: "#0d211a",
+            color: "#f4fff8",
+            border: "1px solid rgba(255,255,255,.08)",
+          },
+          success: {
+            iconTheme: {
+              primary: "#d8b45a",
+              secondary: "#06130f",
+            },
+          },
+        }}
+      />
+
       <Routes>
         <Route path="/login" element={<Login />} />
+
         <Route
           path="/*"
           element={
             <ProtectedRoute>
               <Layout>
                 <Routes>
-                  <Route path="/" element={<Dashboard />} />
-                  <Route path="/clientes" element={<Customers />} />
-                  <Route path="/pets" element={<Pets />} />
-                  <Route path="/servicos" element={<Services />} />
-                  <Route path="/agendamentos" element={<Appointments />} />
-                  <Route path="/financeiro" element={<Finance />} />
-                  <Route path="/caixa" element={<Cash />} />
-                  <Route path="/estoque" element={<Stock />} />
-                  <Route path="/vacinas" element={<Vaccines />} />
-                  <Route path="/galeria" element={<Gallery />} />
-                  <Route path="/configuracoes" element={<Settings />} />
+                  <Route index element={<Dashboard />} />
+                  <Route path="clientes" element={<Customers />} />
+                  <Route path="pets" element={<Pets />} />
+                  <Route path="servicos" element={<Services />} />
+                  <Route path="agendamentos" element={<Appointments />} />
+                  <Route path="financeiro" element={<Finance />} />
+                  <Route path="caixa" element={<Cash />} />
+                  <Route path="estoque" element={<Stock />} />
+                  <Route path="vacinas" element={<Vaccines />} />
+                  <Route path="galeria" element={<Gallery />} />
+                  <Route path="configuracoes" element={<Settings />} />
+
+                  <Route path="*" element={<Dashboard />} />
                 </Routes>
               </Layout>
             </ProtectedRoute>
