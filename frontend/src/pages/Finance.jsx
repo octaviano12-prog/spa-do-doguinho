@@ -1,3 +1,4 @@
+import React from "react";
 import CrudPage from "../components/CrudPage";
 const money = (v) => Number(v || 0).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 export default function Finance() {
