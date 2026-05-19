@@ -1,3 +1,4 @@
+import React from "react";
 import { useEffect, useState } from "react";
 import { AlertTriangle, CalendarDays, PawPrint, Users, Wallet } from "lucide-react";
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
