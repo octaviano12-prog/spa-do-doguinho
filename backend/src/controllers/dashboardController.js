@@ -13,7 +13,8 @@ async function safeQuery(sql, params = []) {
   try {
     const [rows] = await db.query(sql, params);
     return rows;
-  } catch {
+  } catch (error) {
+    console.error("Dashboard query error:", error.message);
     return [];
   }
 }
@@ -38,7 +39,12 @@ exports.summary = async (_, res) => {
     );
 
     const revenueRows = await safeQuery(
-      "SELECT COALESCE(SUM(amount),0) total FROM payments WHERE status IN ('paid','pago')"
+      `
+      SELECT COALESCE(SUM(amount),0) total 
+      FROM payments 
+      WHERE status IN ('paid','pago') 
+      AND type IN ('entrada','receita')
+      `
     );
 
     const lowStockRows = await safeQuery(
@@ -56,8 +62,8 @@ exports.summary = async (_, res) => {
     const cashFlow = await safeQuery(`
       SELECT 
         DATE(created_at) day,
-        SUM(CASE WHEN method IN ('entrada','pix','dinheiro','cartao','paid','pago') THEN amount ELSE 0 END) entradas,
-        SUM(CASE WHEN method IN ('saida','despesa') THEN amount ELSE 0 END) saidas
+        COALESCE(SUM(CASE WHEN type IN ('entrada','receita') THEN amount ELSE 0 END),0) entradas,
+        COALESCE(SUM(CASE WHEN type IN ('saida','despesa') THEN amount ELSE 0 END),0) saidas
       FROM payments
       GROUP BY DATE(created_at)
       ORDER BY day DESC
@@ -128,6 +134,8 @@ exports.summary = async (_, res) => {
     });
   } catch (error) {
     console.error("Erro dashboard summary:", error);
-    return res.status(500).json({ message: "Erro ao carregar dashboard" });
+    return res.status(500).json({
+      message: "Erro ao carregar dashboard",
+    });
   }
 };
