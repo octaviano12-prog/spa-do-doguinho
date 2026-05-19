@@ -30,8 +30,9 @@ app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/dashboard", require("./routes/dashboardRoutes"));
 app.use("/api/availability", require("./routes/availabilityRoutes"));
 app.use("/api/mercadopago", require("./routes/mercadoPagoRoutes"));
+app.use("/api/public-booking", require("./routes/publicBooking"));
 app.use("/api", require("./routes/resourceRoutes"));
-app.use("/api/upload", require("./routes/uploadRoutes"));
+app.use("/api/upload", require("./routes/uploadRoutes"))
 
 const frontendPath = path.join(process.cwd(), "../public_html/.builds/source/repository/frontend/dist");
 
