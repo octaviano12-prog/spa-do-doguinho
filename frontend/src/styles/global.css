@@ -1346,3 +1346,206 @@ body,
     font-size:clamp(2.3rem,12vw,3.5rem);
   }
 }
+/* ===== PUBLIC HOME POLISH ===== */
+
+.whatsappFloat{
+  position:fixed;
+  left:18px;
+  top:110px;
+  z-index:80;
+  width:54px;
+  height:54px;
+  border-radius:999px;
+  display:grid;
+  place-items:center;
+  background:#25d366;
+  color:white;
+  box-shadow:0 18px 45px rgba(37,211,102,.35);
+}
+
+.publicHero{
+  padding-top:110px;
+  padding-bottom:80px;
+}
+
+.heroPetCard{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:22px;
+  min-height:420px;
+  border-radius:34px;
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(255,255,255,.08);
+  backdrop-filter:blur(18px);
+  box-shadow:var(--shadow);
+}
+
+.petCircle{
+  width:190px;
+  height:190px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:radial-gradient(circle,rgba(216,180,90,.22),rgba(255,255,255,.03));
+  color:var(--gold2);
+}
+
+.ratingCard{
+  text-align:center;
+}
+
+.ratingCard div{
+  display:flex;
+  justify-content:center;
+  gap:4px;
+  color:var(--gold2);
+  margin-bottom:8px;
+}
+
+.ratingCard strong,
+.ratingCard span{
+  display:block;
+}
+
+.ratingCard span{
+  color:var(--muted);
+  margin-top:4px;
+}
+
+.publicStats{
+  max-width:1400px;
+  margin:0 auto;
+  padding:26px 6vw 70px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px;
+}
+
+.statBox{
+  padding:24px;
+  border-radius:24px;
+  background:rgba(255,255,255,.045);
+  border:1px solid rgba(255,255,255,.08);
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.statBox svg{
+  color:var(--gold2);
+}
+
+.statBox strong{
+  display:block;
+  font-size:1.45rem;
+  color:var(--text);
+}
+
+.statBox span{
+  color:var(--muted);
+}
+
+.servicesSection,
+.aboutSection,
+.testimonialsSection,
+.contactSection{
+  max-width:1500px;
+  margin:0 auto;
+}
+
+.publicCard a{
+  display:inline-flex;
+  margin-top:18px;
+  color:var(--gold2);
+  font-weight:800;
+}
+
+.aboutBox{
+  display:grid;
+  grid-template-columns:1.2fr .8fr;
+  gap:32px;
+}
+
+.aboutBox h2{
+  font-size:clamp(2rem,4vw,3rem);
+  margin:12px 0;
+}
+
+.aboutChecklist{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  justify-content:center;
+}
+
+.aboutChecklist div{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:16px;
+  border-radius:18px;
+  background:rgba(255,255,255,.04);
+}
+
+.aboutChecklist svg{
+  color:var(--gold2);
+  flex:none;
+}
+
+.testimonialGrid{
+  grid-template-columns:repeat(3,1fr);
+}
+
+.testimonialCard{
+  min-height:210px;
+}
+
+.contactBox{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:28px;
+  text-align:left;
+}
+
+.contactBox h2{
+  margin:12px 0;
+  font-size:clamp(2rem,4vw,3rem);
+}
+
+.contactBox .heroButtons{
+  flex:none;
+}
+
+@media(max-width:1100px){
+  .publicStats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .aboutBox{
+    grid-template-columns:1fr;
+  }
+
+  .testimonialGrid{
+    grid-template-columns:1fr;
+  }
+
+  .contactBox{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+}
+
+@media(max-width:640px){
+  .publicStats{
+    grid-template-columns:1fr;
+  }
+
+  .whatsappFloat{
+    top:auto;
+    bottom:20px;
+    left:20px;
+  }
+}
