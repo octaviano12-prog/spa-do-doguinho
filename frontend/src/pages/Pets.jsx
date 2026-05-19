@@ -1,3 +1,4 @@
+import React from "react";
 import CrudPage from "../components/CrudPage";
 export default function Pets() {
   return <CrudPage title="Pets" subtitle="Pets vinculados aos clientes" endpoint="pets" searchFields={["name","species","breed"]} defaults={{customer_id:"",name:"",species:"Cachorro",breed:"",birth_date:"",notes:""}}
