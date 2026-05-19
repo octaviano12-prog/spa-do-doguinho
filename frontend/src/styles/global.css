@@ -1549,3 +1549,96 @@ body,
     left:20px;
   }
 }
+/* ===== BOOKING SUCCESS ===== */
+
+.bookingSuccess{
+  width:min(760px,100%);
+  padding:48px;
+  border-radius:36px;
+  text-align:center;
+  background:linear-gradient(
+    180deg,
+    rgba(255,255,255,.05),
+    rgba(255,255,255,.02)
+  );
+  border:1px solid rgba(255,255,255,.08);
+  backdrop-filter:blur(22px);
+  box-shadow:var(--shadow);
+}
+
+.successIcon{
+  width:120px;
+  height:120px;
+  margin:0 auto 24px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:
+    radial-gradient(
+      circle,
+      rgba(29,181,106,.22),
+      rgba(255,255,255,.03)
+    );
+
+  color:#7ef0ae;
+}
+
+.successBadge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:18px;
+  padding:10px 18px;
+  border-radius:999px;
+  background:rgba(29,181,106,.12);
+  color:#8ef2ba;
+  border:1px solid rgba(29,181,106,.15);
+  font-weight:700;
+}
+
+.bookingSuccess h2{
+  margin:0;
+  font-size:clamp(2rem,5vw,3.2rem);
+}
+
+.bookingSuccess p{
+  margin:18px auto 34px;
+  max-width:620px;
+  color:var(--muted);
+  line-height:1.8;
+}
+
+.successResume{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:16px;
+  margin-bottom:34px;
+}
+
+.successResume div{
+  padding:20px;
+  border-radius:20px;
+  background:rgba(255,255,255,.045);
+  border:1px solid rgba(255,255,255,.06);
+  text-align:left;
+}
+
+.successResume strong{
+  display:block;
+  margin-bottom:6px;
+  color:var(--gold2);
+}
+
+.successResume span{
+  color:var(--text);
+}
+
+@media(max-width:760px){
+  .bookingSuccess{
+    padding:28px;
+  }
+
+  .successResume{
+    grid-template-columns:1fr;
+  }
+}
