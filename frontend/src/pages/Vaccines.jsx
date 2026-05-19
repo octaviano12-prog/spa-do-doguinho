@@ -1,3 +1,4 @@
+import React from "react";
 import CrudPage from "../components/CrudPage";
 export default function Vaccines() {
   return <CrudPage title="Vacinas" subtitle="Controle de vacinas e próximas doses" endpoint="vaccines" searchFields={["name","notes"]} defaults={{pet_id:"",name:"",applied_at:"",next_due:"",notes:""}}
