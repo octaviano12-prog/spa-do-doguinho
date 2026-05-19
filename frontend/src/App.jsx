@@ -1,3 +1,4 @@
+import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -21,25 +22,28 @@ export default function App() {
       <Toaster position="top-right" />
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route path="/*" element={
-          <ProtectedRoute>
-            <Layout>
-              <Routes>
-                <Route path="/" element={<Dashboard />} />
-                <Route path="/clientes" element={<Customers />} />
-                <Route path="/pets" element={<Pets />} />
-                <Route path="/servicos" element={<Services />} />
-                <Route path="/agendamentos" element={<Appointments />} />
-                <Route path="/financeiro" element={<Finance />} />
-                <Route path="/caixa" element={<Cash />} />
-                <Route path="/estoque" element={<Stock />} />
-                <Route path="/vacinas" element={<Vaccines />} />
-                <Route path="/galeria" element={<Gallery />} />
-                <Route path="/configuracoes" element={<Settings />} />
-              </Routes>
-            </Layout>
-          </ProtectedRoute>
-        } />
+        <Route
+          path="/*"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <Routes>
+                  <Route path="/" element={<Dashboard />} />
+                  <Route path="/clientes" element={<Customers />} />
+                  <Route path="/pets" element={<Pets />} />
+                  <Route path="/servicos" element={<Services />} />
+                  <Route path="/agendamentos" element={<Appointments />} />
+                  <Route path="/financeiro" element={<Finance />} />
+                  <Route path="/caixa" element={<Cash />} />
+                  <Route path="/estoque" element={<Stock />} />
+                  <Route path="/vacinas" element={<Vaccines />} />
+                  <Route path="/galeria" element={<Gallery />} />
+                  <Route path="/configuracoes" element={<Settings />} />
+                </Routes>
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </>
   );
