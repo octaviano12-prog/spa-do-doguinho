@@ -1,3 +1,4 @@
+import React from "react";
 import CrudPage from "../components/CrudPage";
 
 export default function Customers() {
