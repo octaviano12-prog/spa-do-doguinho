@@ -33,7 +33,7 @@ app.use("/api/mercadopago", require("./routes/mercadoPagoRoutes"));
 app.use("/api", require("./routes/resourceRoutes"));
 app.use("/api/upload", require("./routes/uploadRoutes"));
 
-const frontendPath = path.join(__dirname, "../../frontend/dist");
+const frontendPath = path.join(process.cwd(), "../public_html/.builds/source/repository/frontend/dist");
 
 app.use(express.static(frontendPath));
 
