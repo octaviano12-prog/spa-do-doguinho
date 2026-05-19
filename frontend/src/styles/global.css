@@ -1255,3 +1255,94 @@ textarea.input{
     padding:24px;
   }
 }
+html,
+body,
+#root{
+  width:100%;
+  max-width:100%;
+  overflow-x:hidden;
+}
+
+.publicSite{
+  width:100%;
+  max-width:100%;
+  overflow-x:hidden;
+}
+
+.publicHero{
+  position:relative;
+  min-height:calc(100vh - 90px);
+  display:grid;
+  grid-template-columns:minmax(0,1.1fr) minmax(320px,.9fr);
+  align-items:center;
+  gap:40px;
+  padding:80px 6vw;
+  overflow:hidden;
+}
+
+.heroContent{
+  min-width:0;
+}
+
+.heroContent h1{
+  max-width:760px;
+  font-size:clamp(2.6rem,5.4vw,5.3rem);
+  line-height:1.02;
+  word-break:normal;
+}
+
+.heroMiniCards{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+  margin-top:34px;
+  max-width:780px;
+}
+
+.heroMiniCards div{
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+  padding:16px;
+  border-radius:20px;
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.08);
+}
+
+.heroMiniCards svg{
+  color:var(--gold2);
+}
+
+.heroMiniCards span{
+  color:var(--muted);
+  font-size:.9rem;
+}
+
+.heroPetCard{
+  min-width:0;
+}
+
+@media(max-width:1100px){
+  .publicHero{
+    grid-template-columns:1fr;
+    padding:55px 6vw;
+  }
+
+  .heroMiniCards{
+    grid-template-columns:1fr;
+  }
+
+  .heroPetCard{
+    display:none;
+  }
+}
+
+@media(max-width:760px){
+  .publicNav{
+    flex-wrap:wrap;
+  }
+
+  .heroContent h1{
+    font-size:clamp(2.3rem,12vw,3.5rem);
+  }
+}
