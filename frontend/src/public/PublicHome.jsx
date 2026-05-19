@@ -37,21 +37,25 @@ export default function PublicHome() {
       </a>
 
       <header className="publicHeader">
-        <div className="publicLogo">
+        <Link to="/" className="publicLogo">
           <div className="brandIcon"><Dog /></div>
           <div>
             <strong>SPA do Doguinho</strong>
             <span>Cuidado com amor para seu melhor amigo</span>
           </div>
-        </div>
+        </Link>
 
         <nav className="publicNav">
-          <a href="#servicos">Serviços</a>
-          <a href="#sobre">Sobre</a>
-          <a href="#depoimentos">Depoimentos</a>
+          <Link to="/">Home</Link>
+          <Link to="/servicos-publico">Serviços</Link>
+          <Link to="/galeria-publica">Galeria</Link>
+          <a href="#sobre">Quem Somos</a>
           <a href="#contato">Contato</a>
-          <Link to="/agendar" className="btn gold">Agendar</Link>
         </nav>
+
+        <Link to="/agendar" className="btn gold publicHeaderCta">
+          Agendar
+        </Link>
       </header>
 
       <section className="publicHero">
@@ -95,9 +99,7 @@ export default function PublicHome() {
         <motion.div className="heroPetCard" initial={{ opacity: 0, scale: 0.94 }} animate={{ opacity: 1, scale: 1 }}>
           <div className="petCircle"><Dog size={100} /></div>
           <div className="ratingCard">
-            <div>
-              {[1,2,3,4,5].map((i) => <Star key={i} size={18} fill="currentColor" />)}
-            </div>
+            <div>{[1,2,3,4,5].map((i) => <Star key={i} size={18} fill="currentColor" />)}</div>
             <strong>5.0 de avaliação</strong>
             <span>Clientes e pets felizes</span>
           </div>
@@ -131,7 +133,7 @@ export default function PublicHome() {
               <Icon size={32} />
               <strong>{title}</strong>
               <p>{desc}</p>
-              <Link to="/agendar">Agendar agora</Link>
+              <Link to="/servicos-publico">Ver serviços</Link>
             </div>
           ))}
         </div>
