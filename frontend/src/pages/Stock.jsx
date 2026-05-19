@@ -1,3 +1,4 @@
+import React from "react";
 import CrudPage from "../components/CrudPage";
 export default function Stock() {
   return <CrudPage title="Estoque" subtitle="Produtos, quantidade mínima e preços" endpoint="stock" searchFields={["name","notes"]} defaults={{name:"",quantity:0,min_quantity:0,cost_price:0,sale_price:0,unit:"un",notes:""}}
