@@ -6,7 +6,10 @@
   "type": "commonjs",
   "scripts": {
     "dev": "nodemon src/server.js",
-    "start": "node src/server.js"
+    "start": "node src/server.js",
+    "frontend:install": "cd ../frontend && npm install",
+    "frontend:build": "cd ../frontend && npm run build",
+    "build": "npm run frontend:install && npm run frontend:build"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
