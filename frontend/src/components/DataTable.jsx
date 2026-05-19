@@ -1,3 +1,4 @@
+import React from "react";
 export default function DataTable({ columns, rows, loading, empty = "Nenhum registro encontrado" }) {
   if (loading) return <div className="card loading"><div className="spinner" /> Carregando...</div>;
 
