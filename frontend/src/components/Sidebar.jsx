@@ -1,6 +1,20 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { BarChart3, CalendarDays, Dog, GalleryHorizontalEnd, Package, PawPrint, Scissors, Settings, ShieldCheck, Syringe, Users, WalletCards } from "lucide-react";
+import { motion } from "framer-motion";
+import {
+  BarChart3,
+  CalendarDays,
+  Dog,
+  GalleryHorizontalEnd,
+  Package,
+  PawPrint,
+  Scissors,
+  Settings,
+  ShieldCheck,
+  Syringe,
+  Users,
+  WalletCards,
+} from "lucide-react";
 
 const items = [
   { to: "/", label: "Dashboard", icon: BarChart3 },
@@ -13,28 +27,57 @@ const items = [
   { to: "/estoque", label: "Estoque", icon: Package },
   { to: "/vacinas", label: "Vacinas", icon: Syringe },
   { to: "/galeria", label: "Galeria", icon: GalleryHorizontalEnd },
-  { to: "/configuracoes", label: "Configurações", icon: Settings }
+  { to: "/configuracoes", label: "Configurações", icon: Settings },
 ];
 
 export default function Sidebar({ open, onClose }) {
   return (
-    <aside className={`sidebar ${open ? "open" : ""}`}>
-      <div className="brand">
-        <div className="brandIcon"><Dog size={24} /></div>
+    <aside className={`sidebar premiumSidebar ${open ? "open" : ""}`}>
+      <motion.div
+        className="brand premiumBrand"
+        initial={{ opacity: 0, x: -18 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.35 }}
+      >
+        <div className="brandIcon">
+          <Dog size={24} />
+        </div>
+
         <div>
           <strong>SPA do Doguinho</strong>
           <small>Painel premium</small>
         </div>
-      </div>
+      </motion.div>
 
       <nav>
-        {items.map(({ to, label, icon: Icon }) => (
-          <NavLink to={to} key={to} onClick={onClose} className="navItem">
-            <Icon size={18} />
-            <span>{label}</span>
-          </NavLink>
+        {items.map(({ to, label, icon: Icon }, index) => (
+          <motion.div
+            key={to}
+            initial={{ opacity: 0, x: -14 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{
+              duration: 0.28,
+              delay: index * 0.035,
+            }}
+          >
+            <NavLink
+              to={to}
+              onClick={onClose}
+              className={({ isActive }) =>
+                `navItem ${isActive ? "active" : ""}`
+              }
+            >
+              <Icon size={18} />
+              <span>{label}</span>
+            </NavLink>
+          </motion.div>
         ))}
       </nav>
+
+      <div className="sidebarFooter">
+        <span>Sistema online</span>
+        <strong>MySQL + Node API</strong>
+      </div>
     </aside>
   );
 }
