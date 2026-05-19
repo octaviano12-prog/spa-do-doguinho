@@ -1642,3 +1642,111 @@ body,
     grid-template-columns:1fr;
   }
 }
+.publicInnerPage{
+  min-height:100vh;
+}
+
+.publicPageHero{
+  padding:90px 6vw 40px;
+  max-width:1200px;
+}
+
+.publicPageHero h1{
+  margin:14px 0;
+  font-size:clamp(2.5rem,6vw,4.8rem);
+  line-height:1.05;
+}
+
+.publicPageHero p{
+  max-width:760px;
+  color:var(--muted);
+  line-height:1.8;
+  font-size:1.08rem;
+}
+
+.backLink{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:20px;
+  color:var(--muted);
+  font-weight:700;
+}
+
+.backLink:hover{
+  color:var(--gold2);
+}
+
+.publicServicesList{
+  padding:30px 6vw 90px;
+  display:grid;
+  gap:18px;
+}
+
+.servicePublicCard{
+  padding:24px;
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  align-items:center;
+  gap:22px;
+}
+
+.serviceIcon{
+  width:68px;
+  height:68px;
+  border-radius:22px;
+  display:grid;
+  place-items:center;
+  color:var(--gold2);
+  background:rgba(216,180,90,.12);
+}
+
+.servicePublicContent strong{
+  display:block;
+  font-size:1.3rem;
+}
+
+.servicePublicContent p{
+  color:var(--muted);
+  line-height:1.7;
+}
+
+.serviceMeta{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.serviceMeta span{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  color:var(--muted);
+}
+
+.servicePriceBox{
+  min-width:180px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  align-items:flex-end;
+}
+
+.servicePriceBox span{
+  color:var(--muted);
+}
+
+.servicePriceBox strong{
+  color:var(--gold2);
+  font-size:1.4rem;
+}
+
+@media(max-width:850px){
+  .servicePublicCard{
+    grid-template-columns:1fr;
+  }
+
+  .servicePriceBox{
+    align-items:flex-start;
+  }
+}
