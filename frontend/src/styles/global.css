@@ -1802,3 +1802,24 @@ body,
     gap:18px;
   }
 }
+/* ===== HEADER PUBLICO FINAL PREMIUM ===== */
+
+.publicHeader{
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+}
+
+.publicNav{
+  justify-self:center;
+  margin:0;
+}
+
+.publicHeaderCta{
+  justify-self:end;
+}
+
+@media(max-width:900px){
+  .publicHeader{
+    display:flex;
+  }
+}
