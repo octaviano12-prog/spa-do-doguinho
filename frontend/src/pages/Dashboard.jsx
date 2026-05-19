@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import {
   AlertCircle,
   AlertTriangle,
@@ -108,6 +109,7 @@ function EmptyChart({ text = "Sem dados suficientes" }) {
 export default function Dashboard() {
   const [data, setData] = useState(emptyData);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     let active = true;
@@ -414,10 +416,18 @@ export default function Dashboard() {
           </div>
 
           <div className="quickActions premiumQuickActions">
-            <button type="button"><CalendarDays size={18} /> Novo agendamento</button>
-            <button type="button"><Users size={18} /> Novo cliente</button>
-            <button type="button"><PawPrint size={18} /> Novo pet</button>
-            <button type="button"><Syringe size={18} /> Nova vacina</button>
+            <button type="button" onClick={() => navigate("/agendamentos")}>
+              <CalendarDays size={18} /> Novo agendamento
+            </button>
+            <button type="button" onClick={() => navigate("/clientes")}>
+              <Users size={18} /> Novo cliente
+            </button>
+            <button type="button" onClick={() => navigate("/pets")}>
+              <PawPrint size={18} /> Novo pet
+            </button>
+            <button type="button" onClick={() => navigate("/vacinas")}>
+              <Syringe size={18} /> Nova vacina
+            </button>
           </div>
         </motion.div>
 
