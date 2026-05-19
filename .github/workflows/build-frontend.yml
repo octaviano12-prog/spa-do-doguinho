@@ -8,6 +8,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: build-frontend
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -15,6 +19,11 @@ jobs:
     steps:
       - name: Baixar código
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Atualizar branch
+        run: git pull --rebase origin main
 
       - name: Instalar Node
         uses: actions/setup-node@v4
@@ -29,8 +38,13 @@ jobs:
         working-directory: frontend
         run: npm run build
 
-      - name: Commitar pasta dist
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: Gerar build frontend
-          file_pattern: frontend/dist
+      - name: Configurar Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Salvar pasta dist
+        run: |
+          git add frontend/dist
+          git commit -m "Gerar build frontend" || echo "Sem alterações para commitar"
+          git push origin main
