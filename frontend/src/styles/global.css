@@ -1750,3 +1750,55 @@ body,
     align-items:flex-start;
   }
 }
+/* ===== FIX FINAL MENU PUBLICO ===== */
+
+.publicHeader{
+  position:sticky;
+  top:0;
+  z-index:50;
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:18px 6vw;
+  background:rgba(2,18,13,.88);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.publicNav{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:34px;
+  margin-left:auto;
+}
+
+.publicNav a{
+  color:var(--muted);
+  font-weight:700;
+  transition:.25s ease;
+  white-space:nowrap;
+}
+
+.publicNav a:hover{
+  color:var(--gold2);
+}
+
+.publicNav .btn{
+  margin-left:12px;
+  color:#11251b;
+}
+
+@media(max-width:760px){
+  .publicHeader{
+    align-items:flex-start;
+  }
+
+  .publicNav{
+    width:100%;
+    justify-content:flex-start;
+    overflow-x:auto;
+    gap:18px;
+  }
+}
