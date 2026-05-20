@@ -2,9 +2,25 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
-  Award, CalendarCheck, CheckCircle2, Clock, Dog, Gift, Heart, Leaf,
-  MapPin, MessageCircle, Phone, Quote, Scissors, ShieldCheck, Sparkles, Star
+  Award,
+  CalendarCheck,
+  CheckCircle2,
+  Clock,
+  Dog,
+  Gift,
+  Heart,
+  Leaf,
+  MapPin,
+  MessageCircle,
+  PawPrint,
+  Phone,
+  Quote,
+  Scissors,
+  ShieldCheck,
+  Sparkles,
+  Star
 } from "lucide-react";
+
 import client from "../api/client";
 
 const whatsappHref = "https://wa.me/5518999999999";
