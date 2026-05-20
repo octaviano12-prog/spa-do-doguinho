@@ -46,8 +46,6 @@ export default function App() {
 
         <Route path="/agendamento-mobile" element={<PublicBooking />} />
 
-        <Route path="/login" element={<Login />} />
-
         {/* ADMIN */}
         <Route
           path="/admin/*"
