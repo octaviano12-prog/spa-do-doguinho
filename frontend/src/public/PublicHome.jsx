@@ -1,210 +1,224 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
-import {
-  Award,
-  CalendarCheck,
-  CheckCircle2,
-  Clock,
-  Dog,
-  Gift,
-  Heart,
-  Leaf,
-  MapPin,
-  MessageCircle,
-  PawPrint,
-  Phone,
-  Quote,
-  Scissors,
-  ShieldCheck,
-  Sparkles,
-  Star,
-} from "lucide-react";
+/* ===== HOME PREMIUM COM IMAGENS ===== */
 
-const whatsappHref = "https://wa.me/5518999999999";
+.heroImageWrap{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:680px;
+}
 
-export default function PublicHome() {
-  const services = [
-    { title: "Banho & Tosa", icon: Scissors, desc: "Higiene completa, pelagem bem cuidada e finalização cheia de charme." },
-    { title: "Spa Relaxante", icon: Heart, desc: "Momento tranquilo para o pet relaxar e se sentir acolhido." },
-    { title: "Agendamento Online", icon: CalendarCheck, desc: "Escolha serviço, data e horário pelo site de forma rápida." },
-  ];
+.heroImageGlow{
+  position:absolute;
+  width:520px;
+  height:520px;
+  border-radius:50%;
+  background:rgba(216,180,90,.18);
+  filter:blur(90px);
+}
 
-  return (
-    <div className="publicSite">
-      <a href={whatsappHref} target="_blank" rel="noreferrer" className="whatsappFloat">
-        <MessageCircle size={30} />
-      </a>
+.heroDogImage{
+  position:relative;
+  z-index:2;
+  width:100%;
+  max-width:620px;
+  object-fit:contain;
+  filter:drop-shadow(0 40px 70px rgba(0,0,0,.45));
+  animation:floatDog 5s ease-in-out infinite;
+}
 
-      <header className="publicHeader">
-        <Link to="/" className="publicLogo">
-          <div className="brandIcon"><Dog /></div>
-          <div>
-            <strong>SPA do Doguinho</strong>
-            <span>Cuidado com amor para seu melhor amigo</span>
-          </div>
-        </Link>
+.heroFloatingCard{
+  position:absolute;
+  bottom:30px;
+  right:0;
+  z-index:4;
+  width:280px;
+  padding:24px;
+  border-radius:28px;
+  background:rgba(9,25,20,.82);
+  border:1px solid rgba(255,255,255,.08);
+  backdrop-filter:blur(18px);
+  box-shadow:0 20px 60px rgba(0,0,0,.35);
+}
 
-        <nav className="publicNav">
-          <Link to="/">Home</Link>
-          <Link to="/servicos-publico">Serviços</Link>
-          <Link to="/galeria-publica">Galeria</Link>
-          <a href="#sobre">Quem Somos</a>
-          <a href="#contato">Contato</a>
-        </nav>
+.heroStars{
+  display:flex;
+  gap:4px;
+  color:var(--gold2);
+  margin-bottom:12px;
+}
 
-        <Link to="/agendar" className="btn gold publicHeaderCta">
-          Agendar
-        </Link>
-      </header>
+.heroFloatingCard strong,
+.heroFloatingCard span{
+  display:block;
+}
 
-      <section className="publicHero">
-        <div className="heroGlow glowLeft" />
-        <div className="heroGlow glowRight" />
+.heroFloatingCard span{
+  margin-top:8px;
+  color:var(--muted);
+  line-height:1.6;
+}
 
-        <motion.div className="heroContent" initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }}>
-          <div className="heroBadge">
-            <Star size={16} />
-            Referência em estética pet
-          </div>
+.serviceImageGrid{
+  grid-template-columns:repeat(3,minmax(0,1fr));
+}
 
-          <h1>
-            Cuidado, carinho e beleza para o seu <span>melhor amigo</span>
-          </h1>
+.serviceImageCard{
+  padding:0;
+  overflow:hidden;
+}
 
-          <p>
-            Banho, tosa, vacinas e relaxamento com atendimento premium,
-            carinho de verdade e agendamento online.
-          </p>
+.serviceImageCard img{
+  width:100%;
+  height:230px;
+  object-fit:cover;
+  display:block;
+}
 
-          <div className="heroButtons">
-            <Link to="/agendar" className="btn gold">
-              <CalendarCheck size={18} />
-              Agendar horário
-            </Link>
+.serviceImageCard > div{
+  padding:24px;
+}
 
-            <a href={whatsappHref} target="_blank" rel="noreferrer" className="btn ghost">
-              <Phone size={18} />
-              WhatsApp
-            </a>
-          </div>
+.aboutPremiumGrid{
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  gap:20px;
+  align-items:stretch;
+}
 
-          <div className="heroMiniCards">
-            <div><ShieldCheck size={24} /><strong>Ambiente seguro</strong><span>Atendimento cuidadoso</span></div>
-            <div><Heart size={24} /><strong>Profissionais</strong><span>Carinho em cada detalhe</span></div>
-            <div><Leaf size={24} /><strong>Produtos premium</strong><span>Conforto e qualidade</span></div>
-          </div>
-        </motion.div>
+.aboutImage{
+  width:100%;
+  height:100%;
+  min-height:420px;
+  object-fit:cover;
+  border-radius:28px;
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:var(--shadow);
+}
 
-        <motion.div className="heroPetCard" initial={{ opacity: 0, scale: 0.94 }} animate={{ opacity: 1, scale: 1 }}>
-          <div className="petCircle"><Dog size={100} /></div>
-          <div className="ratingCard">
-            <div>{[1,2,3,4,5].map((i) => <Star key={i} size={18} fill="currentColor" />)}</div>
-            <strong>5.0 de avaliação</strong>
-            <span>Clientes e pets felizes</span>
-          </div>
-        </motion.div>
-      </section>
+.testimonialPremiumGrid{
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  gap:20px;
+  align-items:stretch;
+}
 
-      <section className="publicStats">
-        {[
-          { icon: PawPrint, value: "+3.500", label: "Pets atendidos" },
-          { icon: Award, value: "5 anos", label: "De experiência" },
-          { icon: Clock, value: "Online", label: "Agendamento fácil" },
-          { icon: Gift, value: "Premium", label: "Benefícios exclusivos" },
-        ].map(({ icon: Icon, value, label }) => (
-          <div className="statBox" key={value}>
-            <Icon size={26} />
-            <strong>{value}</strong>
-            <span>{label}</span>
-          </div>
-        ))}
-      </section>
+.testimonialCards{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+}
 
-      <section className="servicesSection" id="servicos">
-        <div className="sectionTitle">
-          <span><Sparkles size={16} /> Serviços especiais</span>
-          <h2>Tudo que seu pet precisa em um só lugar</h2>
-        </div>
+.testimonialPremiumGrid > img{
+  width:100%;
+  height:100%;
+  min-height:320px;
+  object-fit:cover;
+  border-radius:28px;
+  border:1px solid rgba(255,255,255,.08);
+}
 
-        <div className="servicesGrid">
-          {services.map(({ title, icon: Icon, desc }) => (
-            <div className="card publicCard" key={title}>
-              <Icon size={32} />
-              <strong>{title}</strong>
-              <p>{desc}</p>
-              <Link to="/servicos-publico">Ver serviços</Link>
-            </div>
-          ))}
-        </div>
-      </section>
+.homeGalleryGrid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px;
+}
 
-      <section className="aboutSection" id="sobre">
-        <div className="aboutBox card">
-          <div>
-            <span className="pageKicker">Por que escolher a gente?</span>
-            <h2>Um atendimento pensado para o pet e para o tutor</h2>
-            <p>
-              O SPA do Doguinho une visual profissional, agendamento fácil,
-              carinho, segurança e uma experiência premium para encantar clientes.
-            </p>
-          </div>
+.homeGalleryItem{
+  height:260px;
+  border-radius:26px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:var(--shadow);
+}
 
-          <div className="aboutChecklist">
-            {[
-              "Ambiente seguro e acolhedor.",
-              "Produtos especiais para pele e pelagem.",
-              "Agendamento online simples e rápido.",
-            ].map((text) => (
-              <div key={text}>
-                <CheckCircle2 size={20} />
-                <span>{text}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+.homeGalleryItem img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  transition:.35s ease;
+}
 
-      <section className="testimonialsSection" id="depoimentos">
-        <div className="sectionTitle">
-          <span>Depoimentos</span>
-          <h2>Quem conhece recomenda</h2>
-        </div>
+.homeGalleryItem:hover img{
+  transform:scale(1.08);
+}
 
-        <div className="testimonialGrid">
-          {[
-            "Meu pet voltou cheiroso, calmo e muito bem cuidado.",
-            "Gostei muito do agendamento online. Rápido e fácil.",
-            "Equipe atenciosa e espaço organizado. Recomendo!",
-          ].map((text, index) => (
-            <div className="card testimonialCard" key={text}>
-              <Quote size={26} />
-              <p>“{text}”</p>
-              <strong>Cliente {index + 1}</strong>
-            </div>
-          ))}
-        </div>
-      </section>
+.premiumFooter{
+  display:grid;
+  grid-template-columns:1.2fr 1fr 1fr;
+  gap:30px;
+}
 
-      <section className="contactSection" id="contato">
-        <div className="contactBox card">
-          <div>
-            <span className="pageKicker"><MapPin size={15} /> Agendamento fácil</span>
-            <h2>Pronto para mimar seu doguinho?</h2>
-            <p>Escolha o melhor horário pelo site ou fale direto no WhatsApp.</p>
-          </div>
+.premiumFooter div{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
 
-          <div className="heroButtons">
-            <Link to="/agendar" className="btn gold">Começar agendamento</Link>
-            <a href={whatsappHref} target="_blank" rel="noreferrer" className="btn ghost">WhatsApp</a>
-          </div>
-        </div>
-      </section>
+.mobileBookingCta{
+  display:none;
+}
 
-      <footer className="publicFooter">
-        <strong>SPA do Doguinho</strong>
-        <span>© 2026 — Cuidado, carinho e beleza pet</span>
-      </footer>
-    </div>
-  );
+@keyframes floatDog{
+  0%{transform:translateY(0)}
+  50%{transform:translateY(-14px)}
+  100%{transform:translateY(0)}
+}
+
+@media(max-width:1100px){
+  .heroImageWrap{
+    min-height:auto;
+  }
+
+  .heroDogImage{
+    max-width:480px;
+  }
+
+  .aboutPremiumGrid,
+  .testimonialPremiumGrid{
+    grid-template-columns:1fr;
+  }
+
+  .testimonialCards,
+  .homeGalleryGrid,
+  .serviceImageGrid{
+    grid-template-columns:1fr;
+  }
+
+  .premiumFooter{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:760px){
+  .heroFloatingCard{
+    position:relative;
+    right:auto;
+    bottom:auto;
+    width:100%;
+    margin-top:-30px;
+  }
+
+  .mobileBookingCta{
+    position:fixed;
+    left:16px;
+    right:16px;
+    bottom:16px;
+    z-index:100;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    border:none;
+    padding:15px 18px;
+    border-radius:18px;
+    background:linear-gradient(135deg,var(--gold),var(--gold2));
+    color:#11251b;
+    font-weight:900;
+    box-shadow:0 20px 60px rgba(0,0,0,.45);
+  }
+
+  .publicFooter{
+    padding-bottom:92px;
+  }
 }
