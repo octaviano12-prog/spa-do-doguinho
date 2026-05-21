@@ -180,3 +180,277 @@ textarea.input{min-height:120px;resize:vertical}
 }
 @media(max-width:560px){.gallery{grid-template-columns:1fr}.heroButtons .btn{width:100%}.publicNav a{font-size:.92rem}.serviceImageCard img,.homeGalleryItem{height:220px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.001ms!important}}
+:root{
+  --hero-header-height: 96px;
+}
+
+/* remove sobra e melhora fundo */
+.publicSite,
+.publicInnerPage{
+  background:
+    radial-gradient(circle at 0% 20%, rgba(29,181,106,.20), transparent 28%),
+    linear-gradient(90deg, #061b13 0%, #07140f 45%, #07140f 100%);
+}
+
+/* HEADER MAIS PREMIUM */
+.publicHeader{
+  min-height: var(--hero-header-height);
+  padding: 18px 6vw !important;
+  background: rgba(2, 18, 13, .92) !important;
+  backdrop-filter: blur(18px);
+  box-shadow: 0 8px 35px rgba(0,0,0,.18);
+}
+
+.publicNav a{
+  font-weight: 900;
+}
+
+.publicHeader .btn,
+.publicHeaderCta .btn{
+  border-radius: 18px;
+  padding: 14px 22px;
+}
+
+/* HERO PRINCIPAL */
+.publicHero,
+.heroSection{
+  min-height: calc(100vh - var(--hero-header-height)) !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, .95fr) minmax(520px, 1.05fr) !important;
+  align-items: center !important;
+  gap: 42px !important;
+  padding: 34px 6vw 46px !important;
+  position: relative;
+  overflow: hidden;
+}
+
+/* conteúdo mais para cima */
+.heroContent{
+  align-self: center;
+  transform: translateY(-36px);
+  z-index: 5;
+}
+
+.heroBadge{
+  margin-bottom: 18px;
+  border: 1px solid rgba(216,180,90,.35);
+  box-shadow: 0 12px 35px rgba(0,0,0,.18);
+}
+
+.heroContent h1{
+  max-width: 760px !important;
+  font-size: clamp(3.2rem, 5.8vw, 6.2rem) !important;
+  line-height: .98 !important;
+  letter-spacing: -0.055em;
+  text-shadow: 0 16px 45px rgba(0,0,0,.38);
+}
+
+.heroContent h1 strong,
+.heroContent h1 span,
+.heroHighlight,
+.goldText{
+  color: var(--gold2);
+  background: linear-gradient(135deg, var(--gold), var(--gold2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.heroContent p{
+  max-width: 680px !important;
+  font-size: clamp(1rem, 1.3vw, 1.18rem);
+  line-height: 1.75;
+  color: rgba(244,255,248,.78);
+  margin: 24px 0 24px !important;
+}
+
+.heroButtons{
+  gap: 16px;
+}
+
+.heroButtons .btn{
+  min-height: 56px;
+  border-radius: 18px;
+  padding: 15px 24px;
+  font-size: 1.02rem;
+  box-shadow: 0 18px 45px rgba(0,0,0,.25);
+}
+
+/* IMAGEM DO HERO PREENCHENDO O LADO DIREITO */
+.heroImageWrap,
+.heroPetCard,
+.heroCard{
+  align-self: stretch;
+  min-height: calc(100vh - var(--hero-header-height) - 70px) !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: -34px -6vw -46px 0 !important;
+  overflow: hidden !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  position: relative;
+}
+
+/* degradê para unir texto + imagem */
+.heroImageWrap::before,
+.heroPetCard::before,
+.heroCard::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(6,27,19,.98) 0%, rgba(6,27,19,.82) 18%, rgba(6,27,19,.30) 42%, transparent 68%),
+    linear-gradient(180deg, rgba(2,18,13,.12), rgba(2,18,13,.30));
+}
+
+/* se sua imagem estiver como img */
+.heroDogImage,
+.heroImageWrap img,
+.heroPetCard img,
+.heroCard img{
+  width: 100% !important;
+  height: 100% !important;
+  min-height: inherit;
+  object-fit: cover !important;
+  object-position: center center !important;
+  display: block !important;
+  filter: saturate(1.05) contrast(1.03);
+}
+
+/* se sua imagem estiver como background */
+.heroImageWrap,
+.heroPetCard,
+.heroCard{
+  background-size: cover !important;
+  background-position: center center !important;
+}
+
+/* card flutuante da imagem: deixa mais discreto */
+.heroFloatingCard{
+  right: 6vw !important;
+  bottom: 34px !important;
+  z-index: 6;
+}
+
+/* mini cards sobem e ficam elegantes */
+.heroMiniCards{
+  margin-top: 30px !important;
+  max-width: 760px;
+  grid-template-columns: repeat(3, minmax(0,1fr)) !important;
+}
+
+.heroMiniCards div{
+  background: rgba(255,255,255,.055);
+  border: 1px solid rgba(216,180,90,.15);
+  backdrop-filter: blur(12px);
+}
+
+/* WHATSAPP FIXO NO CANTO INFERIOR DIREITO */
+.whatsappFloat{
+  position: fixed !important;
+  right: 28px !important;
+  left: auto !important;
+  top: auto !important;
+  bottom: 28px !important;
+  z-index: 999 !important;
+  width: 68px !important;
+  height: 68px !important;
+  border-radius: 999px !important;
+  background: #25d366 !important;
+  color: #fff !important;
+  box-shadow:
+    0 18px 50px rgba(37,211,102,.35),
+    0 0 0 10px rgba(37,211,102,.10);
+  animation: whatsPulse 2.3s ease-in-out infinite;
+}
+
+.whatsappFloat svg{
+  width: 32px;
+  height: 32px;
+}
+
+@keyframes whatsPulse{
+  0%,100%{ transform: translateY(0) scale(1); }
+  50%{ transform: translateY(-4px) scale(1.04); }
+}
+
+/* BOTÃO MOBILE DE AGENDAMENTO NÃO COBRIR O WHATS */
+.mobileBookingCta{
+  right: 96px !important;
+  left: 16px !important;
+  bottom: 18px !important;
+}
+
+/* RESPONSIVO */
+@media(max-width:1100px){
+  .publicHero,
+  .heroSection{
+    grid-template-columns: 1fr !important;
+    padding: 42px 6vw 70px !important;
+  }
+
+  .heroContent{
+    transform: none;
+  }
+
+  .heroImageWrap,
+  .heroPetCard,
+  .heroCard{
+    margin: 0 !important;
+    min-height: 420px !important;
+    border-radius: 30px !important;
+  }
+
+  .heroImageWrap::before,
+  .heroPetCard::before,
+  .heroCard::before{
+    background: linear-gradient(180deg, transparent 30%, rgba(6,27,19,.70));
+  }
+}
+
+@media(max-width:760px){
+  :root{
+    --hero-header-height: auto;
+  }
+
+  .publicHeader{
+    min-height: auto;
+  }
+
+  .publicHero,
+  .heroSection{
+    min-height: auto !important;
+    padding: 34px 18px 96px !important;
+    gap: 26px !important;
+  }
+
+  .heroContent h1{
+    font-size: clamp(2.45rem, 12vw, 3.6rem) !important;
+    letter-spacing: -0.045em;
+  }
+
+  .heroButtons{
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .heroMiniCards{
+    grid-template-columns: 1fr !important;
+  }
+
+  .heroImageWrap,
+  .heroPetCard,
+  .heroCard{
+    min-height: 360px !important;
+  }
+
+  .whatsappFloat{
+    width: 62px !important;
+    height: 62px !important;
+    right: 18px !important;
+    bottom: 88px !important;
+  }
+}
