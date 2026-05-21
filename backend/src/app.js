@@ -3,7 +3,7 @@ const cors = require("cors");
 const helmet = require("helmet");
 const path = require("path");
 
-const db = require("./config/db");
+const db = require("./db");
 
 const app = express();
 
