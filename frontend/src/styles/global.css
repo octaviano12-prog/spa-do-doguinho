@@ -1,11 +1,14 @@
 
 /* =========================================================
-   SPA DO DOGUINHO — CSS PREMIUM LIMPO
-   Caminho das imagens no React/Vite:
-   public/images/...  => usar no CSS como /images/...
-
-   Hero principal:
-   /images/hero-dog.png
+   SPA DO DOGUINHO — CSS PREMIUM FINAL
+   Arquivo limpo e completo, já com:
+   - Hero premium com imagem /images/hero-dog.png
+   - Animação suave da imagem
+   - Texto mais legível
+   - WhatsApp fixo no canto inferior direito
+   - Header com blur premium
+   - Cards com efeito vidro
+   - Responsivo mobile
 ========================================================= */
 
 :root{
@@ -86,7 +89,7 @@ img{
 
 .btn:hover{
   transform:translateY(-2px);
-  filter:brightness(1.05);
+  filter:brightness(1.06);
 }
 
 .btn.ghost{
@@ -141,7 +144,8 @@ img{
   background:rgba(2,18,13,.95);
   border-bottom:1px solid rgba(255,255,255,.06);
   box-shadow:0 10px 35px rgba(0,0,0,.20);
-  backdrop-filter:blur(18px);
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
 }
 
 .publicLogo{
@@ -228,7 +232,7 @@ img{
   overflow:hidden;
 }
 
-/* imagem principal */
+/* Imagem principal do hero */
 .publicHero::after,
 .heroSection::after{
   content:"";
@@ -236,18 +240,33 @@ img{
   inset:0;
   z-index:0;
   background:
-    linear-gradient(90deg,
-      rgba(4,25,17,.98) 0%,
-      rgba(4,25,17,.95) 30%,
-      rgba(4,25,17,.70) 48%,
-      rgba(4,25,17,.18) 70%,
-      rgba(4,25,17,.03) 100%
+    linear-gradient(
+      90deg,
+      rgba(4,25,17,.99) 0%,
+      rgba(4,25,17,.97) 34%,
+      rgba(4,25,17,.78) 50%,
+      rgba(4,25,17,.22) 72%,
+      rgba(4,25,17,.04) 100%
     ),
-    linear-gradient(180deg,rgba(0,0,0,.02),rgba(0,0,0,.22)),
+    linear-gradient(180deg,rgba(0,0,0,.02),rgba(0,0,0,.24)),
     url("/images/hero-dog.png");
   background-repeat:no-repeat;
   background-size:auto 100%;
   background-position:right center;
+  animation:heroZoom 12s ease-in-out infinite alternate;
+  transform-origin:center right;
+  will-change:transform,filter;
+}
+
+@keyframes heroZoom{
+  from{
+    transform:scale(1);
+    filter:saturate(1.04) contrast(1.03);
+  }
+  to{
+    transform:scale(1.06);
+    filter:saturate(1.12) contrast(1.08);
+  }
 }
 
 /* brilho verde */
@@ -306,6 +325,9 @@ img{
   -webkit-background-clip:text;
   background-clip:text;
   color:transparent;
+  text-shadow:
+    0 0 18px rgba(216,180,90,.20),
+    0 0 40px rgba(216,180,90,.12);
 }
 
 .heroContent p{
@@ -323,7 +345,7 @@ img{
   gap:16px;
 }
 
-/* cards pequenos */
+/* cards pequenos do hero */
 .heroMiniCards{
   position:relative;
   z-index:3;
@@ -338,9 +360,10 @@ img{
   min-height:132px;
   padding:18px;
   border-radius:22px;
-  background:rgba(8,37,26,.72);
-  border:1px solid rgba(216,180,90,.15);
-  backdrop-filter:blur(14px);
+  background:rgba(8,37,26,.48);
+  border:1px solid rgba(255,255,255,.08);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
   box-shadow:0 18px 45px rgba(0,0,0,.22);
 }
 
@@ -387,6 +410,7 @@ img{
   background:rgba(3,27,18,.82);
   border:1px solid rgba(216,180,90,.14);
   backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
   box-shadow:var(--shadow);
 }
 
@@ -438,7 +462,9 @@ img{
   place-items:center;
   color:#fff;
   background:#25d366!important;
-  box-shadow:0 18px 50px rgba(37,211,102,.36),0 0 0 10px rgba(37,211,102,.10);
+  box-shadow:
+    0 18px 50px rgba(37,211,102,.36),
+    0 0 0 10px rgba(37,211,102,.10);
   animation:whatsPulse 2.2s ease-in-out infinite;
 }
 
@@ -492,6 +518,7 @@ img{
   border-radius:26px;
   box-shadow:var(--shadow);
   backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
 }
 
 .servicesGrid,
@@ -721,6 +748,7 @@ img{
   background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.022));
   border:1px solid var(--line);
   backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
   box-shadow:var(--shadow);
 }
 
@@ -803,6 +831,7 @@ textarea.input{
   padding:16px 24px;
   background:rgba(6,19,15,.82);
   backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
   border-bottom:1px solid rgba(255,255,255,.07);
 }
 
@@ -1041,6 +1070,7 @@ textarea.input{
 
   .heroMiniCards{
     max-width:100%;
+    grid-template-columns:1fr;
   }
 
   .publicStats{
@@ -1106,21 +1136,5 @@ textarea.input{
   .pageHeader{
     align-items:flex-start;
     flex-direction:column;
-  }
-}
-.publicHero::after,
-.heroSection::after{
-  animation: heroZoom 12s ease-in-out infinite alternate;
-  transform-origin: center right;
-}
-
-@keyframes heroZoom{
-  from{
-    transform: scale(1);
-    filter: saturate(1.04) contrast(1.03);
-  }
-  to{
-    transform: scale(1.06);
-    filter: saturate(1.12) contrast(1.08);
   }
 }
