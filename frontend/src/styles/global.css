@@ -1575,3 +1575,185 @@ textarea.input{min-height:120px;resize:vertical}
     font-size:.88rem;
   }
 }
+:root{
+  --header-h: 104px;
+}
+
+/* HERO MAIS EQUILIBRADO */
+.publicHero,
+.heroSection{
+  min-height: calc(100vh - var(--header-h)) !important;
+  padding: 72px 6vw 170px !important;
+  display: block !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+/* FOTO DE FUNDO COM CACHORRO MENOR E MAIS À DIREITA */
+.publicHero::after,
+.heroSection::after{
+  background:
+    linear-gradient(90deg,
+      rgba(4,27,18,.98) 0%,
+      rgba(4,27,18,.94) 31%,
+      rgba(4,27,18,.70) 47%,
+      rgba(4,27,18,.20) 68%,
+      rgba(4,27,18,.04) 100%
+    ),
+    linear-gradient(180deg, rgba(0,0,0,.03), rgba(0,0,0,.28)),
+    url("/images/hero-dog.png") !important;
+  background-size: auto 100% !important;
+  background-position: right center !important;
+  background-repeat: no-repeat !important;
+}
+
+/* CONTEÚDO PRINCIPAL */
+.heroContent{
+  position: relative !important;
+  z-index: 5 !important;
+  max-width: 760px !important;
+  transform: none !important;
+  padding-top: 0 !important;
+}
+
+.heroBadge{
+  margin-bottom: 22px !important;
+}
+
+.heroContent h1{
+  max-width: 740px !important;
+  font-size: clamp(3rem, 5.3vw, 5.45rem) !important;
+  line-height: 1.02 !important;
+  letter-spacing: -0.055em !important;
+  margin: 0 !important;
+}
+
+.heroContent p{
+  max-width: 660px !important;
+  margin: 24px 0 26px !important;
+  font-size: 1.08rem !important;
+  line-height: 1.75 !important;
+}
+
+/* BOTÕES */
+.heroButtons{
+  display: flex !important;
+  gap: 16px !important;
+  flex-wrap: wrap !important;
+}
+
+.heroButtons .btn{
+  min-height: 58px !important;
+  padding: 16px 26px !important;
+  border-radius: 18px !important;
+}
+
+/* ESCONDE A AVALIAÇÃO NO MEIO DO CACHORRO, SE EXISTIR */
+.ratingCard,
+.heroFloatingCard{
+  display: none !important;
+}
+
+/* MINI CARDS DO HERO: NÃO CORTAR E NÃO FICAR EMBAIXO DO BENEFÍCIOS */
+.heroMiniCards{
+  position: relative !important;
+  z-index: 6 !important;
+  max-width: 660px !important;
+  margin-top: 34px !important;
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0,1fr)) !important;
+  gap: 14px !important;
+}
+
+.heroMiniCards div{
+  min-height: 132px !important;
+  padding: 18px !important;
+  overflow: hidden !important;
+}
+
+/* BARRA DE BENEFÍCIOS MAIS PARA BAIXO */
+.publicStats{
+  position: relative !important;
+  z-index: 7 !important;
+  max-width: calc(100% - 12vw) !important;
+  margin: -120px auto 70px !important;
+  padding: 26px 34px !important;
+  border-radius: 30px !important;
+}
+
+/* WHATSAPP */
+.whatsappFloat{
+  right: 30px !important;
+  left: auto !important;
+  bottom: 30px !important;
+  top: auto !important;
+  width: 70px !important;
+  height: 70px !important;
+  z-index: 9999 !important;
+}
+
+/* TELAS MÉDIAS */
+@media(max-width: 1200px){
+  .publicHero,
+  .heroSection{
+    padding: 60px 6vw 160px !important;
+  }
+
+  .publicHero::after,
+  .heroSection::after{
+    background-size: auto 100% !important;
+    background-position: 65% center !important;
+  }
+
+  .heroContent h1{
+    font-size: clamp(2.8rem, 6vw, 4.6rem) !important;
+  }
+}
+
+/* MOBILE */
+@media(max-width: 900px){
+  .publicHero,
+  .heroSection{
+    padding: 42px 20px 120px !important;
+    min-height: auto !important;
+  }
+
+  .publicHero::after,
+  .heroSection::after{
+    background:
+      linear-gradient(180deg,
+        rgba(4,27,18,.92) 0%,
+        rgba(4,27,18,.86) 38%,
+        rgba(4,27,18,.74) 100%
+      ),
+      url("/images/hero-dog.png") !important;
+    background-size: cover !important;
+    background-position: center right !important;
+  }
+
+  .heroContent{
+    max-width: 100% !important;
+  }
+
+  .heroContent h1{
+    font-size: clamp(2.45rem, 12vw, 3.6rem) !important;
+  }
+
+  .heroMiniCards{
+    max-width: 100% !important;
+    grid-template-columns: 1fr !important;
+  }
+
+  .publicStats{
+    max-width: calc(100% - 36px) !important;
+    margin: -70px auto 50px !important;
+    grid-template-columns: 1fr !important;
+  }
+
+  .whatsappFloat{
+    width: 62px !important;
+    height: 62px !important;
+    right: 18px !important;
+    bottom: 18px !important;
+  }
+}
