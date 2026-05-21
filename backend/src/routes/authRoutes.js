@@ -8,29 +8,34 @@ const db = require("../config/db");
 
 router.post("/login", async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, username, password } = req.body;
+
+    const login = email || username;
+
+    if (!login || !password) {
+      return res.status(400).json({
+        error: "Informe e-mail/usuário e senha."
+      });
+    }
 
     const [users] = await db.query(
-      "SELECT * FROM users WHERE email = ? LIMIT 1",
-      [email]
+      "SELECT * FROM users WHERE email = ? OR username = ? LIMIT 1",
+      [login, login]
     );
 
     if (!users.length) {
       return res.status(401).json({
-        error: "Usuário não encontrado"
+        error: "Usuário não encontrado."
       });
     }
 
     const user = users[0];
 
-    const valid = await bcrypt.compare(
-      password,
-      user.password
-    );
+    const valid = await bcrypt.compare(password, user.password);
 
     if (!valid) {
       return res.status(401).json({
-        error: "Senha inválida"
+        error: "Senha inválida."
       });
     }
 
@@ -40,13 +45,14 @@ router.post("/login", async (req, res) => {
         email: user.email,
         role: user.role
       },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: "7d"
-      }
+      process.env.JWT_SECRET || "spadodoguinho123",
+      { expiresIn: "7d" }
     );
 
+    delete user.password;
+
     res.json({
+      success: true,
       token,
       user
     });
