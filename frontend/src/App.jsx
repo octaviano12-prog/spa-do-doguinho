@@ -9,28 +9,22 @@ import {
 import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/admin/DashboardPage";
 import ClientesPage from "./pages/admin/ClientesPage";
+import PetsPage from "./pages/admin/PetsPage";
+import ServicosPage from "./pages/admin/ServicosPage";
 
 function PrivateRoute({ children }) {
   const token = localStorage.getItem("spa_token");
 
-  return token
-    ? children
-    : <Navigate to="/login" replace />;
+  return token ? children : <Navigate to="/login" replace />;
 }
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route
-          path="/"
-          element={<Navigate to="/login" replace />}
-        />
+        <Route path="/" element={<Navigate to="/login" replace />} />
 
-        <Route
-          path="/login"
-          element={<LoginPage />}
-        />
+        <Route path="/login" element={<LoginPage />} />
 
         <Route
           path="/admin/dashboard"
@@ -49,6 +43,26 @@ export default function App() {
             </PrivateRoute>
           }
         />
+
+        <Route
+          path="/admin/pets"
+          element={
+            <PrivateRoute>
+              <PetsPage />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/admin/servicos"
+          element={
+            <PrivateRoute>
+              <ServicosPage />
+            </PrivateRoute>
+          }
+        />
+
+        <Route path="*" element={<Navigate to="/admin/dashboard" replace />} />
       </Routes>
     </BrowserRouter>
   );
