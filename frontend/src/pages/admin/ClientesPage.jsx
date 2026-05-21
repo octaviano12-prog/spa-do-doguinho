@@ -1,7 +1,16 @@
 import { useEffect, useState } from "react";
+
 import AdminLayout from "../../components/admin/AdminLayout";
+import AdminTable from "../../components/ui/AdminTable";
+
 import { apiRequest } from "../../lib/api";
-import { Plus, Trash2 } from "lucide-react";
+
+import {
+  Plus,
+  Trash2,
+  Mail,
+  Phone
+} from "lucide-react";
 
 export default function ClientesPage() {
   const [clientes, setClientes] = useState([]);
@@ -64,6 +73,48 @@ export default function ClientesPage() {
     loadClientes();
   }, []);
 
+  const columns = [
+    {
+      key: "name",
+      label: "Cliente"
+    },
+
+    {
+      key: "email",
+      label: "E-mail",
+      render: (row) => (
+        <div className="flex items-center gap-2">
+          <Mail size={16} />
+          {row.email}
+        </div>
+      )
+    },
+
+    {
+      key: "phone",
+      label: "Telefone",
+      render: (row) => (
+        <div className="flex items-center gap-2">
+          <Phone size={16} />
+          {row.phone}
+        </div>
+      )
+    },
+
+    {
+      key: "actions",
+      label: "Ações",
+      render: (row) => (
+        <button
+          onClick={() => handleDelete(row.id)}
+          className="w-10 h-10 rounded-2xl bg-red-100 text-red-600 flex items-center justify-center hover:bg-red-200 transition"
+        >
+          <Trash2 size={18} />
+        </button>
+      )
+    }
+  ];
+
   return (
     <AdminLayout>
       <div className="space-y-8">
@@ -71,15 +122,19 @@ export default function ClientesPage() {
           <h1 className="text-4xl font-black">
             Clientes
           </h1>
+
+          <p className="text-gray-500 mt-2">
+            Gerencie todos os clientes do sistema.
+          </p>
         </div>
 
         <form
           onSubmit={handleCreate}
-          className="bg-white p-6 rounded-3xl border shadow-sm grid md:grid-cols-4 gap-4"
+          className="bg-white rounded-3xl p-6 border shadow-sm grid md:grid-cols-4 gap-4"
         >
           <input
             placeholder="Nome"
-            className="border rounded-2xl px-4 h-12"
+            className="h-12 border rounded-2xl px-4"
             value={form.name}
             onChange={(e) =>
               setForm({
@@ -91,7 +146,7 @@ export default function ClientesPage() {
 
           <input
             placeholder="E-mail"
-            className="border rounded-2xl px-4 h-12"
+            className="h-12 border rounded-2xl px-4"
             value={form.email}
             onChange={(e) =>
               setForm({
@@ -103,7 +158,7 @@ export default function ClientesPage() {
 
           <input
             placeholder="Telefone"
-            className="border rounded-2xl px-4 h-12"
+            className="h-12 border rounded-2xl px-4"
             value={form.phone}
             onChange={(e) =>
               setForm({
@@ -119,51 +174,12 @@ export default function ClientesPage() {
           </button>
         </form>
 
-        <div className="bg-white rounded-3xl border shadow-sm overflow-hidden">
-          <table className="w-full">
-            <thead className="bg-gray-100">
-              <tr>
-                <th className="text-left p-4">Nome</th>
-                <th className="text-left p-4">Email</th>
-                <th className="text-left p-4">Telefone</th>
-                <th className="text-right p-4">Ações</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {!loading &&
-                clientes.map((cliente) => (
-                  <tr
-                    key={cliente.id}
-                    className="border-t"
-                  >
-                    <td className="p-4">
-                      {cliente.name}
-                    </td>
-
-                    <td className="p-4">
-                      {cliente.email}
-                    </td>
-
-                    <td className="p-4">
-                      {cliente.phone}
-                    </td>
-
-                    <td className="p-4 text-right">
-                      <button
-                        onClick={() =>
-                          handleDelete(cliente.id)
-                        }
-                        className="text-red-600"
-                      >
-                        <Trash2 size={18} />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-        </div>
+        <AdminTable
+          columns={columns}
+          data={clientes}
+          loading={loading}
+          emptyMessage="Nenhum cliente cadastrado"
+        />
       </div>
     </AdminLayout>
   );
