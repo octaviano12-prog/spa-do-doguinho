@@ -1109,3 +1109,63 @@ button{
   from{transform:scale(1);filter:saturate(1.04)}
   to{transform:scale(1.06);filter:saturate(1.12)}
 }
+
+/* Ajustes para botões de menu e links do footer */
+html{
+  scroll-behavior:smooth;
+}
+
+#sobre,
+#contato,
+#servicos,
+#depoimentos,
+#galeria-preview{
+  scroll-margin-top:120px;
+}
+
+.navButton{
+  position:relative;
+  border:0;
+  background:transparent;
+  color:rgba(255,255,255,.78);
+  font-weight:800;
+  cursor:pointer;
+  transition:.22s ease;
+}
+
+.navButton:hover{
+  color:var(--gold-light);
+}
+
+.navButton::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-12px;
+  width:0;
+  height:3px;
+  border-radius:999px;
+  background:linear-gradient(90deg,var(--gold),var(--gold-light));
+  transition:.22s ease;
+}
+
+.navButton:hover::after{
+  width:100%;
+}
+
+.footerLinks button{
+  width:max-content;
+  border:0;
+  padding:0;
+  background:transparent;
+  color:var(--muted);
+  font:inherit;
+  cursor:pointer;
+  text-align:left;
+  transition:.2s ease;
+}
+
+.footerLinks button:hover{
+  color:var(--gold-light);
+  transform:translateX(4px);
+}
