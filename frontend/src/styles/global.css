@@ -919,3 +919,19 @@ button{
     bottom:18px;
   }
 }
+.publicHero::after{
+  animation: heroBgMove 10s ease-in-out infinite alternate !important;
+  transform-origin: right center;
+}
+
+@keyframes heroBgMove{
+  0%{
+    transform: scale(1) translateY(0);
+    filter: saturate(1.03) contrast(1.02);
+  }
+
+  100%{
+    transform: scale(1.08) translateY(-18px);
+    filter: saturate(1.15) contrast(1.08);
+  }
+}
