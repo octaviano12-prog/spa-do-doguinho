@@ -15,22 +15,20 @@ import PetsPage from "./pages/admin/PetsPage";
 import ServicosPage from "./pages/admin/ServicosPage";
 import AgendamentosPage from "./pages/admin/AgendamentosPage";
 
+import FinanceiroPage from "./pages/admin/FinanceiroPage";
+import EstoquePage from "./pages/admin/EstoquePage";
+import VacinasPage from "./pages/admin/VacinasPage";
+import GaleriaPage from "./pages/admin/GaleriaPage";
+
+import DisponibilidadePage from "./pages/admin/DisponibilidadePage";
+import ConfiguracoesPage from "./pages/admin/ConfiguracoesPage";
+
 function PrivateRoute({ children }) {
   const token = localStorage.getItem("spa_token");
 
   return token
     ? children
     : <Navigate to="/login" replace />;
-}
-
-function PlaceholderPage({ title }) {
-  return (
-    <div className="p-10">
-      <h1 className="text-4xl font-black">
-        {title}
-      </h1>
-    </div>
-  );
 }
 
 export default function App() {
@@ -116,7 +114,7 @@ export default function App() {
           path="/admin/financeiro"
           element={
             <PrivateRoute>
-              <PlaceholderPage title="Financeiro" />
+              <FinanceiroPage />
             </PrivateRoute>
           }
         />
@@ -127,7 +125,7 @@ export default function App() {
           path="/admin/estoque"
           element={
             <PrivateRoute>
-              <PlaceholderPage title="Estoque" />
+              <EstoquePage />
             </PrivateRoute>
           }
         />
@@ -138,18 +136,7 @@ export default function App() {
           path="/admin/vacinas"
           element={
             <PrivateRoute>
-              <PlaceholderPage title="Vacinas" />
-            </PrivateRoute>
-          }
-        />
-
-        {/* DISPONIBILIDADE */}
-
-        <Route
-          path="/admin/disponibilidade"
-          element={
-            <PrivateRoute>
-              <PlaceholderPage title="Disponibilidade" />
+              <VacinasPage />
             </PrivateRoute>
           }
         />
@@ -160,7 +147,18 @@ export default function App() {
           path="/admin/galeria"
           element={
             <PrivateRoute>
-              <PlaceholderPage title="Galeria" />
+              <GaleriaPage />
+            </PrivateRoute>
+          }
+        />
+
+        {/* DISPONIBILIDADE */}
+
+        <Route
+          path="/admin/disponibilidade"
+          element={
+            <PrivateRoute>
+              <DisponibilidadePage />
             </PrivateRoute>
           }
         />
@@ -171,7 +169,7 @@ export default function App() {
           path="/admin/configuracoes"
           element={
             <PrivateRoute>
-              <PlaceholderPage title="Configurações" />
+              <ConfiguracoesPage />
             </PrivateRoute>
           }
         />
@@ -187,6 +185,7 @@ export default function App() {
             />
           }
         />
+
       </Routes>
     </BrowserRouter>
   );
