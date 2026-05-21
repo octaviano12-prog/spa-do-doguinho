@@ -19,6 +19,7 @@ import {
   ShieldCheck,
   Sparkles,
   Star,
+  User,
 } from "lucide-react";
 
 import client from "../api/client";
@@ -63,6 +64,7 @@ export default function PublicHome() {
     async function load() {
       try {
         const { data } = await client.get("/services");
+
         setServices(
           Array.isArray(data)
             ? data.filter((service) => Number(service.active) !== 0)
@@ -122,7 +124,7 @@ export default function PublicHome() {
   }
 
   return (
-    <div className="publicSite">
+    <div className="publicSite cinemaHome">
       <a
         href={whatsappHref}
         target="_blank"
@@ -133,7 +135,7 @@ export default function PublicHome() {
         <MessageCircle size={30} />
       </a>
 
-      <header className="publicHeader">
+      <header className="publicHeader cinemaHeader">
         <Link to="/" className="publicLogo">
           <div className="brandIcon">
             <Dog />
@@ -167,113 +169,137 @@ export default function PublicHome() {
           </button>
         </nav>
 
-        <button onClick={goBooking} className="btn gold publicHeaderCta">
-          <CalendarCheck size={18} />
-          Agendar
-        </button>
+        <div className="headerActions">
+          <Link to="/login" className="accountLink">
+            <User size={18} />
+            Minha Conta
+          </Link>
+
+          <button onClick={goBooking} className="btn gold publicHeaderCta">
+            <CalendarCheck size={18} />
+            Agendar Agora
+          </button>
+        </div>
       </header>
 
-      <section className="publicHero">
-        <div className="heroGlow glowLeft" />
-        <div className="heroGlow glowRight" />
+      <section className="cinemaHero">
+        <div className="cinemaHeroBg" />
+        <div className="cinemaHeroOverlay" />
 
-        <motion.div
-          className="heroContent"
-          initial={{ opacity: 0, y: 28 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55 }}
-        >
-          <div className="heroBadge">
-            <Star size={16} />
-            Referência em estética pet
-          </div>
+        <div className="heroParticles">
+          {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
+            <span key={item} />
+          ))}
+        </div>
 
-          <h1>
-            Cuidado, carinho e beleza para o seu <span>melhor amigo</span>
-          </h1>
-
-          <p>
-            Banho, tosa, vacinas e relaxamento com atendimento premium, carinho
-            de verdade e agendamento online.
-          </p>
-
-          <div className="heroButtons">
-            <button onClick={goBooking} className="btn gold">
-              <CalendarCheck size={18} />
-              Agendar agora
-            </button>
-
-            <a
-              href={whatsappHref}
-              target="_blank"
-              rel="noreferrer"
-              className="btn ghost"
-            >
-              <Phone size={18} />
-              Falar no WhatsApp
-            </a>
-          </div>
-
-          <div className="heroMiniCards">
-            <div>
-              <ShieldCheck size={24} />
-              <strong>Ambiente climatizado</strong>
-              <span>Conforto e segurança</span>
+        <div className="cinemaHeroContent">
+          <motion.div
+            className="cinemaHeroText"
+            initial={{ opacity: 0, y: 26 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65 }}
+          >
+            <div className="cinemaBadge">
+              <Star size={16} fill="currentColor" />
+              Referência em estética pet
             </div>
 
-            <div>
-              <Heart size={24} />
-              <strong>Atendimento com carinho</strong>
-              <span>Cuidado em cada detalhe</span>
+            <h1>
+              Cuidado, carinho e beleza para o seu{" "}
+              <span>melhor amigo</span>
+            </h1>
+
+            <p>
+              Banho, tosa e relaxamento com profissionais especializados que
+              amam o que fazem. Seu pet merece o melhor!
+            </p>
+
+            <div className="cinemaButtons">
+              <button onClick={goBooking} className="btn gold">
+                <CalendarCheck size={18} />
+                Agendar Horário
+              </button>
+
+              <a
+                href={whatsappHref}
+                target="_blank"
+                rel="noreferrer"
+                className="btn ghost"
+              >
+                <Phone size={18} />
+                Falar no WhatsApp
+              </a>
             </div>
 
-            <div>
-              <Leaf size={24} />
-              <strong>Produtos de qualidade</strong>
-              <span>Bem-estar para o pet</span>
+            <div className="cinemaFeatures">
+              <div>
+                <ShieldCheck size={24} />
+                <strong>Ambiente Seguro</strong>
+                <span>Monitorado 24h</span>
+              </div>
+
+              <div>
+                <Heart size={24} />
+                <strong>Profissionais</strong>
+                <span>Especializados</span>
+              </div>
+
+              <div>
+                <Leaf size={24} />
+                <strong>Produtos Premium</strong>
+                <span>Hipoalergênicos</span>
+              </div>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
 
-        <motion.div
-          className="heroImageWrap"
-          initial={{ opacity: 0, x: 40 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.7 }}
-        >
-          <div className="heroImageGlow" />
-          <img
-            src={img("hero-dog.png")}
-            alt="SPA do Doguinho"
-            className="heroDogImage"
-          />
+          <motion.div
+            className="cinemaHeroVisual"
+            initial={{ opacity: 0, scale: 0.96, x: 35 }}
+            animate={{ opacity: 1, scale: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <div className="dogGlow" />
 
-          <div className="heroFloatingCard">
-            <div className="heroStars">
-              {[1, 2, 3, 4, 5].map((item) => (
-                <Star key={item} size={16} fill="currentColor" />
-              ))}
+            <img
+              src={img("hero-dog.png")}
+              alt="SPA do Doguinho"
+              className="cinemaDog"
+            />
+
+            <div className="goldRing" />
+
+            <div className="cinemaReviewCard">
+              <div className="heroStars">
+                {[1, 2, 3, 4, 5].map((item) => (
+                  <Star key={item} size={18} fill="currentColor" />
+                ))}
+              </div>
+
+              <strong>5.0 de 500+ avaliações</strong>
+              <span>Clientes e pets felizes!</span>
             </div>
+          </motion.div>
+        </div>
 
-            <strong>5.0 de avaliação</strong>
-            <span>Mais de 3.500 pets atendidos com carinho</span>
-          </div>
-        </motion.div>
-      </section>
+        <section className="cinemaStats">
+          {[
+            { icon: PawPrint, value: "+3.500", label: "Pets atendidos" },
+            { icon: Award, value: "5 anos", label: "De experiência" },
+            { icon: CalendarCheck, value: "Online", label: "Agendamento fácil" },
+            { icon: Gift, value: "Premium", label: "Benefícios exclusivos" },
+          ].map(({ icon: Icon, value, label }) => (
+            <div className="cinemaStatItem" key={value}>
+              <div className="cinemaStatIcon">
+                <Icon size={30} />
+              </div>
 
-      <section className="publicStats">
-        {[
-          { icon: PawPrint, value: "+3.500", label: "Pets atendidos" },
-          { icon: Award, value: "5 anos", label: "De experiência" },
-          { icon: Clock, value: "Online", label: "Agendamento fácil" },
-          { icon: Gift, value: "Premium", label: "Benefícios exclusivos" },
-        ].map(({ icon: Icon, value, label }) => (
-          <div className="statBox" key={value}>
-            <Icon size={26} />
-            <strong>{value}</strong>
-            <span>{label}</span>
-          </div>
-        ))}
+              <div>
+                <strong>{value}</strong>
+                <span>{label}</span>
+              </div>
+            </div>
+          ))}
+        </section>
       </section>
 
       <section className="servicesSection" id="servicos">
@@ -310,7 +336,9 @@ export default function PublicHome() {
           <div className="aboutBox card">
             <div>
               <span className="pageKicker">Por que escolher a gente?</span>
+
               <h2>Um atendimento pensado para o pet e para o tutor</h2>
+
               <p>
                 O SPA do Doguinho une visual profissional, agendamento fácil,
                 carinho, segurança e uma experiência premium para encantar
