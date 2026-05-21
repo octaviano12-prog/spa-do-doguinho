@@ -25,7 +25,24 @@ app.use(
 app.get("/health", (_, res) => {
   res.json({ ok: true, app: "SPA do Doguinho API" });
 });
+const db = require("./config/db");
 
+app.get("/api/health", async (_, res) => {
+  try {
+    await db.query("SELECT 1");
+
+    res.json({
+      status: "ok",
+      database: "connected"
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      database: "disconnected",
+      error: error.message
+    });
+  }
+});
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/dashboard", require("./routes/dashboardRoutes"));
 app.use("/api/availability", require("./routes/availabilityRoutes"));
