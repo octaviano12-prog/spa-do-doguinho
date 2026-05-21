@@ -93,10 +93,6 @@ export default function PublicHome() {
     }));
   }, [services]);
 
-  function goBooking() {
-    navigate(window.innerWidth <= 768 ? "/agendamento-mobile" : "/agendamento");
-  }
-
   const galleryList = gallery.length
     ? gallery.slice(0, 4)
     : [
@@ -109,6 +105,21 @@ export default function PublicHome() {
           title: "Agendamento online",
         },
       ];
+
+  function goBooking() {
+    navigate(window.innerWidth <= 768 ? "/agendamento-mobile" : "/agendamento");
+  }
+
+  function scrollToSection(id) {
+    const section = document.getElementById(id);
+
+    if (section) {
+      section.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  }
 
   return (
     <div className="publicSite">
@@ -138,8 +149,22 @@ export default function PublicHome() {
           <Link to="/">Home</Link>
           <Link to="/servicos-publico">Serviços</Link>
           <Link to="/galeria-publica">Galeria</Link>
-          <a href="#sobre">Quem Somos</a>
-          <a href="#contato">Contato</a>
+
+          <button
+            type="button"
+            className="navButton"
+            onClick={() => scrollToSection("sobre")}
+          >
+            Quem Somos
+          </button>
+
+          <button
+            type="button"
+            className="navButton"
+            onClick={() => scrollToSection("contato")}
+          >
+            Contato
+          </button>
         </nav>
 
         <button onClick={goBooking} className="btn gold publicHeaderCta">
@@ -416,6 +441,12 @@ export default function PublicHome() {
             <Link to="/">Home</Link>
             <Link to="/servicos-publico">Serviços</Link>
             <Link to="/galeria-publica">Galeria</Link>
+            <button type="button" onClick={() => scrollToSection("sobre")}>
+              Quem Somos
+            </button>
+            <button type="button" onClick={() => scrollToSection("contato")}>
+              Contato
+            </button>
           </div>
         </div>
 
