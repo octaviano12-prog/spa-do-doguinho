@@ -1,185 +1,203 @@
 import { useEffect, useState } from "react";
 
-import AdminLayout from "../../components/admin/AdminLayout";
-import AdminTable from "../../components/ui/AdminTable";
-
-import { apiRequest } from "../../lib/api";
-
 import {
-  Plus,
-  Trash2,
-  Mail,
-  Phone
+  Calendar,
+  Users,
+  PawPrint,
+  Wallet,
+  TrendingUp,
+  Clock
 } from "lucide-react";
 
-export default function ClientesPage() {
-  const [clientes, setClientes] = useState([]);
-  const [loading, setLoading] = useState(true);
+import { motion } from "framer-motion";
 
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    phone: ""
+import AdminLayout from "../../components/admin/AdminLayout";
+
+import { getDashboardStats } from "../../lib/dashboard";
+
+export default function DashboardPage() {
+  const [stats, setStats] = useState({
+    customers: 0,
+    pets: 0,
+    appointments: 0,
+    revenue: 0
   });
 
-  async function loadClientes() {
-    try {
-      const data = await apiRequest("/customers");
-
-      setClientes(data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function handleCreate(e) {
-    e.preventDefault();
-
-    try {
-      await apiRequest("/customers", {
-        method: "POST",
-        body: JSON.stringify(form)
-      });
-
-      setForm({
-        name: "",
-        email: "",
-        phone: ""
-      });
-
-      loadClientes();
-    } catch (error) {
-      alert(error.message);
-    }
-  }
-
-  async function handleDelete(id) {
-    if (!confirm("Excluir cliente?")) return;
-
-    try {
-      await apiRequest(`/customers/${id}`, {
-        method: "DELETE"
-      });
-
-      loadClientes();
-    } catch (error) {
-      alert(error.message);
-    }
-  }
-
   useEffect(() => {
-    loadClientes();
+    async function load() {
+      try {
+        const data =
+          await getDashboardStats();
+
+        setStats(data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    load();
   }, []);
 
-  const columns = [
+  const cards = [
     {
-      key: "name",
-      label: "Cliente"
+      title: "Agendamentos",
+      value: stats.appointments,
+      icon: Calendar
     },
 
     {
-      key: "email",
-      label: "E-mail",
-      render: (row) => (
-        <div className="flex items-center gap-2">
-          <Mail size={16} />
-          {row.email}
-        </div>
-      )
+      title: "Clientes",
+      value: stats.customers,
+      icon: Users
     },
 
     {
-      key: "phone",
-      label: "Telefone",
-      render: (row) => (
-        <div className="flex items-center gap-2">
-          <Phone size={16} />
-          {row.phone}
-        </div>
-      )
+      title: "Pets",
+      value: stats.pets,
+      icon: PawPrint
     },
 
     {
-      key: "actions",
-      label: "Ações",
-      render: (row) => (
-        <button
-          onClick={() => handleDelete(row.id)}
-          className="w-10 h-10 rounded-2xl bg-red-100 text-red-600 flex items-center justify-center hover:bg-red-200 transition"
-        >
-          <Trash2 size={18} />
-        </button>
-      )
+      title: "Faturamento",
+      value: `R$ ${Number(
+        stats.revenue
+      ).toFixed(2)}`,
+      icon: Wallet
     }
   ];
 
   return (
     <AdminLayout>
       <div className="space-y-8">
-        <div>
-          <h1 className="text-4xl font-black">
-            Clientes
-          </h1>
 
-          <p className="text-gray-500 mt-2">
-            Gerencie todos os clientes do sistema.
-          </p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-5xl font-black text-white">
+              Dashboard
+            </h1>
+
+            <p className="text-green-100 mt-2">
+              Bem-vindo ao SPA do Doguinho 🐶
+            </p>
+          </div>
+
+          <div className="glass rounded-3xl px-6 py-4 border border-white/30 text-white">
+            <div className="flex items-center gap-3">
+              <Clock size={22} />
+
+              <div>
+                <div className="text-sm opacity-70">
+                  Sistema Online
+                </div>
+
+                <div className="font-black">
+                  Node.js + MySQL
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <form
-          onSubmit={handleCreate}
-          className="bg-white rounded-3xl p-6 border shadow-sm grid md:grid-cols-4 gap-4"
-        >
-          <input
-            placeholder="Nome"
-            className="h-12 border rounded-2xl px-4"
-            value={form.name}
-            onChange={(e) =>
-              setForm({
-                ...form,
-                name: e.target.value
-              })
-            }
-          />
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+          {cards.map((card, index) => {
+            const Icon = card.icon;
 
-          <input
-            placeholder="E-mail"
-            className="h-12 border rounded-2xl px-4"
-            value={form.email}
-            onChange={(e) =>
-              setForm({
-                ...form,
-                email: e.target.value
-              })
-            }
-          />
+            return (
+              <motion.div
+                key={card.title}
+                initial={{
+                  opacity: 0,
+                  y: 20
+                }}
+                animate={{
+                  opacity: 1,
+                  y: 0
+                }}
+                transition={{
+                  delay: index * 0.08
+                }}
+                className="glass rounded-[32px] p-7 border border-white/30 shadow-2xl card-hover"
+              >
+                <div className="flex items-center justify-between">
 
-          <input
-            placeholder="Telefone"
-            className="h-12 border rounded-2xl px-4"
-            value={form.phone}
-            onChange={(e) =>
-              setForm({
-                ...form,
-                phone: e.target.value
-              })
-            }
-          />
+                  <div>
+                    <div className="text-gray-500 font-semibold">
+                      {card.title}
+                    </div>
 
-          <button className="bg-green-700 hover:bg-green-800 text-white rounded-2xl font-bold flex items-center justify-center gap-2">
-            <Plus size={18} />
-            Adicionar
-          </button>
-        </form>
+                    <div className="text-4xl font-black mt-3 text-gray-900">
+                      {card.value}
+                    </div>
+                  </div>
 
-        <AdminTable
-          columns={columns}
-          data={clientes}
-          loading={loading}
-          emptyMessage="Nenhum cliente cadastrado"
-        />
+                  <div className="w-20 h-20 rounded-[28px] bg-gradient-to-br from-green-500 to-emerald-700 text-white flex items-center justify-center shadow-xl">
+                    <Icon size={34} />
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+
+        <div className="grid xl:grid-cols-3 gap-6">
+
+          <div className="xl:col-span-2 glass rounded-[32px] p-8 border border-white/30 shadow-2xl">
+            <div className="flex items-center gap-3 mb-6">
+              <TrendingUp className="text-green-700" />
+
+              <h2 className="text-2xl font-black">
+                Resumo do Sistema
+              </h2>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-5">
+
+              {[
+                "Sistema moderno",
+                "MySQL integrado",
+                "Dashboard em tempo real",
+                "Agendamentos online",
+                "Controle financeiro",
+                "Controle de estoque"
+              ].map((item) => (
+                <div
+                  key={item}
+                  className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm"
+                >
+                  <div className="font-bold text-gray-800">
+                    {item}
+                  </div>
+                </div>
+              ))}
+
+            </div>
+          </div>
+
+          <div className="glass rounded-[32px] p-8 border border-white/30 shadow-2xl">
+            <h2 className="text-2xl font-black mb-6">
+              Atividades
+            </h2>
+
+            <div className="space-y-4">
+
+              {[
+                "Sistema iniciado",
+                "API online",
+                "Banco conectado",
+                "Painel carregado"
+              ].map((item) => (
+                <div
+                  key={item}
+                  className="bg-white rounded-2xl p-4 border shadow-sm"
+                >
+                  {item}
+                </div>
+              ))}
+
+            </div>
+          </div>
+
+        </div>
       </div>
     </AdminLayout>
   );
