@@ -216,12 +216,55 @@ export default function PublicHome() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="publicFooter premiumFooter">
-        <div><strong>SPA do Doguinho</strong><span>Cuidado com amor para seu melhor amigo.</span></div>
-        <div><strong>Links rápidos</strong><Link to="/">Home</Link><Link to="/servicos-publico">Serviços</Link><Link to="/galeria-publica">Galeria</Link></div>
-        <div><strong>Contato</strong><span>(18) 99999-9999</span><span>Segunda a Sexta — 08:00 às 18:00</span></div>
-      </footer>
+{/* Footer */}
+<footer className="publicFooter premiumFooter">
+  <div className="footerColumn">
+    <div className="footerBrand">
+      <div className="brandIcon">
+        <Dog size={24} />
+      </div>
+
+      <div>
+        <strong>SPA do Doguinho</strong>
+        <span>
+          Cuidado com amor para seu melhor amigo.
+        </span>
+      </div>
     </div>
+  </div>
+
+  <div className="footerColumn">
+    <strong>Links rápidos</strong>
+
+    <div className="footerLinks">
+      <Link to="/">Home</Link>
+      <Link to="/servicos-publico">Serviços</Link>
+      <Link to="/galeria-publica">Galeria</Link>
+    </div>
+  </div>
+
+  <div className="footerColumn">
+    <strong>Contato</strong>
+
+    <div className="footerInfo">
+      <span>(18) 99999-9999</span>
+      <span>Segunda a Sexta — 08:00 às 18:00</span>
+    </div>
+  </div>
+
+  <div className="footerColumn">
+    <strong>Redes sociais</strong>
+
+    <div className="footerSocials">
+      <a
+        href={whatsappHref}
+        target="_blank"
+        rel="noreferrer"
+      >
+        WhatsApp
+      </a>
+    </div>
+  </div>
+</footer>
   );
 }
