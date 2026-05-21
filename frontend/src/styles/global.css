@@ -1108,3 +1108,19 @@ textarea.input{
     flex-direction:column;
   }
 }
+.publicHero::after,
+.heroSection::after{
+  animation: heroZoom 12s ease-in-out infinite alternate;
+  transform-origin: center right;
+}
+
+@keyframes heroZoom{
+  from{
+    transform: scale(1);
+    filter: saturate(1.04) contrast(1.03);
+  }
+  to{
+    transform: scale(1.06);
+    filter: saturate(1.12) contrast(1.08);
+  }
+}
