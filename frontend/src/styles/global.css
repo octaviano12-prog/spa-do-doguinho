@@ -1063,3 +1063,49 @@ button{
   }
 
 }
+/* ===== HERO COMO FUNDO NOVAMENTE ===== */
+
+.publicHero{
+  position:relative;
+  min-height:calc(100vh - var(--header-h));
+  display:flex !important;
+  align-items:flex-start !important;
+  padding:72px 6vw 160px !important;
+  overflow:hidden;
+}
+
+.publicHero::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(3,19,13,.99) 0%,
+      rgba(3,19,13,.96) 34%,
+      rgba(3,19,13,.74) 52%,
+      rgba(3,19,13,.22) 73%,
+      rgba(3,19,13,.04) 100%
+    ),
+    url("/images/hero-dog.png");
+  background-repeat:no-repeat;
+  background-size:auto 100%;
+  background-position:right center;
+  animation:heroZoom 12s ease-in-out infinite alternate;
+}
+
+.heroContent{
+  position:relative;
+  z-index:5;
+  max-width:760px;
+}
+
+.heroImageWrap{
+  display:none !important;
+}
+
+@keyframes heroZoom{
+  from{transform:scale(1);filter:saturate(1.04)}
+  to{transform:scale(1.06);filter:saturate(1.12)}
+}
