@@ -1,12 +1,18 @@
 const express = require("express");
 const router = express.Router();
-const jwt = require("jsonwebtoken");
 
+const jwt = require("jsonwebtoken");
 const db = require("../config/db");
 
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({
+        error: "Informe e-mail e senha."
+      });
+    }
 
     const [users] = await db.query(
       "SELECT * FROM users WHERE email = ? LIMIT 1",
@@ -39,13 +45,13 @@ router.post("/login", async (req, res) => {
 
     delete user.password;
 
-    res.json({
+    return res.json({
       success: true,
       token,
       user
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       error: error.message
     });
   }
