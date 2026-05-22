@@ -1,8 +1,9 @@
 require("dotenv").config();
+
 const app = require("./app");
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
-  console.log(`SPA do Doguinho API rodando na porta ${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`API SPA do Doguinho rodando na porta ${PORT}`);
 });
