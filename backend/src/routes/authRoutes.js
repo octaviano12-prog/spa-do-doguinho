@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
 
 const db = require("../config/db");
 
@@ -23,17 +22,7 @@ router.post("/login", async (req, res) => {
 
     const user = users[0];
 
-    console.log("SENHA DIGITADA:", password);
-    console.log("HASH BANCO:", user.password);
-
-    const valid = await bcrypt.compare(
-      password,
-      user.password
-    );
-
-    console.log("VALID:", valid);
-
-    if (!valid) {
+    if (password !== user.password) {
       return res.status(401).json({
         error: "Senha inválida."
       });
@@ -42,9 +31,10 @@ router.post("/login", async (req, res) => {
     const token = jwt.sign(
       {
         id: user.id,
-        email: user.email
+        email: user.email,
+        role: user.role
       },
-      "spadodoguinho123",
+      process.env.JWT_SECRET || "spadodoguinho123",
       {
         expiresIn: "7d"
       }
@@ -52,16 +42,13 @@ router.post("/login", async (req, res) => {
 
     delete user.password;
 
-    res.json({
+    return res.json({
       success: true,
       token,
       user
     });
-
   } catch (error) {
-    console.log(error);
-
-    res.status(500).json({
+    return res.status(500).json({
       error: error.message
     });
   }
