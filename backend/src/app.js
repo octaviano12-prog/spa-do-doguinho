@@ -1,73 +1,192 @@
-const express = require("express");
-const cors = require("cors");
-const path = require("path");
-const fs = require("fs");
+import React from "react";
 
-const db = require("./config/db");
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate
+} from "react-router-dom";
 
-const app = express();
+import LoginPage from "./pages/LoginPage";
 
-app.use(cors());
-app.use(express.json({ limit: "10mb" }));
+import DashboardPage from "./pages/admin/DashboardPage";
+import ClientesPage from "./pages/admin/ClientesPage";
+import PetsPage from "./pages/admin/PetsPage";
+import ServicosPage from "./pages/admin/ServicosPage";
+import AgendamentosPage from "./pages/admin/AgendamentosPage";
 
-app.get("/health", (req, res) => {
-  res.json({
-    ok: true,
-    cwd: process.cwd(),
-    dirname: __dirname
-  });
-});
+import FinanceiroPage from "./pages/admin/FinanceiroPage";
+import EstoquePage from "./pages/admin/EstoquePage";
+import VacinasPage from "./pages/admin/VacinasPage";
+import GaleriaPage from "./pages/admin/GaleriaPage";
 
-app.get("/api/health", async (req, res) => {
-  try {
-    const [rows] = await db.query("SELECT 1");
-    res.json({ ok: true, database: "conectado", rows });
-  } catch (error) {
-    res.status(500).json({ ok: false, error: error.message });
-  }
-});
+import DisponibilidadePage from "./pages/admin/DisponibilidadePage";
+import ConfiguracoesPage from "./pages/admin/ConfiguracoesPage";
 
-app.use("/api/auth", require("./routes/authRoutes"));
-app.use("/api", require("./routes/resourceRoutes"));
+function PrivateRoute({ children }) {
+  const token = localStorage.getItem("spa_token");
 
-const frontendPaths = [
-  "/home/u953887285/domains/spadodoguinho.com.br/public_html",
-  path.join(process.cwd(), "../public_html"),
-  path.join(process.cwd(), "../public_html/.builds/source/repository/frontend/dist"),
-  path.join(process.cwd(), "frontend/dist"),
-  path.join(__dirname, "../../frontend/dist")
-];
-
-const frontendPath = frontendPaths.find((p) =>
-  fs.existsSync(path.join(p, "index.html"))
-);
-
-app.get("/debug-paths", (req, res) => {
-  res.json({
-    cwd: process.cwd(),
-    dirname: __dirname,
-    frontendPath,
-    tested: frontendPaths.map((p) => ({
-      path: p,
-      exists: fs.existsSync(p),
-      index: fs.existsSync(path.join(p, "index.html"))
-    }))
-  });
-});
-
-if (frontendPath) {
-  app.use(express.static(frontendPath));
-
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(frontendPath, "index.html"));
-  });
-} else {
-  app.get("*", (req, res) => {
-    res.status(500).json({
-      error: "Frontend não encontrado",
-      tested: frontendPaths
-    });
-  });
+  return token
+    ? children
+    : <Navigate to="/login" replace />;
 }
 
-module.exports = app;
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+
+        {/* LOGIN */}
+
+        <Route
+          path="/"
+          element={
+            <Navigate
+              to="/login"
+              replace
+            />
+          }
+        />
+
+        <Route
+          path="/login"
+          element={<LoginPage />}
+        />
+
+        {/* DASHBOARD */}
+
+        <Route
+          path="/admin/dashboard"
+          element={
+            <PrivateRoute>
+              <DashboardPage />
+            </PrivateRoute>
+          }
+        />
+
+        {/* CLIENTES */}
+
+        <Route
+          path="/admin/clientes"
+          element={
+            <PrivateRoute>
+              <ClientesPage />
+            </PrivateRoute>
+          }
+        />
+
+        {/* PETS */}
+
+        <Route
+          path="/admin/pets"
+          element={
+            <PrivateRoute>
+              <PetsPage />
+            </PrivateRoute>
+          }
+        />
+
+        {/* SERVIÇOS */}
+
+        <Route
+          path="/admin/servicos"
+          element={
+            <PrivateRoute>
+              <ServicosPage />
+            </PrivateRoute>
+          }
+        />
+
+        {/* AGENDAMENTOS */}
+
+        <Route
+          path="/admin/agendamentos"
+          element={
+            <PrivateRoute>
+              <AgendamentosPage />
+            </PrivateRoute>
+          }
+        />
+
+        {/* FINANCEIRO */}
+
+        <Route
+          path="/admin/financeiro"
+          element={
+            <PrivateRoute>
+              <FinanceiroPage />
+            </PrivateRoute>
+          }
+        />
+
+        {/* ESTOQUE */}
+
+        <Route
+          path="/admin/estoque"
+          element={
+            <PrivateRoute>
+              <EstoquePage />
+            </PrivateRoute>
+          }
+        />
+
+        {/* VACINAS */}
+
+        <Route
+          path="/admin/vacinas"
+          element={
+            <PrivateRoute>
+              <VacinasPage />
+            </PrivateRoute>
+          }
+        />
+
+        {/* GALERIA */}
+
+        <Route
+          path="/admin/galeria"
+          element={
+            <PrivateRoute>
+              <GaleriaPage />
+            </PrivateRoute>
+          }
+        />
+
+        {/* DISPONIBILIDADE */}
+
+        <Route
+          path="/admin/disponibilidade"
+          element={
+            <PrivateRoute>
+              <DisponibilidadePage />
+            </PrivateRoute>
+          }
+        />
+
+        {/* CONFIGURAÇÕES */}
+
+        <Route
+          path="/admin/configuracoes"
+          element={
+            <PrivateRoute>
+              <ConfiguracoesPage />
+            </PrivateRoute>
+          }
+        />
+
+        {/* FALLBACK */}
+
+        <Route
+          path="*"
+          element={
+            <Navigate
+              to="/admin/dashboard"
+              replace
+            />
+          }
+        />
+
+      </Routes>
+    </BrowserRouter>
+  );
+}
