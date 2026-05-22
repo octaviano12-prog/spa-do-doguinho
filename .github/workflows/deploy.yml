@@ -18,15 +18,9 @@ jobs:
         with:
           node-version: 22
 
-      - name: Ver arquivos
-        run: ls -la
-
-      - name: Ver frontend
-        run: ls -la frontend
-
       - name: Instalar dependências frontend
         working-directory: frontend
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       - name: Gerar build frontend
         working-directory: frontend
