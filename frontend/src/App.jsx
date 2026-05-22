@@ -9,52 +9,43 @@ import {
 
 import LoginPage from "./pages/LoginPage";
 
+import HomePage from "./pages/public/HomePage";
+import ServicosPublicPage from "./pages/public/ServicosPublicPage";
+import GaleriaPublicPage from "./pages/public/GaleriaPublicPage";
+import ContatoPage from "./pages/public/ContatoPage";
+
 import DashboardPage from "./pages/admin/DashboardPage";
 import ClientesPage from "./pages/admin/ClientesPage";
 import PetsPage from "./pages/admin/PetsPage";
 import ServicosPage from "./pages/admin/ServicosPage";
 import AgendamentosPage from "./pages/admin/AgendamentosPage";
-
 import FinanceiroPage from "./pages/admin/FinanceiroPage";
 import EstoquePage from "./pages/admin/EstoquePage";
 import VacinasPage from "./pages/admin/VacinasPage";
 import GaleriaPage from "./pages/admin/GaleriaPage";
-
 import DisponibilidadePage from "./pages/admin/DisponibilidadePage";
 import ConfiguracoesPage from "./pages/admin/ConfiguracoesPage";
 
 function PrivateRoute({ children }) {
   const token = localStorage.getItem("spa_token");
 
-  return token
-    ? children
-    : <Navigate to="/login" replace />;
+  return token ? children : <Navigate to="/login" replace />;
 }
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* SITE PÚBLICO */}
+        <Route path="/" element={<HomePage />} />
+        <Route path="/servicos" element={<ServicosPublicPage />} />
+        <Route path="/galeria" element={<GaleriaPublicPage />} />
+        <Route path="/contato" element={<ContatoPage />} />
 
         {/* LOGIN */}
+        <Route path="/login" element={<LoginPage />} />
 
-        <Route
-          path="/"
-          element={
-            <Navigate
-              to="/login"
-              replace
-            />
-          }
-        />
-
-        <Route
-          path="/login"
-          element={<LoginPage />}
-        />
-
-        {/* DASHBOARD */}
-
+        {/* ADMIN */}
         <Route
           path="/admin/dashboard"
           element={
@@ -63,8 +54,6 @@ export default function App() {
             </PrivateRoute>
           }
         />
-
-        {/* CLIENTES */}
 
         <Route
           path="/admin/clientes"
@@ -75,8 +64,6 @@ export default function App() {
           }
         />
 
-        {/* PETS */}
-
         <Route
           path="/admin/pets"
           element={
@@ -85,8 +72,6 @@ export default function App() {
             </PrivateRoute>
           }
         />
-
-        {/* SERVIÇOS */}
 
         <Route
           path="/admin/servicos"
@@ -97,8 +82,6 @@ export default function App() {
           }
         />
 
-        {/* AGENDAMENTOS */}
-
         <Route
           path="/admin/agendamentos"
           element={
@@ -107,8 +90,6 @@ export default function App() {
             </PrivateRoute>
           }
         />
-
-        {/* FINANCEIRO */}
 
         <Route
           path="/admin/financeiro"
@@ -119,8 +100,6 @@ export default function App() {
           }
         />
 
-        {/* ESTOQUE */}
-
         <Route
           path="/admin/estoque"
           element={
@@ -129,8 +108,6 @@ export default function App() {
             </PrivateRoute>
           }
         />
-
-        {/* VACINAS */}
 
         <Route
           path="/admin/vacinas"
@@ -141,8 +118,6 @@ export default function App() {
           }
         />
 
-        {/* GALERIA */}
-
         <Route
           path="/admin/galeria"
           element={
@@ -151,8 +126,6 @@ export default function App() {
             </PrivateRoute>
           }
         />
-
-        {/* DISPONIBILIDADE */}
 
         <Route
           path="/admin/disponibilidade"
@@ -163,8 +136,6 @@ export default function App() {
           }
         />
 
-        {/* CONFIGURAÇÕES */}
-
         <Route
           path="/admin/configuracoes"
           element={
@@ -174,18 +145,7 @@ export default function App() {
           }
         />
 
-        {/* FALLBACK */}
-
-        <Route
-          path="*"
-          element={
-            <Navigate
-              to="/admin/dashboard"
-              replace
-            />
-          }
-        />
-
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   );
