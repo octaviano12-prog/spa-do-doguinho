@@ -4,12 +4,28 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 const db = require("../config/db");
 
+/*
+  Teste pelo navegador:
+  GET /api/auth/login
+*/
+router.get("/login", (req, res) => {
+  res.json({
+    ok: true,
+    message: "Rota de login ativa. Use POST para autenticar."
+  });
+});
+
+/*
+  Login real:
+  POST /api/auth/login
+*/
 router.post("/login", async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password } = req.body || {};
 
     if (!email || !password) {
       return res.status(400).json({
+        success: false,
         error: "Informe e-mail e senha."
       });
     }
@@ -19,16 +35,18 @@ router.post("/login", async (req, res) => {
       [email]
     );
 
-    if (!users.length) {
+    if (!users || users.length === 0) {
       return res.status(401).json({
+        success: false,
         error: "Usuário não encontrado."
       });
     }
 
     const user = users[0];
 
-    if (password !== user.password) {
+    if (String(password) !== String(user.password)) {
       return res.status(401).json({
+        success: false,
         error: "Senha inválida."
       });
     }
@@ -37,10 +55,12 @@ router.post("/login", async (req, res) => {
       {
         id: user.id,
         email: user.email,
-        role: user.role
+        role: user.role || "admin"
       },
       process.env.JWT_SECRET || "spadodoguinho123",
-      { expiresIn: "7d" }
+      {
+        expiresIn: "7d"
+      }
     );
 
     delete user.password;
@@ -51,8 +71,11 @@ router.post("/login", async (req, res) => {
       user
     });
   } catch (error) {
+    console.error("Erro no login:", error);
+
     return res.status(500).json({
-      error: error.message
+      success: false,
+      error: error.message || "Erro interno no login."
     });
   }
 });
