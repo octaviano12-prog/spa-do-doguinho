@@ -8,19 +8,17 @@ const db = require("../config/db");
 
 router.post("/login", async (req, res) => {
   try {
-    const { email, username, password } = req.body;
+    const { email, password } = req.body;
 
-    const login = email || username;
-
-    if (!login || !password) {
+    if (!email || !password) {
       return res.status(400).json({
-        error: "Informe e-mail/usuário e senha."
+        error: "Informe e-mail e senha."
       });
     }
 
     const [users] = await db.query(
-      "SELECT * FROM users WHERE email = ? OR username = ? LIMIT 1",
-      [login, login]
+      "SELECT * FROM users WHERE email = ? LIMIT 1",
+      [email]
     );
 
     if (!users.length) {
@@ -51,13 +49,13 @@ router.post("/login", async (req, res) => {
 
     delete user.password;
 
-    res.json({
+    return res.json({
       success: true,
       token,
       user
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       error: error.message
     });
   }
