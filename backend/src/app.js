@@ -28,7 +28,7 @@ app.get("/api/health", async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      ok: false
+      ok: false,
       database: "erro",
       error: error.message
     });
