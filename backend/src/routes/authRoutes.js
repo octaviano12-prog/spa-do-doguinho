@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-
 const jwt = require("jsonwebtoken");
 
 const db = require("../config/db");
@@ -35,20 +34,18 @@ router.post("/login", async (req, res) => {
         role: user.role
       },
       process.env.JWT_SECRET || "spadodoguinho123",
-      {
-        expiresIn: "7d"
-      }
+      { expiresIn: "7d" }
     );
 
     delete user.password;
 
-    return res.json({
+    res.json({
       success: true,
       token,
       user
     });
   } catch (error) {
-    return res.status(500).json({
+    res.status(500).json({
       error: error.message
     });
   }
