@@ -36,7 +36,8 @@ app.get("/api/health", async (req, res) => {
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api", require("./routes/resourceRoutes"));
 
-const frontendPath = path.join(process.cwd(), "../public_html");
+const frontendPath =
+  "/home/u953887285/domains/spadodoguinho.com.br/public_html";
 
 app.use(express.static(frontendPath));
 
