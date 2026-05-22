@@ -1,192 +1,55 @@
-import React from "react";
+const express = require("express");
+const cors = require("cors");
 
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Navigate
-} from "react-router-dom";
+const authRoutes = require("./routes/authRoutes");
+const resourceRoutes = require("./routes/resourceRoutes");
+const db = require("./config/db");
 
-import LoginPage from "./pages/LoginPage";
+const app = express();
 
-import DashboardPage from "./pages/admin/DashboardPage";
-import ClientesPage from "./pages/admin/ClientesPage";
-import PetsPage from "./pages/admin/PetsPage";
-import ServicosPage from "./pages/admin/ServicosPage";
-import AgendamentosPage from "./pages/admin/AgendamentosPage";
+app.use(cors());
+app.use(express.json({ limit: "10mb" }));
 
-import FinanceiroPage from "./pages/admin/FinanceiroPage";
-import EstoquePage from "./pages/admin/EstoquePage";
-import VacinasPage from "./pages/admin/VacinasPage";
-import GaleriaPage from "./pages/admin/GaleriaPage";
+app.get("/", (req, res) => {
+  res.json({
+    ok: true,
+    message: "Backend SPA do Doguinho online"
+  });
+});
 
-import DisponibilidadePage from "./pages/admin/DisponibilidadePage";
-import ConfiguracoesPage from "./pages/admin/ConfiguracoesPage";
+app.get("/api/health", async (req, res) => {
+  try {
+    const [rows] = await db.query("SELECT 1");
 
-function PrivateRoute({ children }) {
-  const token = localStorage.getItem("spa_token");
+    res.json({
+      ok: true,
+      database: "conectado",
+      rows
+    });
+  } catch (error) {
+    res.status(500).json({
+      ok: false,
+      database: "erro",
+      error: error.message
+    });
+  }
+});
 
-  return token
-    ? children
-    : <Navigate to="/login" replace />;
-}
+app.use("/api/auth", authRoutes);
+app.use("/api", resourceRoutes);
 
-export default function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
+app.use((req, res) => {
+  res.status(404).json({
+    error: "Rota não encontrada"
+  });
+});
 
-        {/* LOGIN */}
+app.use((err, req, res, next) => {
+  console.error(err);
 
-        <Route
-          path="/"
-          element={
-            <Navigate
-              to="/login"
-              replace
-            />
-          }
-        />
+  res.status(500).json({
+    error: "Erro interno no servidor"
+  });
+});
 
-        <Route
-          path="/login"
-          element={<LoginPage />}
-        />
-
-        {/* DASHBOARD */}
-
-        <Route
-          path="/admin/dashboard"
-          element={
-            <PrivateRoute>
-              <DashboardPage />
-            </PrivateRoute>
-          }
-        />
-
-        {/* CLIENTES */}
-
-        <Route
-          path="/admin/clientes"
-          element={
-            <PrivateRoute>
-              <ClientesPage />
-            </PrivateRoute>
-          }
-        />
-
-        {/* PETS */}
-
-        <Route
-          path="/admin/pets"
-          element={
-            <PrivateRoute>
-              <PetsPage />
-            </PrivateRoute>
-          }
-        />
-
-        {/* SERVIÇOS */}
-
-        <Route
-          path="/admin/servicos"
-          element={
-            <PrivateRoute>
-              <ServicosPage />
-            </PrivateRoute>
-          }
-        />
-
-        {/* AGENDAMENTOS */}
-
-        <Route
-          path="/admin/agendamentos"
-          element={
-            <PrivateRoute>
-              <AgendamentosPage />
-            </PrivateRoute>
-          }
-        />
-
-        {/* FINANCEIRO */}
-
-        <Route
-          path="/admin/financeiro"
-          element={
-            <PrivateRoute>
-              <FinanceiroPage />
-            </PrivateRoute>
-          }
-        />
-
-        {/* ESTOQUE */}
-
-        <Route
-          path="/admin/estoque"
-          element={
-            <PrivateRoute>
-              <EstoquePage />
-            </PrivateRoute>
-          }
-        />
-
-        {/* VACINAS */}
-
-        <Route
-          path="/admin/vacinas"
-          element={
-            <PrivateRoute>
-              <VacinasPage />
-            </PrivateRoute>
-          }
-        />
-
-        {/* GALERIA */}
-
-        <Route
-          path="/admin/galeria"
-          element={
-            <PrivateRoute>
-              <GaleriaPage />
-            </PrivateRoute>
-          }
-        />
-
-        {/* DISPONIBILIDADE */}
-
-        <Route
-          path="/admin/disponibilidade"
-          element={
-            <PrivateRoute>
-              <DisponibilidadePage />
-            </PrivateRoute>
-          }
-        />
-
-        {/* CONFIGURAÇÕES */}
-
-        <Route
-          path="/admin/configuracoes"
-          element={
-            <PrivateRoute>
-              <ConfiguracoesPage />
-            </PrivateRoute>
-          }
-        />
-
-        {/* FALLBACK */}
-
-        <Route
-          path="*"
-          element={
-            <Navigate
-              to="/admin/dashboard"
-              replace
-            />
-          }
-        />
-
-      </Routes>
-    </BrowserRouter>
-  );
-}
+module.exports = app;
