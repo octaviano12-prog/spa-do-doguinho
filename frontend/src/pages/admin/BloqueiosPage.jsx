@@ -1,3 +1,5 @@
+import React from "react";
+
 import CrudPage from "../../components/ui/CrudPage";
 
 export default function BloqueiosPage() {
