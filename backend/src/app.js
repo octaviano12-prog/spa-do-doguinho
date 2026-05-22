@@ -28,7 +28,7 @@ app.get("/api/health", async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      ok: false,
+      ok: false
       database: "erro",
       error: error.message
     });
@@ -38,9 +38,9 @@ app.get("/api/health", async (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api", resourceRoutes);
 
-app.use((req, res) => {
+app.use("/api", (req, res) => {
   res.status(404).json({
-    error: "Rota não encontrada"
+    error: "Rota API não encontrada"
   });
 });
 
