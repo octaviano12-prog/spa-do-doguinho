@@ -28,7 +28,6 @@ import ConfiguracoesPage from "./pages/admin/ConfiguracoesPage";
 
 function PrivateRoute({ children }) {
   const token = localStorage.getItem("spa_token");
-
   return token ? children : <Navigate to="/login" replace />;
 }
 
@@ -36,114 +35,25 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* SITE PÚBLICO */}
         <Route path="/" element={<HomePage />} />
+        <Route path="/quem-somos" element={<HomePage />} />
         <Route path="/servicos" element={<ServicosPublicPage />} />
         <Route path="/galeria" element={<GaleriaPublicPage />} />
         <Route path="/contato" element={<ContatoPage />} />
 
-        {/* LOGIN */}
         <Route path="/login" element={<LoginPage />} />
 
-        {/* ADMIN */}
-        <Route
-          path="/admin/dashboard"
-          element={
-            <PrivateRoute>
-              <DashboardPage />
-            </PrivateRoute>
-          }
-        />
-
-        <Route
-          path="/admin/clientes"
-          element={
-            <PrivateRoute>
-              <ClientesPage />
-            </PrivateRoute>
-          }
-        />
-
-        <Route
-          path="/admin/pets"
-          element={
-            <PrivateRoute>
-              <PetsPage />
-            </PrivateRoute>
-          }
-        />
-
-        <Route
-          path="/admin/servicos"
-          element={
-            <PrivateRoute>
-              <ServicosPage />
-            </PrivateRoute>
-          }
-        />
-
-        <Route
-          path="/admin/agendamentos"
-          element={
-            <PrivateRoute>
-              <AgendamentosPage />
-            </PrivateRoute>
-          }
-        />
-
-        <Route
-          path="/admin/financeiro"
-          element={
-            <PrivateRoute>
-              <FinanceiroPage />
-            </PrivateRoute>
-          }
-        />
-
-        <Route
-          path="/admin/estoque"
-          element={
-            <PrivateRoute>
-              <EstoquePage />
-            </PrivateRoute>
-          }
-        />
-
-        <Route
-          path="/admin/vacinas"
-          element={
-            <PrivateRoute>
-              <VacinasPage />
-            </PrivateRoute>
-          }
-        />
-
-        <Route
-          path="/admin/galeria"
-          element={
-            <PrivateRoute>
-              <GaleriaPage />
-            </PrivateRoute>
-          }
-        />
-
-        <Route
-          path="/admin/disponibilidade"
-          element={
-            <PrivateRoute>
-              <DisponibilidadePage />
-            </PrivateRoute>
-          }
-        />
-
-        <Route
-          path="/admin/configuracoes"
-          element={
-            <PrivateRoute>
-              <ConfiguracoesPage />
-            </PrivateRoute>
-          }
-        />
+        <Route path="/admin/dashboard" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />
+        <Route path="/admin/clientes" element={<PrivateRoute><ClientesPage /></PrivateRoute>} />
+        <Route path="/admin/pets" element={<PrivateRoute><PetsPage /></PrivateRoute>} />
+        <Route path="/admin/servicos" element={<PrivateRoute><ServicosPage /></PrivateRoute>} />
+        <Route path="/admin/agendamentos" element={<PrivateRoute><AgendamentosPage /></PrivateRoute>} />
+        <Route path="/admin/financeiro" element={<PrivateRoute><FinanceiroPage /></PrivateRoute>} />
+        <Route path="/admin/estoque" element={<PrivateRoute><EstoquePage /></PrivateRoute>} />
+        <Route path="/admin/vacinas" element={<PrivateRoute><VacinasPage /></PrivateRoute>} />
+        <Route path="/admin/galeria" element={<PrivateRoute><GaleriaPage /></PrivateRoute>} />
+        <Route path="/admin/disponibilidade" element={<PrivateRoute><DisponibilidadePage /></PrivateRoute>} />
+        <Route path="/admin/configuracoes" element={<PrivateRoute><ConfiguracoesPage /></PrivateRoute>} />
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
