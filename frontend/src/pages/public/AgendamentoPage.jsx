@@ -27,9 +27,12 @@ function formatCurrency(value) {
 export default function AgendamentoPage() {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
+  const savedCustomer = localStorage.getItem("spa_customer");
+  const customer = savedCustomer ? JSON.parse(savedCustomer) : null;
+
   const [form, setForm] = useState({
-    name: "",
-    phone: "",
+    name: customer?.name || "",
+    phone: customer?.phone || "",
     pet: "",
     serviceId: "",
     date: "",
@@ -75,6 +78,7 @@ export default function AgendamentoPage() {
 
     return [
       "Olá! Gostaria de agendar um atendimento no SPA do Doguinho.",
+      customer ? `Cliente logado: ${customer.name}` : "Cliente ainda não logado",
       `Nome: ${form.name}`,
       `Telefone: ${form.phone}`,
       `Pet: ${form.pet}`,
@@ -113,6 +117,20 @@ export default function AgendamentoPage() {
               <p className="text-white/70 mt-6 text-xl leading-relaxed max-w-2xl">
                 Escolha o serviço, informe os dados do pet e selecione a forma de pagamento. A estrutura está preparada para login do cliente, histórico e pagamentos online.
               </p>
+
+              {!customer && (
+                <div className="mt-8 bg-yellow-400/15 border border-yellow-300/30 rounded-3xl p-5 text-yellow-50">
+                  <strong>Recomendado:</strong> entre ou crie sua conta para manter histórico de agendamentos, pets e pagamentos.
+                  <Link to="/cliente-login" className="ml-2 underline font-black">Acessar área do cliente</Link>
+                </div>
+              )}
+
+              {customer && (
+                <div className="mt-8 bg-green-400/15 border border-green-300/30 rounded-3xl p-5 text-green-50">
+                  <strong>Cliente logado:</strong> {customer.name}. Este agendamento ficará preparado para seu histórico.
+                  <Link to="/cliente" className="ml-2 underline font-black">Ver minha área</Link>
+                </div>
+              )}
 
               <div className="grid sm:grid-cols-3 gap-4 mt-10">
                 {[
@@ -199,8 +217,8 @@ export default function AgendamentoPage() {
                   Enviar pré-agendamento
                 </button>
 
-                <Link to="/login" className="text-center text-slate-500 hover:text-green-700 font-bold transition">
-                  Já tem conta? Entrar no painel
+                <Link to={customer ? "/cliente" : "/cliente-login"} className="text-center text-slate-500 hover:text-green-700 font-bold transition">
+                  {customer ? "Ver minha área do cliente" : "Já tem conta? Entrar como cliente"}
                 </Link>
               </div>
             </div>
