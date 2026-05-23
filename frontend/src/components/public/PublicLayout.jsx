@@ -20,6 +20,7 @@ const navLinks = [
   { to: "/", label: "Home" },
   { to: "/quem-somos", label: "Quem Somos" },
   { to: "/servicos", label: "Serviços" },
+  { to: "/agendamento", label: "Agendamento" },
   { to: "/galeria", label: "Galeria" },
   { to: "/contato", label: "Contato" }
 ];
@@ -60,15 +61,13 @@ export default function PublicLayout({ children }) {
           </nav>
 
           <div className="hidden lg:flex items-center gap-3">
-            <a
-              href={whatsappUrl}
-              target="_blank"
-              rel="noreferrer"
+            <Link
+              to="/agendamento"
               className="bg-green-500 hover:bg-green-600 px-5 py-3 rounded-2xl shadow-lg font-black flex items-center gap-2 transition"
             >
-              <MessageCircle size={18} />
+              <CalendarDays size={18} />
               Agendar
-            </a>
+            </Link>
 
             <Link
               to="/login"
@@ -105,15 +104,14 @@ export default function PublicLayout({ children }) {
                 </NavLink>
               ))}
 
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noreferrer"
+              <Link
+                to="/agendamento"
+                onClick={() => setMobileOpen(false)}
                 className="mt-2 bg-green-500 hover:bg-green-600 px-5 py-4 rounded-2xl shadow-lg font-black flex items-center justify-center gap-2 transition"
               >
-                <MessageCircle size={18} />
-                Agendar pelo WhatsApp
-              </a>
+                <CalendarDays size={18} />
+                Agendar atendimento
+              </Link>
 
               <Link
                 to="/login"
@@ -129,15 +127,13 @@ export default function PublicLayout({ children }) {
 
       <main className="pt-20">{children}</main>
 
-      <a
-        href={whatsappUrl}
-        target="_blank"
-        rel="noreferrer"
+      <Link
+        to="/agendamento"
         className="fixed right-5 bottom-5 z-50 w-16 h-16 rounded-full bg-green-500 hover:bg-green-600 text-white flex items-center justify-center shadow-2xl shadow-green-900/40 transition hover:scale-105"
-        aria-label="Agendar pelo WhatsApp"
+        aria-label="Agendar atendimento"
       >
-        <MessageCircle size={30} />
-      </a>
+        <CalendarDays size={30} />
+      </Link>
 
       <footer className="border-t border-white/10 bg-[#06140f] relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,#22c55e22,transparent_30%),radial-gradient(circle_at_85%_80%,#f59e0b22,transparent_30%)]" />
