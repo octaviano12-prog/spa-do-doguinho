@@ -118,6 +118,10 @@ export default function AgendamentoPage() {
                 Escolha o serviço, informe os dados do pet e selecione a forma de pagamento. A estrutura está preparada para login do cliente, histórico e pagamentos online.
               </p>
 
+              <div className="mt-8 bg-white/10 border border-white/10 rounded-[34px] p-5 shadow-2xl">
+                <img src="/images/banho-tosa.svg" alt="Agendamento pet" className="w-full rounded-[28px]" />
+              </div>
+
               {!customer && (
                 <div className="mt-8 bg-yellow-400/15 border border-yellow-300/30 rounded-3xl p-5 text-yellow-50">
                   <strong>Recomendado:</strong> entre ou crie sua conta para manter histórico de agendamentos, pets e pagamentos.
@@ -131,20 +135,6 @@ export default function AgendamentoPage() {
                   <Link to="/cliente" className="ml-2 underline font-black">Ver minha área</Link>
                 </div>
               )}
-
-              <div className="grid sm:grid-cols-3 gap-4 mt-10">
-                {[
-                  [Lock, "Login do cliente", "Histórico completo"],
-                  [QrCode, "PIX", "Pagamento online"],
-                  [ShieldCheck, "Agenda segura", "Disponibilidade real"]
-                ].map(([Icon, title, text]) => (
-                  <div key={title} className="bg-white/10 border border-white/10 rounded-3xl p-5 text-white">
-                    <Icon className="text-green-300 mb-4" size={32} />
-                    <div className="font-black">{title}</div>
-                    <div className="text-white/55 text-sm mt-1">{text}</div>
-                  </div>
-                ))}
-              </div>
             </div>
 
             <div className="bg-white rounded-[40px] p-8 shadow-2xl border border-green-100">
@@ -166,9 +156,7 @@ export default function AgendamentoPage() {
                 <select value={form.serviceId} onChange={(e) => updateField("serviceId", e.target.value)} className="bg-slate-50 border border-slate-200 rounded-2xl px-5 py-4 outline-none text-slate-900 focus:border-green-500">
                   <option value="">Selecione o serviço</option>
                   {services.map((service) => (
-                    <option key={service.id} value={service.id}>
-                      {service.name} - {formatCurrency(service.price)}
-                    </option>
+                    <option key={service.id} value={service.id}>{service.name} - {formatCurrency(service.price)}</option>
                   ))}
                 </select>
 
@@ -178,19 +166,8 @@ export default function AgendamentoPage() {
                 </div>
 
                 <div className="grid sm:grid-cols-3 gap-3">
-                  {[
-                    ["pix", QrCode, "PIX"],
-                    ["card", CreditCard, "Cartão"],
-                    ["presencial", User, "Presencial"]
-                  ].map(([value, Icon, label]) => (
-                    <button
-                      key={value}
-                      type="button"
-                      onClick={() => updateField("paymentMethod", value)}
-                      className={`rounded-2xl p-4 border font-black flex flex-col items-center gap-2 transition ${
-                        form.paymentMethod === value ? "bg-green-600 text-white border-green-600" : "bg-slate-50 text-slate-700 border-slate-200 hover:border-green-400"
-                      }`}
-                    >
+                  {[["pix", QrCode, "PIX"], ["card", CreditCard, "Cartão"], ["presencial", User, "Presencial"]].map(([value, Icon, label]) => (
+                    <button key={value} type="button" onClick={() => updateField("paymentMethod", value)} className={`rounded-2xl p-4 border font-black flex flex-col items-center gap-2 transition ${form.paymentMethod === value ? "bg-green-600 text-white border-green-600" : "bg-slate-50 text-slate-700 border-slate-200 hover:border-green-400"}`}>
                       <Icon size={24} />
                       {label}
                     </button>
