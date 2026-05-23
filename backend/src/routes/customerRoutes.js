@@ -3,6 +3,26 @@ const router = require("express").Router();
 const db = require("../config/db");
 const customerAuth = require("../middlewares/customerAuth");
 
+function padTime(value) {
+  return String(value || "").slice(0, 5);
+}
+
+function addMinutes(time, minutes) {
+  const [hour, minute] = padTime(time).split(":").map(Number);
+  const date = new Date(2000, 0, 1, hour || 0, minute || 0, 0);
+  date.setMinutes(date.getMinutes() + Number(minutes || 0));
+  return `${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
+}
+
+function timeToMinutes(time) {
+  const [hour, minute] = padTime(time).split(":").map(Number);
+  return (hour || 0) * 60 + (minute || 0);
+}
+
+function hasOverlap(startA, endA, startB, endB) {
+  return timeToMinutes(startA) < timeToMinutes(endB) && timeToMinutes(endA) > timeToMinutes(startB);
+}
+
 router.use(customerAuth);
 
 router.get("/me", async (req, res) => {
@@ -75,11 +95,47 @@ router.post("/appointments", async (req, res) => {
     const [customers] = await db.query("SELECT id, name FROM customers WHERE id = ? LIMIT 1", [req.customer.id]);
     const customer = customers[0];
 
-    const [services] = await db.query("SELECT id, name, price FROM services WHERE id = ? LIMIT 1", [service_id]);
+    const [services] = await db.query("SELECT id, name, price, duration_minutes FROM services WHERE id = ? LIMIT 1", [service_id]);
     const service = services[0];
 
     if (!service) {
       return res.status(404).json({ error: "Serviço não encontrado." });
+    }
+
+    const duration = Number(service.duration_minutes || 60);
+    const startTime = padTime(time);
+    const endTime = addMinutes(startTime, duration);
+
+    const [blocked] = await db.query(
+      "SELECT id, reason FROM blocked_dates WHERE date = ? AND active = 1 LIMIT 1",
+      [date]
+    );
+
+    if (blocked.length) {
+      return res.status(409).json({ error: blocked[0].reason || "Esta data está bloqueada." });
+    }
+
+    const [existingAppointments] = await db.query(
+      `SELECT id, time, service_id FROM appointments
+       WHERE date = ? AND status NOT IN ('canceled', 'cancelado')`,
+      [date]
+    );
+
+    for (const item of existingAppointments) {
+      const otherStart = padTime(item.time);
+      if (!otherStart) continue;
+
+      let otherDuration = 60;
+      if (item.service_id) {
+        const [otherServices] = await db.query("SELECT duration_minutes FROM services WHERE id = ? LIMIT 1", [item.service_id]);
+        otherDuration = Number(otherServices[0]?.duration_minutes || 60);
+      }
+
+      const otherEnd = addMinutes(otherStart, otherDuration);
+
+      if (hasOverlap(startTime, endTime, otherStart, otherEnd)) {
+        return res.status(409).json({ error: "Este horário acabou de ser ocupado. Escolha outro horário." });
+      }
     }
 
     let finalPetName = pet_name || null;
@@ -97,7 +153,7 @@ router.post("/appointments", async (req, res) => {
       finalPetName = pets[0].name;
     }
 
-    const scheduledAt = `${date} ${time}:00`;
+    const scheduledAt = `${date} ${startTime}:00`;
 
     const [result] = await db.query(
       `INSERT INTO appointments
@@ -112,7 +168,7 @@ router.post("/appointments", async (req, res) => {
         service.name,
         scheduledAt,
         date,
-        time,
+        startTime,
         payment_method || "presencial",
         service.price || 0,
         notes || null
