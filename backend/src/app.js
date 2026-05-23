@@ -5,6 +5,7 @@ const path = require("path");
 const publicRoutes = require("./routes/publicRoutes");
 const authRoutes = require("./routes/authRoutes");
 const resourceRoutes = require("./routes/resourceRoutes");
+const customerRoutes = require("./routes/customerRoutes");
 const db = require("./config/db");
 
 const app = express();
@@ -33,6 +34,7 @@ app.get("/api/health", async (req, res) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/public", publicRoutes);
+app.use("/api/customer", customerRoutes);
 app.use("/api", resourceRoutes);
 
 app.use("/api", (req, res) => {
