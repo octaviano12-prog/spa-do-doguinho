@@ -51,6 +51,98 @@ select{
   min-width: 0;
 }
 
+.clientes-page .clientes-row{
+  display:grid !important;
+  grid-template-columns:minmax(190px,1fr) minmax(230px,1.2fr) minmax(150px,.8fr) auto !important;
+  gap:16px !important;
+  align-items:center !important;
+  width:100% !important;
+}
+
+.clientes-page .cliente-cell{
+  background:#f8fafc !important;
+  border:1px solid #eef2f7 !important;
+  border-radius:20px !important;
+  padding:16px !important;
+  min-width:0 !important;
+  width:100% !important;
+}
+
+.clientes-page .cliente-label{
+  display:flex !important;
+  align-items:center !important;
+  gap:8px !important;
+  font-size:12px !important;
+  line-height:1 !important;
+  color:#94a3b8 !important;
+  font-weight:900 !important;
+  text-transform:uppercase !important;
+  white-space:nowrap !important;
+}
+
+.clientes-page .cliente-value{
+  margin-top:10px !important;
+  color:#0f172a !important;
+  font-size:16px !important;
+  line-height:1.25 !important;
+  font-weight:900 !important;
+  white-space:normal !important;
+  word-break:normal !important;
+  overflow-wrap:break-word !important;
+}
+
+.clientes-page .cliente-value.email{
+  word-break:break-word !important;
+  overflow-wrap:anywhere !important;
+}
+
+.clientes-page .cliente-actions{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:flex-end !important;
+  gap:12px !important;
+  flex-wrap:wrap !important;
+}
+
+.clientes-page .cliente-btn{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:8px !important;
+  border-radius:18px !important;
+  padding:14px 18px !important;
+  font-weight:900 !important;
+  line-height:1 !important;
+  white-space:nowrap !important;
+  border:0 !important;
+  cursor:pointer !important;
+  text-decoration:none !important;
+}
+
+.clientes-page .cliente-btn.whatsapp{
+  background:#dcfce7 !important;
+  color:#15803d !important;
+}
+
+.clientes-page .cliente-btn.edit{
+  background:#dbeafe !important;
+  color:#1d4ed8 !important;
+}
+
+.clientes-page .cliente-btn.delete{
+  background:#fee2e2 !important;
+  color:#b91c1c !important;
+}
+
+@media (max-width:1280px){
+  .clientes-page .clientes-row{
+    grid-template-columns:1fr !important;
+  }
+  .clientes-page .cliente-actions{
+    justify-content:flex-start !important;
+  }
+}
+
 ::-webkit-scrollbar{
   width:10px;
 }
