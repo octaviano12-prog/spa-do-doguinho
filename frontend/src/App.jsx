@@ -10,6 +10,7 @@ import {
 import LoginPage from "./pages/LoginPage";
 
 import HomePage from "./pages/public/HomePage";
+import QuemSomosPage from "./pages/public/QuemSomosPage";
 import ServicosPublicPage from "./pages/public/ServicosPublicPage";
 import GaleriaPublicPage from "./pages/public/GaleriaPublicPage";
 import ContatoPage from "./pages/public/ContatoPage";
@@ -36,7 +37,7 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/quem-somos" element={<HomePage />} />
+        <Route path="/quem-somos" element={<QuemSomosPage />} />
         <Route path="/servicos" element={<ServicosPublicPage />} />
         <Route path="/galeria" element={<GaleriaPublicPage />} />
         <Route path="/contato" element={<ContatoPage />} />
