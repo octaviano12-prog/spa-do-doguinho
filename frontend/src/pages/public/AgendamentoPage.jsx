@@ -22,11 +22,23 @@ function formatCurrency(value) {
   return Number(value || 0).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 }
 
+function toISODate(date) {
+  return date.toISOString().slice(0, 10);
+}
+
+function formatDay(dateString) {
+  const date = new Date(`${dateString}T00:00:00`);
+  return date.toLocaleDateString("pt-BR", { weekday: "short", day: "2-digit", month: "2-digit" });
+}
+
 const steps = ["Pet", "Serviço", "Data", "Pagamento", "Confirmar"];
 
 export default function AgendamentoPage() {
   const [services, setServices] = useState([]);
   const [pets, setPets] = useState([]);
+  const [slots, setSlots] = useState([]);
+  const [slotsLoading, setSlotsLoading] = useState(false);
+  const [slotsMessage, setSlotsMessage] = useState("");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [step, setStep] = useState(0);
@@ -35,6 +47,12 @@ export default function AgendamentoPage() {
   const savedCustomer = localStorage.getItem("spa_customer");
   const token = localStorage.getItem("spa_customer_token");
   const customer = savedCustomer ? JSON.parse(savedCustomer) : null;
+
+  const availableDays = useMemo(() => Array.from({ length: 14 }, (_, index) => {
+    const date = new Date();
+    date.setDate(date.getDate() + index);
+    return toISODate(date);
+  }), []);
 
   const [form, setForm] = useState({
     name: customer?.name || "",
@@ -68,6 +86,36 @@ export default function AgendamentoPage() {
     }
     loadData();
   }, [token]);
+
+  useEffect(() => {
+    async function loadSlots() {
+      if (!form.serviceId || !form.date) {
+        setSlots([]);
+        setSlotsMessage("");
+        return;
+      }
+
+      setSlotsLoading(true);
+      setSlotsMessage("");
+      setSlots([]);
+
+      try {
+        const response = await fetch(`${API_PUBLIC}/available-slots?service_id=${form.serviceId}&date=${form.date}`);
+        const data = await response.json();
+
+        if (!response.ok) throw new Error(data.error || "Erro ao carregar horários.");
+
+        setSlots(Array.isArray(data.slots) ? data.slots : []);
+        if (data.blocked) setSlotsMessage(data.reason || "Data bloqueada.");
+        else if (!data.slots?.length) setSlotsMessage(data.reason || "Nenhum horário disponível neste dia.");
+      } catch (err) {
+        setSlotsMessage(err.message || "Erro ao carregar horários.");
+      } finally {
+        setSlotsLoading(false);
+      }
+    }
+    loadSlots();
+  }, [form.serviceId, form.date]);
 
   const selectedService = useMemo(() => services.find((item) => String(item.id) === String(form.serviceId)), [services, form.serviceId]);
   const selectedPet = useMemo(() => pets.find((item) => String(item.id) === String(form.petId)), [pets, form.petId]);
@@ -190,61 +238,21 @@ export default function AgendamentoPage() {
             </aside>
 
             <section className="bg-white rounded-[34px] md:rounded-[44px] p-5 md:p-8 shadow-2xl border border-green-100">
-              <div className="flex items-center gap-4 mb-7">
-                <div className="w-14 h-14 rounded-2xl bg-green-100 text-green-700 flex items-center justify-center"><PawPrint size={30} /></div>
-                <div><h2 className="text-2xl md:text-3xl font-black text-slate-900">Agendamento</h2><p className="text-slate-500">Etapa {step + 1} de {steps.length}</p></div>
-              </div>
+              <div className="flex items-center gap-4 mb-7"><div className="w-14 h-14 rounded-2xl bg-green-100 text-green-700 flex items-center justify-center"><PawPrint size={30} /></div><div><h2 className="text-2xl md:text-3xl font-black text-slate-900">Agendamento</h2><p className="text-slate-500">Etapa {step + 1} de {steps.length}</p></div></div>
+              <div className="grid grid-cols-5 gap-2 mb-8">{steps.map((item, index) => <button key={item} type="button" onClick={() => setStep(index)} className={`rounded-2xl px-2 py-3 text-xs md:text-sm font-black transition ${index === step ? "bg-green-600 text-white" : index < step ? "bg-green-100 text-green-700" : "bg-slate-100 text-slate-400"}`}>{item}</button>)}</div>
 
-              <div className="grid grid-cols-5 gap-2 mb-8">
-                {steps.map((item, index) => <button key={item} type="button" onClick={() => setStep(index)} className={`rounded-2xl px-2 py-3 text-xs md:text-sm font-black transition ${index === step ? "bg-green-600 text-white" : index < step ? "bg-green-100 text-green-700" : "bg-slate-100 text-slate-400"}`}>{item}</button>)}
-              </div>
+              {step === 0 && <div className="space-y-5"><h3 className="text-3xl font-black text-slate-900">Quem é o pet?</h3><div className="grid md:grid-cols-2 gap-4"><input value={form.name} onChange={(e) => updateField("name", e.target.value)} placeholder="Nome do tutor" className="bg-slate-50 border border-slate-200 rounded-2xl px-5 py-4 outline-none text-slate-900 focus:border-green-500" /><input value={form.phone} onChange={(e) => updateField("phone", e.target.value)} placeholder="Telefone" className="bg-slate-50 border border-slate-200 rounded-2xl px-5 py-4 outline-none text-slate-900 focus:border-green-500" /></div>{pets.length > 0 && <div className="grid md:grid-cols-2 gap-4">{pets.map((pet) => <button key={pet.id} type="button" onClick={() => { updateField("petId", pet.id); updateField("pet", pet.name); }} className={`text-left rounded-3xl p-5 border transition ${String(form.petId) === String(pet.id) ? "bg-green-600 text-white border-green-600" : "bg-slate-50 text-slate-800 border-slate-200 hover:border-green-400"}`}><PawPrint className="mb-3" /><div className="font-black text-xl">{pet.name}</div><div className="opacity-70">{pet.species || "Pet"} {pet.breed ? `• ${pet.breed}` : ""}</div></button>)}</div>}<input value={form.pet} onChange={(e) => { updateField("pet", e.target.value); updateField("petId", ""); }} placeholder="Ou digite o nome do pet" className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-5 py-4 outline-none text-slate-900 focus:border-green-500" /></div>}
 
-              {step === 0 && <div className="space-y-5">
-                <h3 className="text-3xl font-black text-slate-900">Quem é o pet?</h3>
-                <div className="grid md:grid-cols-2 gap-4"><input value={form.name} onChange={(e) => updateField("name", e.target.value)} placeholder="Nome do tutor" className="bg-slate-50 border border-slate-200 rounded-2xl px-5 py-4 outline-none text-slate-900 focus:border-green-500" /><input value={form.phone} onChange={(e) => updateField("phone", e.target.value)} placeholder="Telefone" className="bg-slate-50 border border-slate-200 rounded-2xl px-5 py-4 outline-none text-slate-900 focus:border-green-500" /></div>
-                {pets.length > 0 && <div className="grid md:grid-cols-2 gap-4">{pets.map((pet) => <button key={pet.id} type="button" onClick={() => { updateField("petId", pet.id); updateField("pet", pet.name); }} className={`text-left rounded-3xl p-5 border transition ${String(form.petId) === String(pet.id) ? "bg-green-600 text-white border-green-600" : "bg-slate-50 text-slate-800 border-slate-200 hover:border-green-400"}`}><PawPrint className="mb-3" /><div className="font-black text-xl">{pet.name}</div><div className="opacity-70">{pet.species || "Pet"} {pet.breed ? `• ${pet.breed}` : ""}</div></button>)}</div>}
-                <input value={form.pet} onChange={(e) => { updateField("pet", e.target.value); updateField("petId", ""); }} placeholder="Ou digite o nome do pet" className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-5 py-4 outline-none text-slate-900 focus:border-green-500" />
-              </div>}
+              {step === 1 && <div className="space-y-5"><h3 className="text-3xl font-black text-slate-900">Escolha o serviço</h3>{loading && <div className="text-slate-500">Carregando serviços...</div>}<div className="grid md:grid-cols-2 gap-4">{services.map((service) => <button key={service.id} type="button" onClick={() => { updateField("serviceId", service.id); updateField("date", ""); updateField("time", ""); }} className={`text-left rounded-3xl p-5 border transition ${String(form.serviceId) === String(service.id) ? "bg-green-600 text-white border-green-600" : "bg-slate-50 text-slate-800 border-slate-200 hover:border-green-400"}`}><Sparkles className="mb-3" /><div className="font-black text-xl">{service.name}</div><div className="opacity-70 mt-1">{service.duration_minutes || 60} min</div><div className="font-black text-2xl mt-3">{formatCurrency(service.price)}</div></button>)}</div></div>}
 
-              {step === 1 && <div className="space-y-5">
-                <h3 className="text-3xl font-black text-slate-900">Escolha o serviço</h3>
-                {loading && <div className="text-slate-500">Carregando serviços...</div>}
-                <div className="grid md:grid-cols-2 gap-4">{services.map((service) => <button key={service.id} type="button" onClick={() => updateField("serviceId", service.id)} className={`text-left rounded-3xl p-5 border transition ${String(form.serviceId) === String(service.id) ? "bg-green-600 text-white border-green-600" : "bg-slate-50 text-slate-800 border-slate-200 hover:border-green-400"}`}><Sparkles className="mb-3" /><div className="font-black text-xl">{service.name}</div><div className="opacity-70 mt-1">{service.duration_minutes || 60} min</div><div className="font-black text-2xl mt-3">{formatCurrency(service.price)}</div></button>)}</div>
-              </div>}
+              {step === 2 && <div className="space-y-5"><h3 className="text-3xl font-black text-slate-900">Data e horário</h3><p className="text-slate-500 font-bold">Escolha uma data disponível. Depois selecione um horário livre.</p><div className="grid grid-cols-2 md:grid-cols-4 gap-3">{availableDays.map((day) => <button key={day} type="button" onClick={() => { updateField("date", day); updateField("time", ""); }} className={`rounded-2xl p-4 border font-black transition ${form.date === day ? "bg-green-600 text-white border-green-600" : "bg-slate-50 text-slate-700 border-slate-200 hover:border-green-400"}`}><CalendarDays size={20} className="mb-2" />{formatDay(day)}</button>)}</div>{form.date && <div className="mt-6"><h4 className="text-xl font-black text-slate-900 mb-3">Horários livres</h4>{slotsLoading && <div className="bg-slate-50 rounded-2xl p-5 text-slate-500 font-bold">Buscando horários...</div>}{!slotsLoading && slotsMessage && <div className="bg-yellow-50 rounded-2xl p-5 text-yellow-800 font-bold border border-yellow-100">{slotsMessage}</div>}{!slotsLoading && slots.length > 0 && <div className="grid grid-cols-3 md:grid-cols-5 gap-3">{slots.map((slot) => <button key={slot.time} type="button" onClick={() => updateField("time", slot.time)} className={`rounded-2xl p-4 border font-black transition ${form.time === slot.time ? "bg-green-600 text-white border-green-600" : "bg-slate-50 text-slate-700 border-slate-200 hover:border-green-400"}`}><Clock size={18} className="mx-auto mb-2" />{slot.label}</button>)}</div>}</div>}</div>}
 
-              {step === 2 && <div className="space-y-5">
-                <h3 className="text-3xl font-black text-slate-900">Data e horário</h3>
-                <div className="grid md:grid-cols-2 gap-4"><input type="date" value={form.date} onChange={(e) => updateField("date", e.target.value)} className="bg-slate-50 border border-slate-200 rounded-2xl px-5 py-5 outline-none text-slate-900 focus:border-green-500 text-lg" /><input type="time" value={form.time} onChange={(e) => updateField("time", e.target.value)} className="bg-slate-50 border border-slate-200 rounded-2xl px-5 py-5 outline-none text-slate-900 focus:border-green-500 text-lg" /></div>
-                <div className="bg-green-50 rounded-3xl p-5 border border-green-100 text-green-800 font-bold">Em breve, esta etapa vai mostrar apenas horários liberados pela tela de Disponibilidade.</div>
-              </div>}
+              {step === 3 && <div className="space-y-5"><h3 className="text-3xl font-black text-slate-900">Forma de pagamento</h3><div className="grid md:grid-cols-3 gap-4">{paymentOptions.map(([value, Icon, label, description]) => <button key={value} type="button" onClick={() => updateField("paymentMethod", value)} className={`text-left rounded-3xl p-5 border transition ${form.paymentMethod === value ? "bg-green-600 text-white border-green-600" : "bg-slate-50 text-slate-800 border-slate-200 hover:border-green-400"}`}><Icon size={30} className="mb-4" /><div className="font-black text-xl">{label}</div><div className="text-sm opacity-75 mt-2">{description}</div></button>)}</div><textarea value={form.notes} onChange={(e) => updateField("notes", e.target.value)} rows={4} placeholder="Observações para o atendimento" className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-5 py-4 outline-none text-slate-900 focus:border-green-500" /></div>}
 
-              {step === 3 && <div className="space-y-5">
-                <h3 className="text-3xl font-black text-slate-900">Forma de pagamento</h3>
-                <div className="grid md:grid-cols-3 gap-4">{paymentOptions.map(([value, Icon, label, description]) => <button key={value} type="button" onClick={() => updateField("paymentMethod", value)} className={`text-left rounded-3xl p-5 border transition ${form.paymentMethod === value ? "bg-green-600 text-white border-green-600" : "bg-slate-50 text-slate-800 border-slate-200 hover:border-green-400"}`}><Icon size={30} className="mb-4" /><div className="font-black text-xl">{label}</div><div className="text-sm opacity-75 mt-2">{description}</div></button>)}</div>
-                <textarea value={form.notes} onChange={(e) => updateField("notes", e.target.value)} rows={4} placeholder="Observações para o atendimento" className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-5 py-4 outline-none text-slate-900 focus:border-green-500" />
-              </div>}
-
-              {step === 4 && <div className="space-y-5">
-                <h3 className="text-3xl font-black text-slate-900">Confirmar agendamento</h3>
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="bg-slate-50 rounded-3xl p-5 border"><div className="text-slate-400 font-black text-xs uppercase">Pet</div><div className="font-black text-slate-900 text-xl">{selectedPet?.name || form.pet || "Não informado"}</div></div>
-                  <div className="bg-slate-50 rounded-3xl p-5 border"><div className="text-slate-400 font-black text-xs uppercase">Serviço</div><div className="font-black text-slate-900 text-xl">{selectedService?.name || "Não selecionado"}</div></div>
-                  <div className="bg-slate-50 rounded-3xl p-5 border"><div className="text-slate-400 font-black text-xs uppercase">Data/Hora</div><div className="font-black text-slate-900 text-xl">{form.date || "--"} às {form.time || "--"}</div></div>
-                  <div className="bg-slate-50 rounded-3xl p-5 border"><div className="text-slate-400 font-black text-xs uppercase">Pagamento</div><div className="font-black text-slate-900 text-xl">{form.paymentMethod.toUpperCase()}</div></div>
-                </div>
-                {selectedService && <div className="bg-green-50 rounded-3xl p-5 border border-green-100 flex items-center justify-between gap-4"><div><div className="text-sm font-black text-green-700 uppercase">Valor</div><div className="text-slate-500 flex items-center gap-2 mt-2"><Clock size={18} /> {selectedService.duration_minutes || 60} minutos</div></div><div className="text-3xl font-black text-green-700">{formatCurrency(selectedService.price)}</div></div>}
-                {error && <div className="bg-red-50 border border-red-100 text-red-700 rounded-2xl p-4 font-bold">{error}</div>}
-                {success && <div className="bg-green-50 border border-green-100 text-green-700 rounded-2xl p-4 font-bold">{success}</div>}
-                <button type="button" onClick={saveAppointment} disabled={saving} className="w-full bg-green-600 hover:bg-green-700 text-white py-5 rounded-2xl font-black text-lg flex items-center justify-center gap-3 transition disabled:opacity-60"><CheckCircle size={20} />{saving ? "Salvando..." : "Confirmar e salvar agendamento"}</button>
-                <button type="button" onClick={openWhatsApp} className="w-full bg-slate-900 hover:bg-slate-800 text-white py-4 rounded-2xl font-black flex items-center justify-center gap-3 transition"><MessageCircle size={20} />Enviar pelo WhatsApp</button>
-              </div>}
+              {step === 4 && <div className="space-y-5"><h3 className="text-3xl font-black text-slate-900">Confirmar agendamento</h3><div className="grid md:grid-cols-2 gap-4"><div className="bg-slate-50 rounded-3xl p-5 border"><div className="text-slate-400 font-black text-xs uppercase">Pet</div><div className="font-black text-slate-900 text-xl">{selectedPet?.name || form.pet || "Não informado"}</div></div><div className="bg-slate-50 rounded-3xl p-5 border"><div className="text-slate-400 font-black text-xs uppercase">Serviço</div><div className="font-black text-slate-900 text-xl">{selectedService?.name || "Não selecionado"}</div></div><div className="bg-slate-50 rounded-3xl p-5 border"><div className="text-slate-400 font-black text-xs uppercase">Data/Hora</div><div className="font-black text-slate-900 text-xl">{form.date || "--"} às {form.time || "--"}</div></div><div className="bg-slate-50 rounded-3xl p-5 border"><div className="text-slate-400 font-black text-xs uppercase">Pagamento</div><div className="font-black text-slate-900 text-xl">{form.paymentMethod.toUpperCase()}</div></div></div>{selectedService && <div className="bg-green-50 rounded-3xl p-5 border border-green-100 flex items-center justify-between gap-4"><div><div className="text-sm font-black text-green-700 uppercase">Valor</div><div className="text-slate-500 flex items-center gap-2 mt-2"><Clock size={18} /> {selectedService.duration_minutes || 60} minutos</div></div><div className="text-3xl font-black text-green-700">{formatCurrency(selectedService.price)}</div></div>}{error && <div className="bg-red-50 border border-red-100 text-red-700 rounded-2xl p-4 font-bold">{error}</div>}{success && <div className="bg-green-50 border border-green-100 text-green-700 rounded-2xl p-4 font-bold">{success}</div>}<button type="button" onClick={saveAppointment} disabled={saving} className="w-full bg-green-600 hover:bg-green-700 text-white py-5 rounded-2xl font-black text-lg flex items-center justify-center gap-3 transition disabled:opacity-60"><CheckCircle size={20} />{saving ? "Salvando..." : "Confirmar e salvar agendamento"}</button><button type="button" onClick={openWhatsApp} className="w-full bg-slate-900 hover:bg-slate-800 text-white py-4 rounded-2xl font-black flex items-center justify-center gap-3 transition"><MessageCircle size={20} />Enviar pelo WhatsApp</button></div>}
 
               {error && step !== 4 && <div className="mt-6 bg-red-50 border border-red-100 text-red-700 rounded-2xl p-4 font-bold">{error}</div>}
-
-              <div className="flex items-center justify-between gap-3 mt-8 pt-6 border-t border-slate-100">
-                <button type="button" onClick={previousStep} disabled={step === 0} className="px-5 py-4 rounded-2xl font-black bg-slate-100 text-slate-700 disabled:opacity-40 flex items-center gap-2"><ArrowLeft size={18} /> Voltar</button>
-                {step < steps.length - 1 && <button type="button" onClick={nextStep} className="px-6 py-4 rounded-2xl font-black bg-green-600 text-white flex items-center gap-2">Continuar <ArrowRight size={18} /></button>}
-              </div>
+              <div className="flex items-center justify-between gap-3 mt-8 pt-6 border-t border-slate-100"><button type="button" onClick={previousStep} disabled={step === 0} className="px-5 py-4 rounded-2xl font-black bg-slate-100 text-slate-700 disabled:opacity-40 flex items-center gap-2"><ArrowLeft size={18} /> Voltar</button>{step < steps.length - 1 && <button type="button" onClick={nextStep} className="px-6 py-4 rounded-2xl font-black bg-green-600 text-white flex items-center gap-2">Continuar <ArrowRight size={18} /></button>}</div>
             </section>
           </div>
         </section>
