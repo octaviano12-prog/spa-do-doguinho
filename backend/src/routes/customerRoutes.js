@@ -23,12 +23,29 @@ function hasOverlap(startA, endA, startB, endB) {
   return timeToMinutes(startA) < timeToMinutes(endB) && timeToMinutes(endA) > timeToMinutes(startB);
 }
 
-function paymentStatusFor(method) {
-  const normalized = String(method || "presencial").toLowerCase();
-  if (normalized === "presencial") return "pending";
-  if (normalized === "pix") return "pending";
-  if (normalized === "card") return "pending";
+function paymentStatusFor() {
   return "pending";
+}
+
+function normalizeMethod(method) {
+  const value = String(method || "presencial").toLowerCase();
+  if (["pix", "card", "presencial"].includes(value)) return value;
+  return "presencial";
+}
+
+function paymentMethodAllowed(method, settings) {
+  if (method === "pix") return Number(settings.pix_enabled ?? 1) === 1;
+  if (method === "card") return Number(settings.card_enabled ?? 1) === 1;
+  if (method === "presencial") return Number(settings.cash_enabled ?? 1) === 1;
+  return false;
+}
+
+function calculatePaymentAmount(price, settings) {
+  const fullPrice = Number(price || 0);
+  if (Number(settings.deposit_required || 0) === 1 && Number(settings.deposit_percent || 0) > 0) {
+    return Number((fullPrice * Number(settings.deposit_percent || 0) / 100).toFixed(2));
+  }
+  return fullPrice;
 }
 
 router.use(customerAuth);
@@ -90,6 +107,24 @@ router.post("/appointments", async (req, res) => {
       return res.status(400).json({ error: "Serviço, data e horário são obrigatórios." });
     }
 
+    const [settingsRows] = await connection.query(
+      "SELECT * FROM payment_settings WHERE active = 1 ORDER BY id DESC LIMIT 1"
+    );
+    const paymentSettings = settingsRows[0] || {
+      pix_enabled: 1,
+      card_enabled: 1,
+      cash_enabled: 1,
+      deposit_required: 0,
+      deposit_percent: 0
+    };
+
+    const normalizedPaymentMethod = normalizeMethod(payment_method);
+
+    if (!paymentMethodAllowed(normalizedPaymentMethod, paymentSettings)) {
+      await connection.rollback();
+      return res.status(400).json({ error: "Forma de pagamento indisponível no momento." });
+    }
+
     const [customers] = await connection.query("SELECT id, name FROM customers WHERE id = ? LIMIT 1", [req.customer.id]);
     const customer = customers[0];
 
@@ -143,8 +178,11 @@ router.post("/appointments", async (req, res) => {
       finalPetName = pets[0].name;
     }
 
-    const normalizedPaymentMethod = payment_method || "presencial";
     const scheduledAt = `${date} ${startTime}:00`;
+    const paymentAmount = calculatePaymentAmount(service.price, paymentSettings);
+    const paymentDescription = Number(paymentSettings.deposit_required || 0) === 1
+      ? `Sinal do agendamento #`
+      : `Pagamento do agendamento #`;
 
     const [result] = await connection.query(
       `INSERT INTO appointments
@@ -158,7 +196,7 @@ router.post("/appointments", async (req, res) => {
     await connection.query(
       `INSERT INTO payments (appointment_id, customer_id, amount, method, status, description, notes)
        VALUES (?, ?, ?, ?, ?, ?, ?)`,
-      [appointmentId, req.customer.id, service.price || 0, normalizedPaymentMethod, paymentStatusFor(normalizedPaymentMethod), `Pagamento do agendamento #${appointmentId}`, notes || null]
+      [appointmentId, req.customer.id, paymentAmount, normalizedPaymentMethod, paymentStatusFor(), `${paymentDescription}${appointmentId}`, notes || null]
     );
 
     const [rows] = await connection.query("SELECT * FROM appointments WHERE id = ? LIMIT 1", [appointmentId]);
