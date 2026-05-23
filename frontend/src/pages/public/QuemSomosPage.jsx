@@ -18,26 +18,10 @@ import PublicLayout from "../../components/public/PublicLayout";
 
 export default function QuemSomosPage() {
   const values = [
-    {
-      icon: Heart,
-      title: "Carinho em primeiro lugar",
-      text: "Cada pet é tratado com paciência, respeito e atenção aos detalhes."
-    },
-    {
-      icon: ShieldCheck,
-      title: "Segurança e higiene",
-      text: "Ambiente organizado, limpo e preparado para um atendimento tranquilo."
-    },
-    {
-      icon: Sparkles,
-      title: "Acabamento premium",
-      text: "Produtos adequados, cuidado com a pelagem e resultado bonito."
-    },
-    {
-      icon: Users,
-      title: "Tutor bem informado",
-      text: "Atendimento claro, comunicação rápida e orientação sempre que necessário."
-    }
+    { icon: Heart, title: "Carinho em primeiro lugar", text: "Cada pet é tratado com paciência, respeito e atenção aos detalhes." },
+    { icon: ShieldCheck, title: "Segurança e higiene", text: "Ambiente organizado, limpo e preparado para um atendimento tranquilo." },
+    { icon: Sparkles, title: "Acabamento premium", text: "Produtos adequados, cuidado com a pelagem e resultado bonito." },
+    { icon: Users, title: "Tutor bem informado", text: "Atendimento claro, comunicação rápida e orientação sempre que necessário." }
   ];
 
   const steps = [
@@ -65,48 +49,27 @@ export default function QuemSomosPage() {
               </h1>
 
               <p className="text-white/70 mt-6 text-xl leading-relaxed max-w-2xl">
-                O SPA do Doguinho nasceu para unir estética animal, bem-estar,
-                organização e atendimento humanizado em uma experiência moderna,
-                segura e acolhedora para pets e tutores.
+                O SPA do Doguinho nasceu para unir estética animal, bem-estar, organização e atendimento humanizado em uma experiência moderna, segura e acolhedora para pets e tutores.
               </p>
 
               <div className="flex flex-wrap gap-4 mt-9">
-                <Link
-                  to="/contato"
-                  className="bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-2xl font-black flex items-center gap-3 shadow-xl transition"
-                >
+                <Link to="/agendamento" className="bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-2xl font-black flex items-center gap-3 shadow-xl transition">
                   <CalendarDays size={20} />
                   Agendar atendimento
                 </Link>
 
-                <a
-                  href="https://wa.me/5518997493722"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="bg-white/10 hover:bg-white/20 text-white px-8 py-4 rounded-2xl font-black flex items-center gap-3 border border-white/15 transition"
-                >
+                <a href="https://wa.me/5518997493722" target="_blank" rel="noreferrer" className="bg-white/10 hover:bg-white/20 text-white px-8 py-4 rounded-2xl font-black flex items-center gap-3 border border-white/15 transition">
                   <MessageCircle size={20} />
                   Falar no WhatsApp
                 </a>
               </div>
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="bg-white/10 border border-white/10 rounded-[42px] p-8 shadow-2xl backdrop-blur-xl"
-            >
-              <div className="bg-gradient-to-br from-green-400 via-emerald-600 to-green-950 rounded-[34px] min-h-[430px] flex items-center justify-center relative overflow-hidden">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,#ffffff55,transparent_24%),radial-gradient(circle_at_75%_70%,#fbbf2455,transparent_30%)]" />
-                <PawPrint size={170} className="relative text-white drop-shadow-2xl" />
-              </div>
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-white/10 border border-white/10 rounded-[42px] p-6 shadow-2xl backdrop-blur-xl">
+              <img src="/images/hero-doguinho.svg" alt="SPA do Doguinho" className="w-full rounded-[34px] shadow-2xl" />
 
               <div className="grid grid-cols-3 gap-4 mt-6">
-                {[
-                  ["+3.500", "pets"],
-                  ["5★", "avaliação"],
-                  ["100%", "carinho"]
-                ].map(([number, label]) => (
+                {[["+3.500", "pets"], ["5★", "avaliação"], ["100%", "carinho"]].map(([number, label]) => (
                   <div key={label} className="bg-black/20 rounded-3xl p-5 text-center text-white">
                     <div className="text-2xl font-black">{number}</div>
                     <div className="text-white/55 text-sm mt-1">{label}</div>
@@ -119,6 +82,8 @@ export default function QuemSomosPage() {
 
         <section className="max-w-7xl mx-auto px-6 py-20 grid lg:grid-cols-2 gap-12 items-center">
           <div className="bg-white rounded-[36px] p-8 md:p-10 shadow-2xl border border-green-100">
+            <img src="/images/spa-pet.svg" alt="Spa pet relaxante" className="w-full rounded-[28px] mb-8" />
+
             <span className="inline-flex items-center gap-2 bg-green-100 text-green-800 rounded-full px-5 py-2 font-black">
               <Home size={18} />
               Nossa essência
@@ -129,9 +94,7 @@ export default function QuemSomosPage() {
             </h2>
 
             <p className="text-slate-500 text-lg mt-5 leading-relaxed">
-              Sabemos que o pet faz parte da família. Por isso, cada atendimento
-              é pensado para transmitir segurança ao tutor e conforto ao animal,
-              desde a chegada até a finalização.
+              Sabemos que o pet faz parte da família. Por isso, cada atendimento é pensado para transmitir segurança ao tutor e conforto ao animal, desde a chegada até a finalização.
             </p>
 
             <div className="space-y-4 mt-8">
@@ -147,16 +110,8 @@ export default function QuemSomosPage() {
           <div className="grid sm:grid-cols-2 gap-6">
             {values.map((item, index) => {
               const Icon = item.icon;
-
               return (
-                <motion.div
-                  key={item.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.06 }}
-                  className="bg-white/10 border border-white/10 rounded-3xl p-7 text-white shadow-2xl"
-                >
+                <motion.div key={item.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.06 }} className="bg-white/10 border border-white/10 rounded-3xl p-7 text-white shadow-2xl">
                   <Icon className="text-green-300 mb-5" size={38} />
                   <h3 className="text-2xl font-black">{item.title}</h3>
                   <p className="text-white/60 mt-3">{item.text}</p>
@@ -167,8 +122,9 @@ export default function QuemSomosPage() {
         </section>
 
         <section className="max-w-7xl mx-auto px-6 pb-24">
-          <div className="rounded-[36px] bg-gradient-to-r from-green-700 to-emerald-500 p-10 md:p-14 text-white shadow-2xl grid lg:grid-cols-3 gap-8 items-center">
-            <div className="lg:col-span-2">
+          <div className="rounded-[36px] bg-gradient-to-r from-green-700 to-emerald-500 p-10 md:p-14 text-white shadow-2xl grid lg:grid-cols-3 gap-8 items-center overflow-hidden relative">
+            <img src="/images/cliente-premium.svg" alt="Área do cliente" className="absolute right-0 bottom-0 w-[340px] opacity-20 hidden lg:block" />
+            <div className="lg:col-span-2 relative">
               <span className="inline-flex items-center gap-2 bg-white/15 rounded-full px-5 py-2 font-black">
                 <Award size={18} />
                 Diferenciais
@@ -179,16 +135,13 @@ export default function QuemSomosPage() {
               </h2>
 
               <p className="text-white/85 mt-5 text-lg max-w-3xl">
-                Nosso objetivo é entregar uma experiência bonita, prática e segura:
-                do agendamento ao pós-atendimento.
+                Nosso objetivo é entregar uma experiência bonita, prática e segura: do agendamento ao pós-atendimento.
               </p>
             </div>
 
-            <div className="bg-white/15 border border-white/20 rounded-3xl p-7">
+            <div className="bg-white/15 border border-white/20 rounded-3xl p-7 relative">
               <div className="flex text-yellow-300 gap-1 mb-4">
-                {[1, 2, 3, 4, 5].map((item) => (
-                  <Star key={item} size={20} fill="currentColor" />
-                ))}
+                {[1, 2, 3, 4, 5].map((item) => <Star key={item} size={20} fill="currentColor" />)}
               </div>
               <h3 className="text-2xl font-black">Seu pet merece esse carinho</h3>
               <p className="text-white/80 mt-3">Agende um horário e conheça nosso cuidado de perto.</p>
