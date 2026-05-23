@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import {
   CalendarDays,
   CheckCircle,
@@ -29,7 +30,7 @@ export default function ContatoPage() {
   });
 
   const whatsappUrl = useMemo(() => {
-    const text = `Olá! Gostaria de agendar um atendimento no SPA do Doguinho.%0A%0ANome: ${form.name || ""}%0ATelefone: ${form.phone || ""}%0APet: ${form.pet || ""}%0AServiço: ${form.service || ""}%0AMensagem: ${form.message || ""}`;
+    const text = `Olá! Gostaria de falar com o SPA do Doguinho.%0A%0ANome: ${form.name || ""}%0ATelefone: ${form.phone || ""}%0APet: ${form.pet || ""}%0AServiço: ${form.service || ""}%0AMensagem: ${form.message || ""}`;
     return `https://wa.me/${WHATSAPP_NUMBER}?text=${text}`;
   }, [form]);
 
@@ -58,6 +59,17 @@ export default function ContatoPage() {
                 Tire dúvidas, escolha o melhor horário e receba orientação para banho, tosa, vacinação e cuidados especiais.
               </p>
 
+              <div className="flex flex-wrap gap-4 mt-8">
+                <Link to="/agendamento" className="bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-2xl font-black flex items-center gap-3 shadow-xl transition">
+                  <CalendarDays size={20} />
+                  Agendar online
+                </Link>
+                <a href={whatsappUrl} target="_blank" rel="noreferrer" className="bg-white/10 hover:bg-white/20 text-white px-8 py-4 rounded-2xl font-black flex items-center gap-3 border border-white/15 transition">
+                  <MessageCircle size={20} />
+                  WhatsApp
+                </a>
+              </div>
+
               <div className="grid sm:grid-cols-3 gap-4 mt-10">
                 {[
                   ["Resposta rápida", "WhatsApp direto", MessageCircle],
@@ -73,48 +85,25 @@ export default function ContatoPage() {
               </div>
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="bg-white rounded-[40px] p-8 shadow-2xl border border-green-100"
-            >
+            <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} className="bg-white rounded-[40px] p-8 shadow-2xl border border-green-100">
+              <img src="/images/cliente-premium.svg" alt="Contato SPA do Doguinho" className="w-full rounded-[30px] mb-7" />
+
               <div className="flex items-center gap-4 mb-7">
                 <div className="w-16 h-16 rounded-2xl bg-green-100 text-green-700 flex items-center justify-center">
                   <PawPrint size={34} />
                 </div>
                 <div>
-                  <h2 className="text-3xl font-black text-slate-900">Agendamento rápido</h2>
+                  <h2 className="text-3xl font-black text-slate-900">Contato rápido</h2>
                   <p className="text-slate-500">Preencha e envie direto pelo WhatsApp</p>
                 </div>
               </div>
 
               <div className="grid gap-4">
-                <input
-                  value={form.name}
-                  onChange={(event) => updateField("name", event.target.value)}
-                  placeholder="Seu nome"
-                  className="bg-slate-50 border border-slate-200 rounded-2xl px-5 py-4 outline-none text-slate-900 focus:border-green-500"
-                />
+                <input value={form.name} onChange={(event) => updateField("name", event.target.value)} placeholder="Seu nome" className="bg-slate-50 border border-slate-200 rounded-2xl px-5 py-4 outline-none text-slate-900 focus:border-green-500" />
+                <input value={form.phone} onChange={(event) => updateField("phone", event.target.value)} placeholder="Seu telefone" className="bg-slate-50 border border-slate-200 rounded-2xl px-5 py-4 outline-none text-slate-900 focus:border-green-500" />
+                <input value={form.pet} onChange={(event) => updateField("pet", event.target.value)} placeholder="Nome do pet" className="bg-slate-50 border border-slate-200 rounded-2xl px-5 py-4 outline-none text-slate-900 focus:border-green-500" />
 
-                <input
-                  value={form.phone}
-                  onChange={(event) => updateField("phone", event.target.value)}
-                  placeholder="Seu telefone"
-                  className="bg-slate-50 border border-slate-200 rounded-2xl px-5 py-4 outline-none text-slate-900 focus:border-green-500"
-                />
-
-                <input
-                  value={form.pet}
-                  onChange={(event) => updateField("pet", event.target.value)}
-                  placeholder="Nome do pet"
-                  className="bg-slate-50 border border-slate-200 rounded-2xl px-5 py-4 outline-none text-slate-900 focus:border-green-500"
-                />
-
-                <select
-                  value={form.service}
-                  onChange={(event) => updateField("service", event.target.value)}
-                  className="bg-slate-50 border border-slate-200 rounded-2xl px-5 py-4 outline-none text-slate-900 focus:border-green-500"
-                >
+                <select value={form.service} onChange={(event) => updateField("service", event.target.value)} className="bg-slate-50 border border-slate-200 rounded-2xl px-5 py-4 outline-none text-slate-900 focus:border-green-500">
                   <option>Banho</option>
                   <option>Tosa</option>
                   <option>Vacina</option>
@@ -122,20 +111,9 @@ export default function ContatoPage() {
                   <option>Outro serviço</option>
                 </select>
 
-                <textarea
-                  value={form.message}
-                  onChange={(event) => updateField("message", event.target.value)}
-                  rows={5}
-                  placeholder="Conte o que seu pet precisa"
-                  className="bg-slate-50 border border-slate-200 rounded-2xl px-5 py-4 outline-none text-slate-900 focus:border-green-500"
-                />
+                <textarea value={form.message} onChange={(event) => updateField("message", event.target.value)} rows={5} placeholder="Conte o que seu pet precisa" className="bg-slate-50 border border-slate-200 rounded-2xl px-5 py-4 outline-none text-slate-900 focus:border-green-500" />
 
-                <a
-                  href={whatsappUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="bg-green-600 hover:bg-green-700 text-white py-5 rounded-2xl font-black text-lg flex items-center justify-center gap-3 transition"
-                >
+                <a href={whatsappUrl} target="_blank" rel="noreferrer" className="bg-green-600 hover:bg-green-700 text-white py-5 rounded-2xl font-black text-lg flex items-center justify-center gap-3 transition">
                   <Send size={20} />
                   Enviar pelo WhatsApp
                 </a>
@@ -197,9 +175,7 @@ export default function ContatoPage() {
 
             <div className="mt-8 bg-gradient-to-br from-green-500 to-emerald-700 rounded-3xl p-6">
               <div className="flex text-yellow-300 gap-1 mb-3">
-                {[1, 2, 3, 4, 5].map((item) => (
-                  <Star key={item} size={18} fill="currentColor" />
-                ))}
+                {[1, 2, 3, 4, 5].map((item) => <Star key={item} size={18} fill="currentColor" />)}
               </div>
               <h3 className="text-2xl font-black">Atendimento 5 estrelas</h3>
               <p className="text-white/80 mt-2">Cuidado premium para pets e tutores.</p>
