@@ -25,6 +25,16 @@ function normalizeStatus(status) {
   return "pending";
 }
 
+router.get("/mercado-pago", (req, res) => {
+  return res.json({
+    ok: true,
+    webhook: "mercado-pago",
+    method: "GET test only",
+    real_method: "POST",
+    message: "Webhook Mercado Pago ativo. Configure esta URL no Mercado Pago usando evento payment."
+  });
+});
+
 router.post("/mercado-pago", async (req, res) => {
   try {
     const body = req.body || {};
