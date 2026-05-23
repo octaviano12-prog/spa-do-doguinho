@@ -33,6 +33,24 @@ select{
   font-family:'Inter',sans-serif;
 }
 
+/* Correção global: impede letras uma embaixo da outra em cards/tabelas do admin */
+.admin-page,
+.admin-page *{
+  word-break: normal !important;
+  overflow-wrap: anywhere;
+  writing-mode: horizontal-tb !important;
+  text-orientation: mixed !important;
+}
+
+.admin-page .admin-card-text,
+.admin-page .admin-card-text *{
+  white-space: normal !important;
+  word-break: normal !important;
+  overflow-wrap: break-word !important;
+  line-height: 1.25 !important;
+  min-width: 0;
+}
+
 ::-webkit-scrollbar{
   width:10px;
 }
