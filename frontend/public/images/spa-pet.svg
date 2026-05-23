@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#fff7ed"/>
+      <stop offset="1" stop-color="#fed7aa"/>
+    </linearGradient>
+    <filter id="shadow"><feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#7c2d12" flood-opacity=".16"/></filter>
+  </defs>
+  <rect width="900" height="620" rx="46" fill="url(#bg)"/>
+  <circle cx="180" cy="130" r="95" fill="#f97316" opacity=".14"/>
+  <circle cx="730" cy="490" r="140" fill="#16a34a" opacity=".12"/>
+  <g filter="url(#shadow)">
+    <rect x="180" y="365" width="540" height="95" rx="48" fill="#16a34a"/>
+    <circle cx="450" cy="285" r="132" fill="#f8ead2"/>
+    <ellipse cx="350" cy="245" rx="52" ry="96" fill="#7c4a25" transform="rotate(-16 350 245)"/>
+    <ellipse cx="550" cy="245" rx="52" ry="96" fill="#7c4a25" transform="rotate(16 550 245)"/>
+    <circle cx="410" cy="280" r="16" fill="#1f2937"/>
+    <circle cx="490" cy="280" r="16" fill="#1f2937"/>
+    <ellipse cx="450" cy="325" rx="30" ry="22" fill="#1f2937"/>
+    <path d="M416 365 C438 386 462 386 484 365" stroke="#1f2937" stroke-width="9" stroke-linecap="round" fill="none"/>
+    <path d="M315 405 C390 455 520 455 592 405" stroke="#ffffff" stroke-width="36" stroke-linecap="round" fill="none" opacity=".92"/>
+    <circle cx="300" cy="190" r="25" fill="#fff" opacity=".9"/>
+    <circle cx="340" cy="150" r="16" fill="#fff" opacity=".9"/>
+    <circle cx="590" cy="160" r="28" fill="#fff" opacity=".9"/>
+    <circle cx="630" cy="205" r="18" fill="#fff" opacity=".9"/>
+    <path d="M690 210 C735 180 778 215 760 263 C747 300 700 300 682 263 C668 235 672 220 690 210Z" fill="#f97316" opacity=".85"/>
+    <path d="M210 260 C255 230 298 265 280 313 C267 350 220 350 202 313 C188 285 192 270 210 260Z" fill="#22c55e" opacity=".82"/>
+  </g>
+  <text x="450" y="540" text-anchor="middle" font-family="Arial, sans-serif" font-size="42" font-weight="900" fill="#7c2d12">Spa Pet Relaxante</text>
+</svg>
