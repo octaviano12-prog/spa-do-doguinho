@@ -14,6 +14,7 @@ import QuemSomosPage from "./pages/public/QuemSomosPage";
 import ServicosPublicPage from "./pages/public/ServicosPublicPage";
 import GaleriaPublicPage from "./pages/public/GaleriaPublicPage";
 import ContatoPage from "./pages/public/ContatoPage";
+import AgendamentoPage from "./pages/public/AgendamentoPage";
 
 import DashboardPage from "./pages/admin/DashboardPage";
 import ClientesPage from "./pages/admin/ClientesPage";
@@ -41,6 +42,7 @@ export default function App() {
         <Route path="/servicos" element={<ServicosPublicPage />} />
         <Route path="/galeria" element={<GaleriaPublicPage />} />
         <Route path="/contato" element={<ContatoPage />} />
+        <Route path="/agendamento" element={<AgendamentoPage />} />
 
         <Route path="/login" element={<LoginPage />} />
 
