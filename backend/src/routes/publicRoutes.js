@@ -48,85 +48,91 @@ router.get("/settings", async (req, res) => {
   }
 });
 
+router.get("/payment-settings", async (req, res) => {
+  try {
+    const [rows] = await db.query(
+      `SELECT provider, public_key, pix_enabled, card_enabled, cash_enabled, deposit_required, deposit_percent, active
+       FROM payment_settings
+       WHERE active = 1
+       ORDER BY id DESC
+       LIMIT 1`
+    );
+
+    return res.json(rows[0] || {
+      provider: "manual",
+      public_key: "",
+      pix_enabled: 1,
+      card_enabled: 1,
+      cash_enabled: 1,
+      deposit_required: 0,
+      deposit_percent: 0,
+      active: 1
+    });
+  } catch (error) {
+    return res.json({
+      provider: "manual",
+      public_key: "",
+      pix_enabled: 1,
+      card_enabled: 1,
+      cash_enabled: 1,
+      deposit_required: 0,
+      deposit_percent: 0,
+      active: 1
+    });
+  }
+});
+
 router.get("/available-slots", async (req, res) => {
   try {
     const { service_id, date } = req.query;
 
-    if (!service_id || !date) {
-      return res.status(400).json({ error: "service_id e date são obrigatórios." });
-    }
+    if (!service_id || !date) return res.status(400).json({ error: "service_id e date são obrigatórios." });
 
     const target = new Date(`${date}T00:00:00`);
-    if (Number.isNaN(target.getTime())) {
-      return res.status(400).json({ error: "Data inválida." });
-    }
+    if (Number.isNaN(target.getTime())) return res.status(400).json({ error: "Data inválida." });
 
     const weekday = target.getDay();
-
-    const [blocked] = await db.query(
-      "SELECT id, reason FROM blocked_dates WHERE date = ? AND active = 1 LIMIT 1",
-      [date]
-    );
-
-    if (blocked.length) {
-      return res.json({ date, blocked: true, reason: blocked[0].reason || "Data bloqueada", slots: [] });
-    }
+    const [blocked] = await db.query("SELECT id, reason FROM blocked_dates WHERE date = ? AND active = 1 LIMIT 1", [date]);
+    if (blocked.length) return res.json({ date, blocked: true, reason: blocked[0].reason || "Data bloqueada", slots: [] });
 
     const [services] = await db.query("SELECT id, duration_minutes FROM services WHERE id = ? LIMIT 1", [service_id]);
     const service = services[0];
     const duration = Number(service?.duration_minutes || 60);
 
     const [rules] = await db.query(
-      `SELECT * FROM availability
-       WHERE active = 1 AND (weekday = ? OR day_of_week = ?)
-       ORDER BY start_time ASC`,
+      `SELECT * FROM availability WHERE active = 1 AND (weekday = ? OR day_of_week = ?) ORDER BY start_time ASC`,
       [weekday, weekday]
     );
 
-    const fallbackRules = rules.length ? rules : [];
-
-    if (!fallbackRules.length) {
-      return res.json({ date, blocked: false, reason: "Sem regra de disponibilidade para este dia", slots: [] });
-    }
+    if (!rules.length) return res.json({ date, blocked: false, reason: "Sem regra de disponibilidade para este dia", slots: [] });
 
     const [appointments] = await db.query(
-      `SELECT id, time, scheduled_at, service_id, status
-       FROM appointments
-       WHERE date = ? AND status NOT IN ('canceled', 'cancelado')`,
+      `SELECT id, time, scheduled_at, service_id, status FROM appointments WHERE date = ? AND status NOT IN ('canceled', 'cancelado')`,
       [date]
     );
 
     const busy = [];
-
     for (const appointment of appointments) {
       const appointmentTime = appointment.time ? padTime(appointment.time) : padTime(String(appointment.scheduled_at || "").slice(11, 16));
       if (!appointmentTime) continue;
-
       let appointmentDuration = 60;
       if (appointment.service_id) {
         const [appointmentServices] = await db.query("SELECT duration_minutes FROM services WHERE id = ? LIMIT 1", [appointment.service_id]);
         appointmentDuration = Number(appointmentServices[0]?.duration_minutes || 60);
       }
-
       busy.push({ start: appointmentTime, end: addMinutes(appointmentTime, appointmentDuration) });
     }
 
     const slots = [];
-
-    for (const rule of fallbackRules) {
+    for (const rule of rules) {
       const start = padTime(rule.start_time || "08:00");
       const end = padTime(rule.end_time || "18:00");
       const interval = Number(rule.interval_minutes || 60);
-
       let current = start;
       while (timeToMinutes(addMinutes(current, duration)) <= timeToMinutes(end)) {
         const slotEnd = addMinutes(current, duration);
         const occupied = busy.some((item) => hasOverlap(current, slotEnd, item.start, item.end));
-
-        if (!occupied) {
-          slots.push({ time: current, label: current });
-        }
-
+        if (!occupied) slots.push({ time: current, label: current });
         current = addMinutes(current, interval);
       }
     }
