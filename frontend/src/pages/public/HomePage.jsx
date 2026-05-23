@@ -41,6 +41,16 @@ function getServiceIcon(name = "", category = "") {
   return PawPrint;
 }
 
+function getServiceImage(name = "", category = "") {
+  const text = `${name} ${category}`.toLowerCase();
+
+  if (text.includes("vacina")) return "/images/vacina-pet.svg";
+  if (text.includes("spa")) return "/images/spa-pet.svg";
+  if (text.includes("banho") || text.includes("tosa")) return "/images/banho-tosa.svg";
+
+  return "/images/hero-doguinho.svg";
+}
+
 export default function HomePage() {
   const [services, setServices] = useState([]);
   const [isLoadingServices, setIsLoadingServices] = useState(true);
@@ -116,7 +126,7 @@ export default function HomePage() {
 
             <div className="flex flex-wrap gap-4 mt-9">
               <Link
-                to="/contato"
+                to="/agendamento"
                 className="group bg-green-500 hover:bg-green-600 px-8 py-4 rounded-2xl font-black shadow-xl shadow-green-600/30 text-white flex items-center gap-3 transition"
               >
                 Agendar agora
@@ -158,10 +168,11 @@ export default function HomePage() {
             className="relative"
           >
             <div className="rounded-[44px] bg-white/10 border border-white/10 p-6 shadow-2xl backdrop-blur-xl">
-              <div className="relative rounded-[36px] min-h-[460px] bg-gradient-to-br from-green-400 via-emerald-600 to-green-950 flex items-center justify-center overflow-hidden">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,#ffffff55,transparent_24%),radial-gradient(circle_at_75%_70%,#fbbf2455,transparent_30%)]" />
-                <PawPrint size={180} className="relative text-white drop-shadow-2xl" />
-              </div>
+              <img
+                src="/images/hero-doguinho.svg"
+                alt="Doguinho feliz no SPA do Doguinho"
+                className="w-full rounded-[36px] shadow-2xl object-cover"
+              />
             </div>
 
             <div className="absolute -bottom-6 -left-4 bg-white text-slate-900 rounded-3xl p-5 shadow-2xl">
@@ -198,7 +209,23 @@ export default function HomePage() {
         })}
       </section>
 
-      <section className="max-w-7xl mx-auto px-6 py-24">
+      <section className="max-w-7xl mx-auto px-6 py-20 grid lg:grid-cols-3 gap-6">
+        {[
+          ["Banho & Tosa", "/images/banho-tosa.svg", "Higiene, acabamento e beleza para seu pet."],
+          ["Vacinação", "/images/vacina-pet.svg", "Cuidado preventivo e bem-estar animal."],
+          ["Spa Relaxante", "/images/spa-pet.svg", "Uma experiência especial de carinho e relaxamento."]
+        ].map(([title, image, text]) => (
+          <div key={title} className="bg-white rounded-[32px] p-5 shadow-2xl border border-green-100 hover:-translate-y-2 transition">
+            <img src={image} alt={title} className="w-full rounded-[26px]" />
+            <div className="p-4">
+              <h3 className="text-2xl font-black text-slate-900">{title}</h3>
+              <p className="text-slate-500 mt-2">{text}</p>
+            </div>
+          </div>
+        ))}
+      </section>
+
+      <section className="max-w-7xl mx-auto px-6 py-20">
         <div className="text-center max-w-3xl mx-auto">
           <span className="inline-flex items-center gap-2 bg-green-100 text-green-800 px-5 py-2 rounded-full font-black">
             <Sparkles size={18} />
@@ -218,7 +245,7 @@ export default function HomePage() {
         <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-6 mt-14">
           {isLoadingServices &&
             [1, 2, 3, 4].map((item) => (
-              <div key={item} className="h-[320px] rounded-3xl bg-white/10 animate-pulse" />
+              <div key={item} className="h-[380px] rounded-3xl bg-white/10 animate-pulse" />
             ))}
 
           {!isLoadingServices && services.length === 0 && (
@@ -230,6 +257,7 @@ export default function HomePage() {
           {!isLoadingServices &&
             services.map((service, index) => {
               const Icon = getServiceIcon(service.name, service.category);
+              const image = getServiceImage(service.name, service.category);
 
               return (
                 <motion.div
@@ -238,10 +266,12 @@ export default function HomePage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.06 }}
-                  className="group bg-white rounded-[32px] p-7 shadow-2xl hover:-translate-y-2 transition border border-green-100"
+                  className="group bg-white rounded-[32px] p-5 shadow-2xl hover:-translate-y-2 transition border border-green-100"
                 >
-                  <div className="w-16 h-16 rounded-2xl bg-green-100 text-green-700 flex items-center justify-center mb-6 group-hover:bg-green-600 group-hover:text-white transition">
-                    <Icon size={32} />
+                  <img src={image} alt={service.name} className="w-full rounded-[24px] mb-5" />
+
+                  <div className="w-14 h-14 rounded-2xl bg-green-100 text-green-700 flex items-center justify-center mb-5 group-hover:bg-green-600 group-hover:text-white transition">
+                    <Icon size={28} />
                   </div>
 
                   <div className="text-sm font-black text-green-600 uppercase tracking-wider">
@@ -278,8 +308,11 @@ export default function HomePage() {
       </section>
 
       <section className="max-w-7xl mx-auto px-6 pb-24">
-        <div className="rounded-[36px] bg-gradient-to-r from-green-700 to-emerald-500 p-10 md:p-14 text-white shadow-2xl grid md:grid-cols-2 gap-8 items-center">
-          <div>
+        <div className="rounded-[36px] bg-gradient-to-r from-green-700 to-emerald-500 p-10 md:p-14 text-white shadow-2xl grid md:grid-cols-2 gap-8 items-center overflow-hidden relative">
+          <div className="absolute right-0 bottom-0 opacity-20 w-[360px] hidden md:block">
+            <img src="/images/cliente-premium.svg" alt="Área do cliente" />
+          </div>
+          <div className="relative">
             <div className="inline-flex items-center gap-2 bg-white/15 px-5 py-2 rounded-full font-black">
               <Gift size={18} />
               Agendamento fácil
@@ -292,22 +325,20 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 md:justify-end">
+          <div className="relative flex flex-col sm:flex-row gap-4 md:justify-end">
             <Link
-              to="/contato"
+              to="/agendamento"
               className="bg-orange-400 hover:bg-orange-500 px-8 py-4 rounded-2xl font-black text-center transition"
             >
               Começar agendamento
             </Link>
 
-            <a
-              href="https://wa.me/5518997493722"
-              target="_blank"
-              rel="noreferrer"
+            <Link
+              to="/cliente-login"
               className="bg-white/15 hover:bg-white/25 px-8 py-4 rounded-2xl font-black text-center border border-white/20 transition"
             >
-              WhatsApp
-            </a>
+              Área do Cliente
+            </Link>
           </div>
         </div>
       </section>
