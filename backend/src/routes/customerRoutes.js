@@ -2,6 +2,7 @@ const router = require("express").Router();
 
 const db = require("../config/db");
 const customerAuth = require("../middlewares/customerAuth");
+const { createPixPayment } = require("../services/mercadoPagoService");
 
 function padTime(value) {
   return String(value || "").slice(0, 5);
@@ -21,10 +22,6 @@ function timeToMinutes(time) {
 
 function hasOverlap(startA, endA, startB, endB) {
   return timeToMinutes(startA) < timeToMinutes(endB) && timeToMinutes(endA) > timeToMinutes(startB);
-}
-
-function paymentStatusFor() {
-  return "pending";
 }
 
 function normalizeMethod(method) {
@@ -107,17 +104,8 @@ router.post("/appointments", async (req, res) => {
       return res.status(400).json({ error: "Serviço, data e horário são obrigatórios." });
     }
 
-    const [settingsRows] = await connection.query(
-      "SELECT * FROM payment_settings WHERE active = 1 ORDER BY id DESC LIMIT 1"
-    );
-    const paymentSettings = settingsRows[0] || {
-      pix_enabled: 1,
-      card_enabled: 1,
-      cash_enabled: 1,
-      deposit_required: 0,
-      deposit_percent: 0
-    };
-
+    const [settingsRows] = await connection.query("SELECT * FROM payment_settings WHERE active = 1 ORDER BY id DESC LIMIT 1");
+    const paymentSettings = settingsRows[0] || { pix_enabled: 1, card_enabled: 1, cash_enabled: 1, deposit_required: 0, deposit_percent: 0 };
     const normalizedPaymentMethod = normalizeMethod(payment_method);
 
     if (!paymentMethodAllowed(normalizedPaymentMethod, paymentSettings)) {
@@ -125,7 +113,7 @@ router.post("/appointments", async (req, res) => {
       return res.status(400).json({ error: "Forma de pagamento indisponível no momento." });
     }
 
-    const [customers] = await connection.query("SELECT id, name FROM customers WHERE id = ? LIMIT 1", [req.customer.id]);
+    const [customers] = await connection.query("SELECT id, name, email FROM customers WHERE id = ? LIMIT 1", [req.customer.id]);
     const customer = customers[0];
 
     const [services] = await connection.query("SELECT id, name, price, duration_minutes FROM services WHERE id = ? LIMIT 1", [service_id]);
@@ -154,13 +142,11 @@ router.post("/appointments", async (req, res) => {
     for (const item of existingAppointments) {
       const otherStart = padTime(item.time);
       if (!otherStart) continue;
-
       let otherDuration = 60;
       if (item.service_id) {
         const [otherServices] = await connection.query("SELECT duration_minutes FROM services WHERE id = ? LIMIT 1", [item.service_id]);
         otherDuration = Number(otherServices[0]?.duration_minutes || 60);
       }
-
       const otherEnd = addMinutes(otherStart, otherDuration);
       if (hasOverlap(startTime, endTime, otherStart, otherEnd)) {
         await connection.rollback();
@@ -180,9 +166,8 @@ router.post("/appointments", async (req, res) => {
 
     const scheduledAt = `${date} ${startTime}:00`;
     const paymentAmount = calculatePaymentAmount(service.price, paymentSettings);
-    const paymentDescription = Number(paymentSettings.deposit_required || 0) === 1
-      ? `Sinal do agendamento #`
-      : `Pagamento do agendamento #`;
+    const isDeposit = Number(paymentSettings.deposit_required || 0) === 1;
+    const paymentDescriptionPrefix = isDeposit ? "Sinal do agendamento #" : "Pagamento do agendamento #";
 
     const [result] = await connection.query(
       `INSERT INTO appointments
@@ -192,16 +177,46 @@ router.post("/appointments", async (req, res) => {
     );
 
     const appointmentId = result.insertId;
+    let pixData = null;
+    let mercadoPagoId = null;
+    let qrCode = null;
+    let qrCodeBase64 = null;
+
+    if (normalizedPaymentMethod === "pix" && paymentSettings.access_token) {
+      pixData = await createPixPayment({
+        accessToken: paymentSettings.access_token,
+        amount: paymentAmount,
+        description: `${paymentDescriptionPrefix}${appointmentId}`,
+        payerEmail: customer?.email,
+        payerName: customer?.name,
+        externalReference: appointmentId
+      });
+      mercadoPagoId = pixData?.mercado_pago_id || null;
+      qrCode = pixData?.qr_code || null;
+      qrCodeBase64 = pixData?.qr_code_base64 || null;
+    }
 
     await connection.query(
-      `INSERT INTO payments (appointment_id, customer_id, amount, method, status, description, notes)
-       VALUES (?, ?, ?, ?, ?, ?, ?)`,
-      [appointmentId, req.customer.id, paymentAmount, normalizedPaymentMethod, paymentStatusFor(), `${paymentDescription}${appointmentId}`, notes || null]
+      `INSERT INTO payments (appointment_id, customer_id, amount, method, status, description, notes, mercado_pago_id, external_reference, qr_code)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [appointmentId, req.customer.id, paymentAmount, normalizedPaymentMethod, pixData?.status || "pending", `${paymentDescriptionPrefix}${appointmentId}`, notes || null, mercadoPagoId, String(appointmentId), qrCode]
     );
 
     const [rows] = await connection.query("SELECT * FROM appointments WHERE id = ? LIMIT 1", [appointmentId]);
     await connection.commit();
-    return res.status(201).json(rows[0]);
+
+    return res.status(201).json({
+      ...rows[0],
+      payment: {
+        amount: paymentAmount,
+        method: normalizedPaymentMethod,
+        status: pixData?.status || "pending",
+        mercado_pago_id: mercadoPagoId,
+        qr_code: qrCode,
+        qr_code_base64: qrCodeBase64,
+        ticket_url: pixData?.ticket_url || null
+      }
+    });
   } catch (error) {
     await connection.rollback();
     return res.status(500).json({ error: error.message });
@@ -214,7 +229,6 @@ router.get("/payments", async (req, res) => {
   try {
     const [appointments] = await db.query("SELECT id FROM appointments WHERE customer_id = ?", [req.customer.id]);
     if (!appointments.length) return res.json([]);
-
     const ids = appointments.map((item) => item.id);
     const placeholders = ids.map(() => "?").join(",");
     const [rows] = await db.query(`SELECT * FROM payments WHERE appointment_id IN (${placeholders}) ORDER BY id DESC`, ids);
