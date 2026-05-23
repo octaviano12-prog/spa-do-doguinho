@@ -35,6 +35,16 @@ function getServiceIcon(name = "", category = "") {
   return PawPrint;
 }
 
+function getServiceImage(name = "", category = "") {
+  const text = `${name} ${category}`.toLowerCase();
+
+  if (text.includes("vacina")) return "/images/vacina-pet.svg";
+  if (text.includes("spa")) return "/images/spa-pet.svg";
+  if (text.includes("banho") || text.includes("tosa")) return "/images/banho-tosa.svg";
+
+  return "/images/hero-doguinho.svg";
+}
+
 export default function ServicosPublicPage() {
   const [services, setServices] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -65,10 +75,7 @@ export default function ServicosPublicPage() {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,#22c55e55,transparent_30%),radial-gradient(circle_at_80%_10%,#f59e0b33,transparent_32%)]" />
 
           <div className="relative max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-            >
+            <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}>
               <span className="inline-flex items-center gap-2 bg-white/10 border border-white/15 rounded-full px-5 py-2 text-green-100 font-black">
                 <Sparkles size={18} />
                 Serviços premium
@@ -83,47 +90,38 @@ export default function ServicosPublicPage() {
               </p>
 
               <div className="flex flex-wrap gap-4 mt-9">
-                <Link
-                  to="/contato"
-                  className="bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-2xl font-black flex items-center gap-3 shadow-xl transition"
-                >
+                <Link to="/agendamento" className="bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-2xl font-black flex items-center gap-3 shadow-xl transition">
                   Agendar agora
                   <ArrowRight size={20} />
                 </Link>
 
-                <a
-                  href="https://wa.me/5518997493722"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="bg-white/10 hover:bg-white/20 text-white px-8 py-4 rounded-2xl font-black flex items-center gap-3 border border-white/15 transition"
-                >
+                <a href="https://wa.me/5518997493722" target="_blank" rel="noreferrer" className="bg-white/10 hover:bg-white/20 text-white px-8 py-4 rounded-2xl font-black flex items-center gap-3 border border-white/15 transition">
                   <MessageCircle size={20} />
                   Tirar dúvidas
                 </a>
               </div>
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="bg-white/10 border border-white/10 rounded-[42px] p-8 shadow-2xl backdrop-blur-xl"
-            >
-              <div className="grid grid-cols-2 gap-5">
-                {[
-                  ["Banho", Bath],
-                  ["Tosa", Scissors],
-                  ["Vacina", Syringe],
-                  ["Spa", Sparkles]
-                ].map(([label, Icon]) => (
-                  <div key={label} className="bg-black/20 rounded-3xl p-7 text-white">
-                    <Icon className="text-green-300 mb-5" size={38} />
-                    <div className="text-2xl font-black">{label}</div>
-                    <div className="text-white/55 mt-2">Com carinho</div>
-                  </div>
-                ))}
-              </div>
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-white/10 border border-white/10 rounded-[42px] p-6 shadow-2xl backdrop-blur-xl">
+              <img src="/images/banho-tosa.svg" alt="Banho e tosa premium" className="rounded-[34px] w-full shadow-2xl" />
             </motion.div>
           </div>
+        </section>
+
+        <section className="max-w-7xl mx-auto px-6 py-16 grid lg:grid-cols-3 gap-6">
+          {[
+            ["Banho & Tosa", "/images/banho-tosa.svg", "Higiene, beleza e acabamento premium."],
+            ["Vacinação", "/images/vacina-pet.svg", "Prevenção, saúde e cuidado responsável."],
+            ["Spa Pet", "/images/spa-pet.svg", "Relaxamento e carinho para seu pet."]
+          ].map(([title, image, text]) => (
+            <div key={title} className="bg-white rounded-[32px] p-5 shadow-2xl border border-green-100 hover:-translate-y-2 transition">
+              <img src={image} alt={title} className="rounded-[26px] w-full" />
+              <div className="p-4">
+                <h3 className="text-2xl font-black text-slate-900">{title}</h3>
+                <p className="text-slate-500 mt-2">{text}</p>
+              </div>
+            </div>
+          ))}
         </section>
 
         <section className="max-w-7xl mx-auto px-6 py-20">
@@ -143,10 +141,7 @@ export default function ServicosPublicPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-            {isLoading &&
-              [1, 2, 3, 4].map((item) => (
-                <div key={item} className="h-[360px] rounded-3xl bg-white/10 animate-pulse" />
-              ))}
+            {isLoading && [1, 2, 3, 4].map((item) => <div key={item} className="h-[420px] rounded-3xl bg-white/10 animate-pulse" />)}
 
             {!isLoading && services.length === 0 && (
               <div className="md:col-span-2 xl:col-span-4 bg-white/10 border border-white/10 rounded-3xl p-10 text-center text-white">
@@ -154,70 +149,61 @@ export default function ServicosPublicPage() {
               </div>
             )}
 
-            {!isLoading &&
-              services.map((service, index) => {
-                const Icon = getServiceIcon(service.name, service.category);
+            {!isLoading && services.map((service, index) => {
+              const Icon = getServiceIcon(service.name, service.category);
+              const image = getServiceImage(service.name, service.category);
 
-                return (
-                  <motion.div
-                    key={service.id || service.name}
-                    initial={{ opacity: 0, y: 24 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.06 }}
-                    className="group bg-white rounded-[32px] p-7 shadow-2xl border border-green-100 hover:-translate-y-2 transition"
-                  >
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="w-16 h-16 rounded-2xl bg-green-100 text-green-700 flex items-center justify-center group-hover:bg-green-600 group-hover:text-white transition">
-                        <Icon size={32} />
-                      </div>
+              return (
+                <motion.div
+                  key={service.id || service.name}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.06 }}
+                  className="group bg-white rounded-[32px] p-5 shadow-2xl border border-green-100 hover:-translate-y-2 transition"
+                >
+                  <img src={image} alt={service.name} className="rounded-[24px] w-full mb-5" />
 
-                      <span className="bg-green-50 text-green-700 px-3 py-1 rounded-full text-xs font-black">
-                        {service.category || "Serviço"}
-                      </span>
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="w-14 h-14 rounded-2xl bg-green-100 text-green-700 flex items-center justify-center group-hover:bg-green-600 group-hover:text-white transition">
+                      <Icon size={28} />
                     </div>
 
-                    <h3 className="text-2xl font-black text-slate-900 mt-6">
-                      {service.name}
-                    </h3>
+                    <span className="bg-green-50 text-green-700 px-3 py-1 rounded-full text-xs font-black">
+                      {service.category || "Serviço"}
+                    </span>
+                  </div>
 
-                    <p className="text-slate-500 mt-4 min-h-[92px]">
-                      {service.description || "Serviço especial para seu pet."}
-                    </p>
+                  <h3 className="text-2xl font-black text-slate-900 mt-6">{service.name}</h3>
+                  <p className="text-slate-500 mt-4 min-h-[92px]">{service.description || "Serviço especial para seu pet."}</p>
 
-                    {service.benefits && (
-                      <div className="bg-green-50 rounded-2xl p-4 mt-5 text-sm text-green-900">
-                        <div className="font-black mb-1">Benefícios</div>
-                        {service.benefits}
-                      </div>
-                    )}
-
-                    <div className="flex items-center gap-2 text-slate-500 mt-5">
-                      <Clock size={18} />
-                      {service.duration_minutes || 60} minutos
+                  {service.benefits && (
+                    <div className="bg-green-50 rounded-2xl p-4 mt-5 text-sm text-green-900">
+                      <div className="font-black mb-1">Benefícios</div>
+                      {service.benefits}
                     </div>
+                  )}
 
-                    <div className="flex items-end justify-between mt-6 pt-6 border-t border-slate-100">
-                      <div>
-                        <div className="text-xs text-slate-400 font-bold">A partir de</div>
-                        <div className="text-2xl font-black text-green-700">
-                          {formatCurrency(service.price)}
-                        </div>
-                      </div>
+                  <div className="flex items-center gap-2 text-slate-500 mt-5">
+                    <Clock size={18} />
+                    {service.duration_minutes || 60} minutos
+                  </div>
 
-                      <CheckCircle className="text-green-500" />
+                  <div className="flex items-end justify-between mt-6 pt-6 border-t border-slate-100">
+                    <div>
+                      <div className="text-xs text-slate-400 font-bold">A partir de</div>
+                      <div className="text-2xl font-black text-green-700">{formatCurrency(service.price)}</div>
                     </div>
+                    <CheckCircle className="text-green-500" />
+                  </div>
 
-                    <Link
-                      to="/contato"
-                      className="mt-7 w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-2xl font-black flex items-center justify-center gap-2 transition"
-                    >
-                      <CalendarDays size={19} />
-                      Agendar
-                    </Link>
-                  </motion.div>
-                );
-              })}
+                  <Link to="/agendamento" className="mt-7 w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-2xl font-black flex items-center justify-center gap-2 transition">
+                    <CalendarDays size={19} />
+                    Agendar
+                  </Link>
+                </motion.div>
+              );
+            })}
           </div>
         </section>
       </main>
