@@ -15,6 +15,8 @@ import ServicosPublicPage from "./pages/public/ServicosPublicPage";
 import GaleriaPublicPage from "./pages/public/GaleriaPublicPage";
 import ContatoPage from "./pages/public/ContatoPage";
 import AgendamentoPage from "./pages/public/AgendamentoPage";
+import ClienteLoginPage from "./pages/public/ClienteLoginPage";
+import ClienteDashboardPage from "./pages/public/ClienteDashboardPage";
 
 import DashboardPage from "./pages/admin/DashboardPage";
 import ClientesPage from "./pages/admin/ClientesPage";
@@ -33,6 +35,11 @@ function PrivateRoute({ children }) {
   return token ? children : <Navigate to="/login" replace />;
 }
 
+function CustomerRoute({ children }) {
+  const token = localStorage.getItem("spa_customer_token");
+  return token ? children : <Navigate to="/cliente-login" replace />;
+}
+
 export default function App() {
   return (
     <BrowserRouter>
@@ -43,6 +50,8 @@ export default function App() {
         <Route path="/galeria" element={<GaleriaPublicPage />} />
         <Route path="/contato" element={<ContatoPage />} />
         <Route path="/agendamento" element={<AgendamentoPage />} />
+        <Route path="/cliente-login" element={<ClienteLoginPage />} />
+        <Route path="/cliente" element={<CustomerRoute><ClienteDashboardPage /></CustomerRoute>} />
 
         <Route path="/login" element={<LoginPage />} />
 
