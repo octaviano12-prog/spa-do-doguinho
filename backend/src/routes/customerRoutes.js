@@ -31,6 +31,26 @@ router.get("/pets", async (req, res) => {
   }
 });
 
+router.post("/pets", async (req, res) => {
+  try {
+    const { name, species, breed, age, weight, notes } = req.body || {};
+
+    if (!name) {
+      return res.status(400).json({ error: "Informe o nome do pet." });
+    }
+
+    const [result] = await db.query(
+      "INSERT INTO pets (customer_id, name, species, breed, age, weight, notes, active) VALUES (?, ?, ?, ?, ?, ?, ?, 1)",
+      [req.customer.id, name, species || "Cachorro", breed || null, age || null, weight || null, notes || null]
+    );
+
+    const [rows] = await db.query("SELECT * FROM pets WHERE id = ? LIMIT 1", [result.insertId]);
+    return res.status(201).json(rows[0]);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
 router.get("/appointments", async (req, res) => {
   try {
     const [rows] = await db.query(
@@ -39,6 +59,68 @@ router.get("/appointments", async (req, res) => {
     );
 
     return res.json(rows);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+router.post("/appointments", async (req, res) => {
+  try {
+    const { pet_id, pet_name, service_id, date, time, payment_method, notes } = req.body || {};
+
+    if (!service_id || !date || !time) {
+      return res.status(400).json({ error: "Serviço, data e horário são obrigatórios." });
+    }
+
+    const [customers] = await db.query("SELECT id, name FROM customers WHERE id = ? LIMIT 1", [req.customer.id]);
+    const customer = customers[0];
+
+    const [services] = await db.query("SELECT id, name, price FROM services WHERE id = ? LIMIT 1", [service_id]);
+    const service = services[0];
+
+    if (!service) {
+      return res.status(404).json({ error: "Serviço não encontrado." });
+    }
+
+    let finalPetName = pet_name || null;
+
+    if (pet_id) {
+      const [pets] = await db.query(
+        "SELECT id, name FROM pets WHERE id = ? AND customer_id = ? LIMIT 1",
+        [pet_id, req.customer.id]
+      );
+
+      if (!pets.length) {
+        return res.status(403).json({ error: "Pet não pertence ao cliente." });
+      }
+
+      finalPetName = pets[0].name;
+    }
+
+    const scheduledAt = `${date} ${time}:00`;
+
+    const [result] = await db.query(
+      `INSERT INTO appointments
+      (customer_id, pet_id, service_id, customer_name, pet_name, service_name, scheduled_at, date, time, status, payment_method, price, notes, active)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?, ?, 1)`,
+      [
+        req.customer.id,
+        pet_id || null,
+        service.id,
+        customer?.name || null,
+        finalPetName,
+        service.name,
+        scheduledAt,
+        date,
+        time,
+        payment_method || "presencial",
+        service.price || 0,
+        notes || null
+      ]
+    );
+
+    const [rows] = await db.query("SELECT * FROM appointments WHERE id = ? LIMIT 1", [result.insertId]);
+    return res.status(201).json(rows[0]);
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
