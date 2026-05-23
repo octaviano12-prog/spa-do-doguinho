@@ -13,7 +13,8 @@ import {
   User
 } from "lucide-react";
 import PublicLayout from "../../components/public/PublicLayout";
-import { apiRequest } from "../../lib/api";
+
+const API_URL = "https://spadodoguinho.com.br/api";
 
 function formatDate(value) {
   if (!value) return "Sem data";
@@ -28,12 +29,31 @@ function formatDate(value) {
   });
 }
 
+async function customerRequest(path) {
+  const token = localStorage.getItem("spa_customer_token");
+
+  const response = await fetch(`${API_URL}${path}`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.error || "Erro ao carregar dados do cliente.");
+  }
+
+  return data;
+}
+
 export default function ClienteDashboardPage() {
   const [customer, setCustomer] = useState(null);
   const [pets, setPets] = useState([]);
   const [appointments, setAppointments] = useState([]);
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   function logout() {
     localStorage.removeItem("spa_customer_token");
@@ -43,42 +63,30 @@ export default function ClienteDashboardPage() {
 
   async function loadData() {
     setLoading(true);
+    setError("");
 
-    const savedCustomer = localStorage.getItem("spa_customer");
     const token = localStorage.getItem("spa_customer_token");
 
-    if (!savedCustomer || !token) {
+    if (!token) {
       window.location.href = "/cliente-login";
       return;
     }
 
-    const parsedCustomer = JSON.parse(savedCustomer);
-    setCustomer(parsedCustomer);
-
     try {
-      const [petsData, appointmentsData, paymentsData] = await Promise.all([
-        apiRequest("/pets").catch(() => []),
-        apiRequest("/appointments").catch(() => []),
-        apiRequest("/payments").catch(() => [])
+      const [meData, petsData, appointmentsData, paymentsData] = await Promise.all([
+        customerRequest("/customer/me"),
+        customerRequest("/customer/pets"),
+        customerRequest("/customer/appointments"),
+        customerRequest("/customer/payments")
       ]);
 
-      const customerPets = Array.isArray(petsData)
-        ? petsData.filter((item) => Number(item.customer_id) === Number(parsedCustomer.id))
-        : [];
-
-      const customerAppointments = Array.isArray(appointmentsData)
-        ? appointmentsData.filter((item) => Number(item.customer_id) === Number(parsedCustomer.id))
-        : [];
-
-      const customerPayments = Array.isArray(paymentsData)
-        ? paymentsData.filter((item) => {
-            return customerAppointments.some((appointment) => Number(appointment.id) === Number(item.appointment_id));
-          })
-        : [];
-
-      setPets(customerPets);
-      setAppointments(customerAppointments);
-      setPayments(customerPayments);
+      setCustomer(meData);
+      localStorage.setItem("spa_customer", JSON.stringify(meData));
+      setPets(Array.isArray(petsData) ? petsData : []);
+      setAppointments(Array.isArray(appointmentsData) ? appointmentsData : []);
+      setPayments(Array.isArray(paymentsData) ? paymentsData : []);
+    } catch (err) {
+      setError(err.message || "Erro ao carregar área do cliente.");
     } finally {
       setLoading(false);
     }
@@ -96,31 +104,43 @@ export default function ClienteDashboardPage() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,#22c55e44,transparent_30%),radial-gradient(circle_at_85%_10%,#f59e0b22,transparent_30%)]" />
 
         <div className="relative max-w-7xl mx-auto space-y-8">
-          <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6">
-            <div>
-              <span className="inline-flex items-center gap-2 bg-white/10 border border-white/15 rounded-full px-5 py-2 text-green-100 font-black">
-                <User size={18} />
-                Área do cliente
-              </span>
-              <h1 className="text-5xl md:text-6xl font-black text-white mt-5">
-                Olá, {customer?.name || "cliente"}!
-              </h1>
-              <p className="text-white/70 mt-3 text-lg max-w-3xl">
-                Acompanhe seus pets, agendamentos, pagamentos e histórico de atendimento.
-              </p>
+          <div className="grid lg:grid-cols-[1fr_420px] gap-8 items-center">
+            <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6">
+              <div>
+                <span className="inline-flex items-center gap-2 bg-white/10 border border-white/15 rounded-full px-5 py-2 text-green-100 font-black">
+                  <User size={18} />
+                  Área do cliente
+                </span>
+                <h1 className="text-5xl md:text-6xl font-black text-white mt-5">
+                  Olá, {customer?.name || "cliente"}!
+                </h1>
+                <p className="text-white/70 mt-3 text-lg max-w-3xl">
+                  Acompanhe seus pets, agendamentos, pagamentos e histórico de atendimento.
+                </p>
+              </div>
             </div>
 
-            <div className="flex flex-wrap gap-3">
-              <button onClick={loadData} className="bg-white/10 hover:bg-white/20 border border-white/10 text-white px-6 py-4 rounded-2xl font-black flex items-center gap-2 transition">
-                <RefreshCw size={20} />
-                Atualizar
-              </button>
-              <button onClick={logout} className="bg-red-500/20 hover:bg-red-500/30 border border-red-300/20 text-white px-6 py-4 rounded-2xl font-black flex items-center gap-2 transition">
-                <LogOut size={20} />
-                Sair
-              </button>
+            <div className="bg-white/10 border border-white/10 rounded-[34px] p-5 shadow-2xl hidden lg:block">
+              <img src="/images/cliente-premium.svg" alt="Área do cliente" className="rounded-[28px] w-full" />
             </div>
           </div>
+
+          <div className="flex flex-wrap gap-3">
+            <button onClick={loadData} className="bg-white/10 hover:bg-white/20 border border-white/10 text-white px-6 py-4 rounded-2xl font-black flex items-center gap-2 transition">
+              <RefreshCw size={20} />
+              Atualizar
+            </button>
+            <button onClick={logout} className="bg-red-500/20 hover:bg-red-500/30 border border-red-300/20 text-white px-6 py-4 rounded-2xl font-black flex items-center gap-2 transition">
+              <LogOut size={20} />
+              Sair
+            </button>
+          </div>
+
+          {error && (
+            <div className="bg-red-500/15 border border-red-400/30 text-red-100 rounded-3xl p-5 font-bold">
+              {error}
+            </div>
+          )}
 
           <div className="grid md:grid-cols-4 gap-6">
             {[
@@ -139,12 +159,12 @@ export default function ClienteDashboardPage() {
 
           <div className="grid xl:grid-cols-3 gap-6">
             <div className="xl:col-span-2 bg-white rounded-[34px] p-8 shadow-2xl border border-green-100">
-              <div className="flex items-center justify-between mb-6">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
                 <div>
                   <h2 className="text-3xl font-black text-slate-900">Meus agendamentos</h2>
                   <p className="text-slate-500 mt-1">Histórico e próximos atendimentos.</p>
                 </div>
-                <Link to="/agendamento" className="bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-2xl font-black flex items-center gap-2 transition">
+                <Link to="/agendamento" className="bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-2xl font-black flex items-center justify-center gap-2 transition">
                   <Plus size={18} />
                   Agendar
                 </Link>
