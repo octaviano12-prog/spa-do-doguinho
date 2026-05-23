@@ -10,19 +10,31 @@ const fallbackGallery = [
     id: "fallback-1",
     title: "Banho premium",
     description: "Cuidado completo, carinho e acabamento especial.",
-    image_url: ""
+    image_url: "/images/banho-tosa.svg"
   },
   {
     id: "fallback-2",
-    title: "Tosa com carinho",
-    description: "Visual bonito e confortável para cada pet.",
-    image_url: ""
+    title: "Vacinação e bem-estar",
+    description: "Cuidado preventivo e atenção para seu pet.",
+    image_url: "/images/vacina-pet.svg"
   },
   {
     id: "fallback-3",
     title: "Spa relaxante",
     description: "Bem-estar, hidratação e pele protegida.",
-    image_url: ""
+    image_url: "/images/spa-pet.svg"
+  },
+  {
+    id: "fallback-4",
+    title: "Área do cliente",
+    description: "Histórico, pets e agendamentos em um só lugar.",
+    image_url: "/images/cliente-premium.svg"
+  },
+  {
+    id: "fallback-5",
+    title: "Doguinho feliz",
+    description: "Uma experiência premium para cada atendimento.",
+    image_url: "/images/hero-doguinho.svg"
   }
 ];
 
@@ -57,7 +69,7 @@ export default function GaleriaPublicPage() {
         <section className="relative bg-[#06150d] px-6 py-24">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,#22c55e55,transparent_30%),radial-gradient(circle_at_85%_10%,#f59e0b33,transparent_30%)]" />
 
-          <div className="relative max-w-7xl mx-auto text-center">
+          <div className="relative max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
             <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}>
               <span className="inline-flex items-center gap-2 bg-white/10 border border-white/15 rounded-full px-5 py-2 text-green-100 font-black">
                 <Camera size={18} />
@@ -68,9 +80,13 @@ export default function GaleriaPublicPage() {
                 Cada atendimento conta uma história de cuidado.
               </h1>
 
-              <p className="text-white/70 mt-6 text-xl leading-relaxed max-w-3xl mx-auto">
+              <p className="text-white/70 mt-6 text-xl leading-relaxed max-w-3xl">
                 Veja registros, resultados e detalhes do carinho que entregamos em cada banho, tosa e cuidado especial.
               </p>
+            </motion.div>
+
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-white/10 border border-white/10 rounded-[42px] p-6 shadow-2xl backdrop-blur-xl">
+              <img src="/images/hero-doguinho.svg" alt="Galeria SPA do Doguinho" className="rounded-[34px] w-full shadow-2xl" />
             </motion.div>
           </div>
         </section>
@@ -82,14 +98,7 @@ export default function GaleriaPublicPage() {
               ["Pets felizes", "Cuidado com carinho", Heart],
               ["Resultado premium", "Acabamento especial", Sparkles]
             ].map(([title, text, Icon], index) => (
-              <motion.div
-                key={title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.06 }}
-                className="bg-white/10 border border-white/10 rounded-3xl p-7 text-white shadow-2xl"
-              >
+              <motion.div key={title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.06 }} className="bg-white/10 border border-white/10 rounded-3xl p-7 text-white shadow-2xl">
                 <Icon className="text-green-300 mb-4" size={36} />
                 <h3 className="text-2xl font-black">{title}</h3>
                 <p className="text-white/60 mt-2">{text}</p>
@@ -109,50 +118,35 @@ export default function GaleriaPublicPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {isLoading &&
-              [1, 2, 3, 4, 5, 6].map((item) => (
-                <div key={item} className="h-[380px] rounded-3xl bg-white/10 animate-pulse" />
-              ))}
+            {isLoading && [1, 2, 3, 4, 5, 6].map((item) => <div key={item} className="h-[420px] rounded-3xl bg-white/10 animate-pulse" />)}
 
-            {!isLoading &&
-              gallery.map((item, index) => (
-                <motion.article
-                  key={item.id || index}
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.05 }}
-                  className="group bg-white rounded-[32px] overflow-hidden shadow-2xl border border-green-100 hover:-translate-y-2 transition"
-                >
-                  {item.image_url ? (
-                    <div
-                      className="h-[300px] bg-cover bg-center"
-                      style={{ backgroundImage: `url('${item.image_url}')` }}
-                    />
+            {!isLoading && gallery.map((item, index) => (
+              <motion.article key={item.id || index} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.05 }} className="group bg-white rounded-[32px] overflow-hidden shadow-2xl border border-green-100 hover:-translate-y-2 transition">
+                {item.image_url ? (
+                  item.image_url.endsWith(".svg") ? (
+                    <div className="h-[300px] bg-slate-50 flex items-center justify-center p-4">
+                      <img src={item.image_url} alt={item.title || "Galeria"} className="w-full h-full object-contain rounded-2xl" />
+                    </div>
                   ) : (
-                    <div className="h-[300px] bg-gradient-to-br from-green-400 via-emerald-600 to-green-950 flex items-center justify-center relative overflow-hidden">
-                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,#ffffff55,transparent_24%),radial-gradient(circle_at_75%_70%,#fbbf2455,transparent_30%)]" />
-                      <PawPrint size={120} className="relative text-white drop-shadow-2xl" />
-                    </div>
-                  )}
-
-                  <div className="p-7">
-                    <div className="flex text-yellow-400 gap-1 mb-4">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <Star key={star} size={17} fill="currentColor" />
-                      ))}
-                    </div>
-
-                    <h2 className="text-2xl font-black text-slate-900">
-                      {item.title || `Atendimento #${index + 1}`}
-                    </h2>
-
-                    <p className="text-slate-500 mt-3">
-                      {item.description || "Resultado incrível para nossos clientes pets."}
-                    </p>
+                    <div className="h-[300px] bg-cover bg-center" style={{ backgroundImage: `url('${item.image_url}')` }} />
+                  )
+                ) : (
+                  <div className="h-[300px] bg-gradient-to-br from-green-400 via-emerald-600 to-green-950 flex items-center justify-center relative overflow-hidden">
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,#ffffff55,transparent_24%),radial-gradient(circle_at_75%_70%,#fbbf2455,transparent_30%)]" />
+                    <PawPrint size={120} className="relative text-white drop-shadow-2xl" />
                   </div>
-                </motion.article>
-              ))}
+                )}
+
+                <div className="p-7">
+                  <div className="flex text-yellow-400 gap-1 mb-4">
+                    {[1, 2, 3, 4, 5].map((star) => <Star key={star} size={17} fill="currentColor" />)}
+                  </div>
+
+                  <h2 className="text-2xl font-black text-slate-900">{item.title || `Atendimento #${index + 1}`}</h2>
+                  <p className="text-slate-500 mt-3">{item.description || "Resultado incrível para nossos clientes pets."}</p>
+                </div>
+              </motion.article>
+            ))}
           </div>
         </section>
       </main>
