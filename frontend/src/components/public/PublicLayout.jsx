@@ -13,6 +13,7 @@ import {
   Phone,
   ShieldCheck,
   Sparkles,
+  User,
   X
 } from "lucide-react";
 
@@ -70,6 +71,14 @@ export default function PublicLayout({ children }) {
             </Link>
 
             <Link
+              to="/cliente-login"
+              className="bg-white/10 hover:bg-white/20 px-5 py-3 rounded-2xl border border-white/10 font-black flex items-center gap-2 transition"
+            >
+              <User size={18} />
+              Cliente
+            </Link>
+
+            <Link
               to="/login"
               className="bg-white/10 hover:bg-white/20 px-5 py-3 rounded-2xl border border-white/10 font-black transition"
             >
@@ -111,6 +120,15 @@ export default function PublicLayout({ children }) {
               >
                 <CalendarDays size={18} />
                 Agendar atendimento
+              </Link>
+
+              <Link
+                to="/cliente-login"
+                onClick={() => setMobileOpen(false)}
+                className="bg-white/10 hover:bg-white/20 px-5 py-4 rounded-2xl border border-white/10 font-black flex items-center justify-center gap-2 transition"
+              >
+                <User size={18} />
+                Área do Cliente
               </Link>
 
               <Link
@@ -175,6 +193,7 @@ export default function PublicLayout({ children }) {
                   {item.label}
                 </Link>
               ))}
+              <Link to="/cliente-login" className="hover:text-green-200 transition">Área do Cliente</Link>
             </div>
           </div>
 
