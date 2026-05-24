@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import PublicLayout from "../../components/public/PublicLayout";
+import { publicPhotos } from "../../data/publicPhotos";
 
 export default function QuemSomosPage() {
   const values = [
@@ -65,8 +66,8 @@ export default function QuemSomosPage() {
               </div>
             </motion.div>
 
-            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-white/10 border border-white/10 rounded-[42px] p-6 shadow-2xl backdrop-blur-xl">
-              <img src="/images/hero-doguinho.svg" alt="SPA do Doguinho" className="w-full rounded-[34px] shadow-2xl" />
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-white/10 border border-white/10 rounded-[42px] p-4 shadow-2xl backdrop-blur-xl">
+              <img src={publicPhotos.heroBath} alt="SPA do Doguinho" className="h-[420px] w-full rounded-[34px] object-cover shadow-2xl" />
 
               <div className="grid grid-cols-3 gap-4 mt-6">
                 {[["+3.500", "pets"], ["5★", "avaliação"], ["100%", "carinho"]].map(([number, label]) => (
@@ -82,7 +83,7 @@ export default function QuemSomosPage() {
 
         <section className="max-w-7xl mx-auto px-6 py-20 grid lg:grid-cols-2 gap-12 items-center">
           <div className="bg-white rounded-[36px] p-8 md:p-10 shadow-2xl border border-green-100">
-            <img src="/images/spa-pet.svg" alt="Spa pet relaxante" className="w-full rounded-[28px] mb-8" />
+            <img src={publicPhotos.towel} alt="Spa pet relaxante" className="h-[360px] w-full rounded-[28px] object-cover mb-8" />
 
             <span className="inline-flex items-center gap-2 bg-green-100 text-green-800 rounded-full px-5 py-2 font-black">
               <Home size={18} />
