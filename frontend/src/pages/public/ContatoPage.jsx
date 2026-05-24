@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import PublicLayout from "../../components/public/PublicLayout";
+import { publicPhotos } from "../../data/publicPhotos";
 
 const WHATSAPP_NUMBER = "5518997493722";
 
@@ -86,7 +87,7 @@ export default function ContatoPage() {
             </motion.div>
 
             <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} className="bg-white rounded-[40px] p-8 shadow-2xl border border-green-100">
-              <img src="/images/cliente-premium.svg" alt="Contato SPA do Doguinho" className="w-full rounded-[30px] mb-7" />
+              <img src={publicPhotos.vetCare} alt="Contato SPA do Doguinho" className="h-[290px] w-full rounded-[30px] object-cover mb-7" />
 
               <div className="flex items-center gap-4 mb-7">
                 <div className="w-16 h-16 rounded-2xl bg-green-100 text-green-700 flex items-center justify-center">
