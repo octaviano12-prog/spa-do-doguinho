@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 
 import { apiRequest } from "../lib/api";
+import { publicPhotos } from "../data/publicPhotos";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -43,37 +44,36 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#06150d] relative overflow-hidden flex items-center justify-center p-6">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,#22c55e55,transparent_30%),radial-gradient(circle_at_85%_10%,#f59e0b33,transparent_28%),linear-gradient(135deg,#06150d,#042413_55%,#020617)]" />
-      <div className="absolute right-[-140px] top-20 h-[480px] w-[480px] rounded-full bg-green-400/20 blur-[100px]" />
-      <div className="absolute left-[-160px] bottom-10 h-[380px] w-[380px] rounded-full bg-orange-300/20 blur-[100px]" />
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#fbf7ef] p-6 text-[#10231a]">
+      <div className="absolute inset-x-0 top-0 h-[58%] bg-[#f5efe4]" />
+      <div className="absolute -left-24 top-24 h-80 w-80 rounded-full bg-emerald-200/45 blur-3xl" />
+      <div className="absolute -right-24 bottom-20 h-80 w-80 rounded-full bg-yellow-200/55 blur-3xl" />
 
-      <div className="relative w-full max-w-6xl grid lg:grid-cols-2 gap-8 items-center">
-        <div className="hidden lg:block text-white">
+      <div className="relative grid w-full max-w-6xl gap-8 lg:grid-cols-[1.05fr_.95fr] lg:items-center">
+        <div className="hidden lg:block">
           <Link
             to="/"
-            className="inline-flex items-center gap-2 bg-white/10 border border-white/15 rounded-full px-5 py-3 text-green-100 font-black hover:bg-white/15 transition"
+            className="inline-flex items-center gap-2 rounded-full border border-emerald-900/10 bg-white px-5 py-3 font-black text-emerald-900 shadow-sm transition hover:border-emerald-700"
           >
             <ArrowLeft size={18} />
             Voltar ao site
           </Link>
 
           <div className="mt-12">
-            <span className="inline-flex items-center gap-2 bg-white/10 border border-white/15 rounded-full px-5 py-2 text-green-100 font-black">
+            <span className="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-5 py-2 font-black text-emerald-900">
               <ShieldCheck size={18} />
               Painel seguro
             </span>
 
-            <h1 className="text-6xl font-black leading-tight mt-7">
+            <h1 className="mt-7 max-w-3xl text-6xl font-black leading-[.96]">
               Gestão premium para o SPA do Doguinho.
             </h1>
 
-            <p className="text-white/70 text-xl mt-6 max-w-xl leading-relaxed">
-              Controle agenda, clientes, pets, serviços, pagamentos, estoque,
-              vacinas e disponibilidade em um painel moderno.
+            <p className="mt-6 max-w-xl text-xl leading-relaxed text-slate-600">
+              Controle agenda, clientes, pets, serviços, pagamentos, estoque, vacinas e disponibilidade em um painel moderno.
             </p>
 
-            <div className="grid sm:grid-cols-2 gap-4 mt-10 max-w-xl">
+            <div className="mt-10 grid max-w-xl gap-4 sm:grid-cols-2">
               {[
                 "Agenda inteligente",
                 "Pagamentos e PIX",
@@ -82,9 +82,9 @@ export default function LoginPage() {
               ].map((item) => (
                 <div
                   key={item}
-                  className="bg-white/10 border border-white/10 rounded-2xl p-4 flex items-center gap-3 font-bold"
+                  className="flex items-center gap-3 rounded-2xl bg-white p-4 font-bold shadow-sm ring-1 ring-black/5"
                 >
-                  <CheckCircle className="text-green-300" size={20} />
+                  <CheckCircle className="text-[#0f7a3b]" size={20} />
                   {item}
                 </div>
               ))}
@@ -92,92 +92,98 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <div className="w-full max-w-md mx-auto bg-white/90 backdrop-blur-xl rounded-[36px] shadow-2xl p-8 md:p-10 border border-white/60">
-          <div className="flex flex-col items-center mb-9 text-center">
-            <div className="w-24 h-24 rounded-[30px] bg-gradient-to-br from-green-500 to-emerald-800 flex items-center justify-center shadow-xl shadow-green-900/25 mb-6">
-              <PawPrint size={48} className="text-white" />
-            </div>
-
-            <span className="inline-flex items-center gap-2 bg-green-100 text-green-800 px-4 py-2 rounded-full font-black text-sm mb-4">
-              <Sparkles size={16} />
-              Área administrativa
-            </span>
-
-            <h2 className="text-4xl font-black text-slate-900">
-              Entrar no painel
-            </h2>
-            <p className="text-slate-500 mt-3">
-              Acesse com seu e-mail e senha para gerenciar o sistema.
-            </p>
+        <div className="grid gap-6 xl:grid-cols-[.8fr_1fr] xl:items-stretch">
+          <div className="hidden overflow-hidden rounded-[36px] bg-white shadow-2xl ring-1 ring-black/5 xl:block">
+            <img src={publicPhotos.essentials} alt="Gestão SPA do Doguinho" className="h-full min-h-[620px] w-full object-cover" />
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div>
-              <label className="block mb-2 font-black text-slate-700">
-                E-mail
-              </label>
-              <div className="flex items-center bg-white rounded-2xl px-5 py-4 border border-slate-200 shadow-sm focus-within:border-green-500 transition">
-                <Mail className="text-slate-400 mr-3" />
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full outline-none bg-transparent text-lg text-slate-900"
-                  placeholder="Seu e-mail"
-                  autoComplete="email"
-                  required
-                />
+          <div className="mx-auto w-full max-w-md rounded-[36px] border border-white/80 bg-white p-8 shadow-2xl md:p-10">
+            <div className="mb-9 flex flex-col items-center text-center">
+              <div className="mb-6 flex h-24 w-24 items-center justify-center rounded-[30px] bg-[#0f7a3b] shadow-xl shadow-emerald-900/20">
+                <PawPrint size={48} className="text-white" />
               </div>
+
+              <span className="mb-4 inline-flex items-center gap-2 rounded-full bg-emerald-100 px-4 py-2 text-sm font-black text-emerald-900">
+                <Sparkles size={16} />
+                Área administrativa
+              </span>
+
+              <h2 className="text-4xl font-black">
+                Entrar no painel
+              </h2>
+              <p className="mt-3 text-slate-500">
+                Acesse com seu e-mail e senha para gerenciar o sistema.
+              </p>
             </div>
 
-            <div>
-              <label className="block mb-2 font-black text-slate-700">
-                Senha
-              </label>
-              <div className="flex items-center bg-white rounded-2xl px-5 py-4 border border-slate-200 shadow-sm focus-within:border-green-500 transition">
-                <Lock className="text-slate-400 mr-3" />
-                <input
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full outline-none bg-transparent text-lg text-slate-900"
-                  placeholder="Sua senha"
-                  autoComplete="current-password"
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword((current) => !current)}
-                  className="text-slate-400 hover:text-slate-700 transition"
-                  aria-label="Mostrar ou ocultar senha"
-                >
-                  {showPassword ? <EyeOff /> : <Eye />}
-                </button>
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div>
+                <label className="mb-2 block font-black text-slate-700">
+                  E-mail
+                </label>
+                <div className="flex items-center rounded-2xl border border-slate-200 bg-white px-5 py-4 shadow-sm transition focus-within:border-emerald-700">
+                  <Mail className="mr-3 text-slate-400" />
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full bg-transparent text-lg text-slate-900 outline-none"
+                    placeholder="Seu e-mail"
+                    autoComplete="email"
+                    required
+                  />
+                </div>
               </div>
-            </div>
 
-            {error && (
-              <div className="bg-red-100 border border-red-300 text-red-700 rounded-2xl p-4 text-sm font-bold">
-                {error}
+              <div>
+                <label className="mb-2 block font-black text-slate-700">
+                  Senha
+                </label>
+                <div className="flex items-center rounded-2xl border border-slate-200 bg-white px-5 py-4 shadow-sm transition focus-within:border-emerald-700">
+                  <Lock className="mr-3 text-slate-400" />
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full bg-transparent text-lg text-slate-900 outline-none"
+                    placeholder="Sua senha"
+                    autoComplete="current-password"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((current) => !current)}
+                    className="text-slate-400 transition hover:text-slate-700"
+                    aria-label="Mostrar ou ocultar senha"
+                  >
+                    {showPassword ? <EyeOff /> : <Eye />}
+                  </button>
+                </div>
               </div>
-            )}
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-green-600 hover:bg-green-700 transition-all text-white font-black text-xl py-4 rounded-2xl shadow-xl disabled:opacity-60"
-            >
-              {loading ? "Entrando..." : "Entrar no painel"}
-            </button>
+              {error && (
+                <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-bold text-red-700">
+                  {error}
+                </div>
+              )}
 
-            <Link
-              to="/"
-              className="lg:hidden flex items-center justify-center gap-2 text-slate-500 hover:text-green-700 font-bold transition"
-            >
-              <ArrowLeft size={18} />
-              Voltar ao site
-            </Link>
-          </form>
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full rounded-2xl bg-[#0f7a3b] py-4 text-xl font-black text-white shadow-xl transition hover:bg-[#0b6631] disabled:opacity-60"
+              >
+                {loading ? "Entrando..." : "Entrar no painel"}
+              </button>
+
+              <Link
+                to="/"
+                className="flex items-center justify-center gap-2 font-bold text-slate-500 transition hover:text-[#0f7a3b] lg:hidden"
+              >
+                <ArrowLeft size={18} />
+                Voltar ao site
+              </Link>
+            </form>
+          </div>
         </div>
       </div>
     </div>
