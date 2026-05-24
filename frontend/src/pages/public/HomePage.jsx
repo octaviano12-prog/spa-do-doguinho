@@ -92,49 +92,49 @@ export default function HomePage() {
   return (
     <PublicLayout>
       <main className="overflow-hidden bg-[#edf6ed] text-[#102d27]">
-        <section className="relative min-h-[calc(100vh-88px)] overflow-hidden bg-[#dcefe3] px-5 pb-12 pt-8 md:px-8 2xl:px-10">
+        <section className="relative overflow-hidden bg-[#dcefe3] px-5 pb-10 pt-7 md:px-8 2xl:px-10">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_18%,rgba(13,139,103,.18),transparent_32%),radial-gradient(circle_at_82%_8%,rgba(244,200,106,.28),transparent_28%),linear-gradient(180deg,rgba(255,255,255,.38),transparent)]" />
 
-          <div className="relative mx-auto grid min-h-[calc(100vh-120px)] max-w-[1840px] gap-10 xl:grid-cols-[.82fr_1.18fr] xl:items-center">
-            <div className="z-10 max-w-4xl py-8 xl:py-16">
-              <span className="inline-flex items-center gap-2 rounded-full border border-[#19534e]/10 bg-white/90 px-5 py-2 text-sm font-black text-[#19534e] shadow-sm">
-                <Sparkles size={16} /> Boutique pet premium em Sud Mennucci
+          <div className="relative mx-auto grid min-h-[calc(100vh-132px)] max-w-[1840px] gap-8 xl:grid-cols-[.72fr_1.28fr] xl:items-center">
+            <div className="z-10 max-w-3xl py-6 xl:py-10">
+              <span className="inline-flex items-center gap-2 rounded-full border border-[#19534e]/10 bg-white/90 px-4 py-2 text-xs font-black text-[#19534e] shadow-sm md:text-sm">
+                <Sparkles size={15} /> Boutique pet premium em Sud Mennucci
               </span>
 
-              <h1 className="mt-7 text-5xl font-black leading-[.92] tracking-tight text-[#102d27] md:text-7xl 2xl:text-8xl">
+              <h1 className="mt-6 text-4xl font-black leading-[.96] tracking-tight text-[#102d27] sm:text-5xl md:text-6xl 2xl:text-7xl">
                 Banho, tosa e cuidado
                 <br />
                 <span className="text-[#0d8b67]">com experiência premium.</span>
               </h1>
 
-              <p className="mt-6 max-w-2xl text-lg leading-relaxed text-slate-700 md:text-xl">
+              <p className="mt-5 max-w-2xl text-base leading-relaxed text-slate-700 md:text-lg">
                 Seu doguinho merece carinho, segurança e um atendimento moderno.
                 Agende online, acompanhe seus horários e deixe o cuidado do seu pet
                 muito mais prático.
               </p>
 
-              <div className="mt-9 flex flex-wrap gap-4">
+              <div className="mt-7 flex flex-wrap gap-3">
                 <Link
                   to="/agendamento"
-                  className="group inline-flex items-center gap-3 rounded-2xl bg-[#19534e] px-7 py-4 font-black text-white shadow-[0_20px_45px_rgba(25,83,78,.24)] transition hover:-translate-y-0.5 hover:bg-[#123f3b]"
+                  className="group inline-flex items-center gap-3 rounded-2xl bg-[#19534e] px-6 py-3.5 font-black text-white shadow-[0_20px_45px_rgba(25,83,78,.24)] transition hover:-translate-y-0.5 hover:bg-[#123f3b]"
                 >
-                  <CalendarDays size={19} />
+                  <CalendarDays size={18} />
                   Agendar agora
-                  <ArrowRight size={18} className="transition group-hover:translate-x-1" />
+                  <ArrowRight size={17} className="transition group-hover:translate-x-1" />
                 </Link>
 
                 <a
                   href={whatsappUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-3 rounded-2xl border border-[#b7d7c2] bg-white px-7 py-4 font-black text-[#102d27] shadow-sm transition hover:-translate-y-0.5 hover:border-[#19534e]"
+                  className="inline-flex items-center gap-3 rounded-2xl border border-[#b7d7c2] bg-white px-6 py-3.5 font-black text-[#102d27] shadow-sm transition hover:-translate-y-0.5 hover:border-[#19534e]"
                 >
-                  <MessageCircle size={19} />
+                  <MessageCircle size={18} />
                   Falar no WhatsApp
                 </a>
               </div>
 
-              <div className="mt-10 grid max-w-3xl gap-3 sm:grid-cols-3">
+              <div className="mt-8 grid max-w-2xl gap-3 sm:grid-cols-3">
                 {[
                   ["+3.500", "pets cuidados"],
                   ["5★", "experiência premium"],
@@ -142,10 +142,10 @@ export default function HomePage() {
                 ].map(([value, label]) => (
                   <div
                     key={label}
-                    className="rounded-3xl bg-white/92 p-5 shadow-lg ring-1 ring-[#b7d7c2]/40"
+                    className="rounded-3xl bg-white/92 p-4 shadow-lg ring-1 ring-[#b7d7c2]/40"
                   >
-                    <div className="text-2xl font-black text-[#0d8b67]">{value}</div>
-                    <div className="mt-1 text-xs font-bold uppercase text-slate-500">
+                    <div className="text-xl font-black text-[#0d8b67] md:text-2xl">{value}</div>
+                    <div className="mt-1 text-[11px] font-bold uppercase text-slate-500">
                       {label}
                     </div>
                   </div>
@@ -153,43 +153,43 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="relative min-h-[520px] xl:min-h-[calc(100vh-150px)]">
-              <div className="absolute inset-y-0 right-0 w-full overflow-hidden rounded-[54px] bg-[#c9ead8] shadow-2xl ring-1 ring-black/5 xl:w-[108%]">
+            <div className="relative min-h-[430px] md:min-h-[500px] xl:min-h-[calc(100vh-168px)]">
+              <div className="absolute inset-y-0 right-0 w-full overflow-hidden rounded-[42px] bg-[#c9ead8] shadow-2xl ring-1 ring-black/5 xl:w-[104%] 2xl:rounded-[54px]">
                 <img
                   src={photos.hero}
                   alt="SPA do Doguinho"
                   className="h-full w-full object-cover object-center"
                 />
-                <div className="absolute inset-0 bg-gradient-to-r from-[#dcefe3]/38 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#dcefe3]/34 via-transparent to-transparent" />
               </div>
 
-              <div className="absolute bottom-8 left-[-24px] hidden w-[330px] overflow-hidden rounded-[36px] border-[10px] border-[#dcefe3] bg-white shadow-2xl md:block 2xl:w-[390px]">
+              <div className="absolute bottom-6 left-[-14px] hidden w-[280px] overflow-hidden rounded-[30px] border-[8px] border-[#dcefe3] bg-white shadow-2xl lg:block 2xl:w-[340px]">
                 <img
                   src={photos.bath}
                   alt="Banho e tosa"
-                  className="h-56 w-full object-cover"
+                  className="h-44 w-full object-cover 2xl:h-52"
                 />
-                <div className="p-5">
+                <div className="p-4">
                   <div className="flex gap-1 text-[#f4c86a]">
                     {[1, 2, 3, 4, 5].map((i) => (
-                      <Star key={i} size={16} fill="currentColor" />
+                      <Star key={i} size={15} fill="currentColor" />
                     ))}
                   </div>
-                  <h3 className="mt-3 text-xl font-black">Banho Premium</h3>
-                  <p className="mt-1 text-sm font-semibold text-slate-500">
+                  <h3 className="mt-2 text-lg font-black">Banho Premium</h3>
+                  <p className="mt-1 text-xs font-semibold text-slate-500">
                     Higiene, perfume e carinho.
                   </p>
                 </div>
               </div>
 
-              <div className="absolute right-6 bottom-8 rounded-[28px] bg-white/92 p-5 shadow-2xl backdrop-blur">
-                <div className="flex items-center gap-4">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#e6f3ef] text-[#19534e]">
-                    <ShieldCheck size={28} />
+              <div className="absolute right-5 bottom-6 hidden rounded-[24px] bg-white/92 p-4 shadow-2xl backdrop-blur md:block">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#e6f3ef] text-[#19534e]">
+                    <ShieldCheck size={24} />
                   </div>
                   <div>
                     <div className="font-black text-[#102d27]">Ambiente seguro</div>
-                    <p className="text-sm text-slate-500">Calma, higiene e atenção.</p>
+                    <p className="text-xs text-slate-500">Calma, higiene e atenção.</p>
                   </div>
                 </div>
               </div>
