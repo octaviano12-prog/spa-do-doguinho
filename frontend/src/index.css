@@ -33,6 +33,87 @@ select{
   font-family:'Inter',sans-serif;
 }
 
+/* Animações premium da Home pública */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(26px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+@keyframes fadeInSoft{
+  from{opacity:0;filter:blur(8px)}
+  to{opacity:1;filter:blur(0)}
+}
+
+@keyframes floatSoft{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-10px)}
+}
+
+@keyframes pulseGlow{
+  0%,100%{box-shadow:0 18px 45px rgba(13,107,84,.25)}
+  50%{box-shadow:0 22px 58px rgba(13,107,84,.42)}
+}
+
+@keyframes shimmerMove{
+  0%{background-position:0% 50%}
+  100%{background-position:100% 50%}
+}
+
+.home-animate-fade{
+  animation:fadeUp .75s ease both;
+}
+
+.home-animate-fade-delay-1{
+  animation:fadeUp .85s ease .12s both;
+}
+
+.home-animate-fade-delay-2{
+  animation:fadeUp .9s ease .22s both;
+}
+
+.home-animate-fade-delay-3{
+  animation:fadeUp .95s ease .32s both;
+}
+
+.home-hero-image{
+  animation:fadeInSoft 1.2s ease both;
+}
+
+.home-float{
+  animation:floatSoft 4.8s ease-in-out infinite;
+}
+
+.home-pulse-glow{
+  animation:pulseGlow 2.8s ease-in-out infinite;
+}
+
+.home-shimmer-text{
+  background:linear-gradient(90deg,#0d6b54,#0d8b67,#f4b942,#0d8b67,#0d6b54);
+  background-size:260% auto;
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  animation:shimmerMove 5.5s linear infinite;
+}
+
+.home-card-animate{
+  animation:fadeUp .7s ease both;
+  transition:transform .28s ease, box-shadow .28s ease, border-color .28s ease;
+}
+
+.home-card-animate:hover{
+  transform:translateY(-8px) scale(1.015);
+  box-shadow:0 24px 55px rgba(13,107,84,.16);
+}
+
+.home-icon-pop{
+  transition:transform .3s ease, background .3s ease;
+}
+
+.home-card-animate:hover .home-icon-pop{
+  transform:scale(1.08) rotate(-4deg);
+}
+
 /* Correção global: impede letras uma embaixo da outra em cards/tabelas do admin */
 .admin-page,
 .admin-page *{
@@ -140,6 +221,24 @@ select{
   }
   .clientes-page .cliente-actions{
     justify-content:flex-start !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .home-animate-fade,
+  .home-animate-fade-delay-1,
+  .home-animate-fade-delay-2,
+  .home-animate-fade-delay-3,
+  .home-hero-image,
+  .home-float,
+  .home-pulse-glow,
+  .home-shimmer-text,
+  .home-card-animate{
+    animation:none !important;
+  }
+  .home-card-animate,
+  .home-icon-pop{
+    transition:none !important;
   }
 }
 
