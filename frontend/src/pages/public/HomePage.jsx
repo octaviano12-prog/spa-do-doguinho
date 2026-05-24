@@ -92,7 +92,7 @@ export default function HomePage() {
   return (
     <PublicLayout>
       <main className="overflow-hidden bg-[#edf6ed] text-[#102d27]">
-        <section className="relative overflow-hidden bg-[#dcefe3] px-5 pb-10 pt-7 md:px-8 2xl:px-10">
+        <section className="relative overflow-hidden bg-[#dcefe3] px-5 pb-0 pt-7 md:px-8 2xl:px-10">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_18%,rgba(13,139,103,.18),transparent_32%),radial-gradient(circle_at_82%_8%,rgba(244,200,106,.28),transparent_28%),linear-gradient(180deg,rgba(255,255,255,.38),transparent)]" />
 
           <div className="relative mx-auto grid min-h-[calc(100vh-132px)] max-w-[1840px] gap-8 xl:grid-cols-[.72fr_1.28fr] xl:items-center">
@@ -102,15 +102,14 @@ export default function HomePage() {
               </span>
 
               <h1 className="mt-6 text-4xl font-black leading-[.96] tracking-tight text-[#102d27] sm:text-5xl md:text-6xl 2xl:text-7xl">
-                Banho, tosa e cuidado
+                Mais que banho,
                 <br />
-                <span className="text-[#0d8b67]">com experiência premium.</span>
+                <span className="text-[#0d8b67]">um momento de carinho.</span>
               </h1>
 
               <p className="mt-5 max-w-2xl text-base leading-relaxed text-slate-700 md:text-lg">
-                Seu doguinho merece carinho, segurança e um atendimento moderno.
-                Agende online, acompanhe seus horários e deixe o cuidado do seu pet
-                muito mais prático.
+                No SPA do Doguinho, seu pet recebe cuidado especial, segurança e muito amor.
+                Agende online e deixe seu melhor amigo se sentir em casa.
               </p>
 
               <div className="mt-7 flex flex-wrap gap-3">
@@ -123,33 +122,32 @@ export default function HomePage() {
                   <ArrowRight size={17} className="transition group-hover:translate-x-1" />
                 </Link>
 
-                <a
-                  href={whatsappUrl}
-                  target="_blank"
-                  rel="noreferrer"
+                <Link
+                  to="/servicos"
                   className="inline-flex items-center gap-3 rounded-2xl border border-[#b7d7c2] bg-white px-6 py-3.5 font-black text-[#102d27] shadow-sm transition hover:-translate-y-0.5 hover:border-[#19534e]"
                 >
-                  <MessageCircle size={18} />
-                  Falar no WhatsApp
-                </a>
+                  <Heart size={18} />
+                  Nossos serviços
+                </Link>
               </div>
 
-              <div className="mt-8 grid max-w-2xl gap-3 sm:grid-cols-3">
-                {[
-                  ["+3.500", "pets cuidados"],
-                  ["5★", "experiência premium"],
-                  ["100%", "agenda online"]
-                ].map(([value, label]) => (
-                  <div
-                    key={label}
-                    className="rounded-3xl bg-white/92 p-4 shadow-lg ring-1 ring-[#b7d7c2]/40"
-                  >
-                    <div className="text-xl font-black text-[#0d8b67] md:text-2xl">{value}</div>
-                    <div className="mt-1 text-[11px] font-bold uppercase text-slate-500">
-                      {label}
+              <div className="mt-7 flex flex-wrap items-center gap-4">
+                <div className="flex -space-x-3">
+                  {[photos.bath, photos.spa, photos.vaccine, photos.client].map((photo, index) => (
+                    <div key={index} className="h-11 w-11 overflow-hidden rounded-full border-2 border-white bg-[#dcefe3] shadow-md">
+                      <img src={photo} alt="Cliente feliz" className="h-full w-full object-cover" />
                     </div>
+                  ))}
+                </div>
+
+                <div>
+                  <div className="flex gap-1 text-[#f4c86a]">
+                    {[1, 2, 3, 4, 5].map((i) => (
+                      <Star key={i} size={16} fill="currentColor" />
+                    ))}
                   </div>
-                ))}
+                  <p className="mt-1 text-sm font-bold text-slate-600">Mais de 500 pets felizes!</p>
+                </div>
               </div>
             </div>
 
@@ -160,40 +158,40 @@ export default function HomePage() {
                   alt="SPA do Doguinho"
                   className="h-full w-full object-cover object-center"
                 />
-                <div className="absolute inset-0 bg-gradient-to-r from-[#dcefe3]/34 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#dcefe3]/18 via-transparent to-transparent" />
               </div>
 
-              <div className="absolute bottom-6 left-[-14px] hidden w-[280px] overflow-hidden rounded-[30px] border-[8px] border-[#dcefe3] bg-white shadow-2xl lg:block 2xl:w-[340px]">
-                <img
-                  src={photos.bath}
-                  alt="Banho e tosa"
-                  className="h-44 w-full object-cover 2xl:h-52"
-                />
-                <div className="p-4">
-                  <div className="flex gap-1 text-[#f4c86a]">
-                    {[1, 2, 3, 4, 5].map((i) => (
-                      <Star key={i} size={15} fill="currentColor" />
-                    ))}
-                  </div>
-                  <h3 className="mt-2 text-lg font-black">Banho Premium</h3>
-                  <p className="mt-1 text-xs font-semibold text-slate-500">
-                    Higiene, perfume e carinho.
-                  </p>
-                </div>
-              </div>
-
-              <div className="absolute right-5 bottom-6 hidden rounded-[24px] bg-white/92 p-4 shadow-2xl backdrop-blur md:block">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#e6f3ef] text-[#19534e]">
+              <div className="absolute right-5 bottom-6 hidden max-w-[280px] rounded-[24px] bg-white/88 p-4 shadow-2xl backdrop-blur md:block">
+                <div className="flex items-start gap-3">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#e6f3ef] text-[#19534e]">
                     <ShieldCheck size={24} />
                   </div>
                   <div>
-                    <div className="font-black text-[#102d27]">Ambiente seguro</div>
-                    <p className="text-xs text-slate-500">Calma, higiene e atenção.</p>
+                    <div className="font-black text-[#102d27]">Ambiente seguro e climatizado</div>
+                    <p className="mt-1 text-xs leading-relaxed text-slate-500">Conforto e bem-estar para o seu melhor amigo.</p>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
+
+          <div className="relative mx-auto -mt-2 grid max-w-[1840px] gap-5 rounded-t-[48px] bg-white/72 px-5 py-8 shadow-[0_-18px_50px_rgba(25,83,78,.08)] ring-1 ring-white/70 backdrop-blur md:grid-cols-4 md:px-8 2xl:px-10">
+            {[
+              [Bath, "Banho Premium", "Produtos de qualidade e muito carinho."],
+              [Scissors, "Tosa e Higiene", "Tosas personalizadas e cuidados especiais."],
+              [Sparkles, "Spa e Bem-estar", "Hidratação, relaxamento e conforto."],
+              [MessageCircle, "Agende Online", "Escolha horário pelo site ou WhatsApp."]
+            ].map(([Icon, title, text]) => (
+              <div key={title} className="flex items-center gap-4">
+                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-[#edf6ed] text-[#19534e] shadow-inner ring-1 ring-[#b7d7c2]/50">
+                  <Icon size={28} />
+                </div>
+                <div>
+                  <h3 className="text-lg font-black text-[#102d27]">{title}</h3>
+                  <p className="mt-1 text-sm leading-relaxed text-slate-600">{text}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </section>
 
