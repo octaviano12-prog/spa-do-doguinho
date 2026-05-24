@@ -78,32 +78,29 @@ export default function QuemSomosPage() {
   return (
     <PublicLayout>
       <main className="overflow-hidden bg-[#fffdf7] text-[#12382f]">
-        <section className="relative min-h-[620px] overflow-hidden bg-[linear-gradient(135deg,#fffdf7,#e6f5eb,#fff8e6)]">
+        <section className="relative min-h-[calc(100vh-128px)] overflow-hidden bg-[linear-gradient(135deg,#fffdf7,#e6f5eb,#fff8e6)] xl:min-h-[610px]">
           <img src={images.hero} alt="Quem somos - SPA do Doguinho" className="home-hero-image absolute inset-0 h-full w-full object-cover object-center" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#fffdf7]/96 via-[#fffdf7]/80 to-transparent" />
-          <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#fffdf7] to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#fffdf7] to-transparent" />
 
-          <div className="relative mx-auto grid min-h-[620px] max-w-[1880px] gap-10 px-6 py-12 md:px-10 lg:grid-cols-[1fr_.9fr] lg:items-center">
-            <div className="max-w-4xl">
-              <span className="home-animate-fade inline-flex items-center gap-2 rounded-full bg-white/85 px-5 py-2 text-sm font-black uppercase tracking-[.16em] text-[#0d6b54] shadow-sm backdrop-blur">
-                <PawPrint size={16} /> Quem somos
-              </span>
-              <h1 className="home-animate-fade-delay-1 mt-6 text-4xl font-black leading-[.95] tracking-[-.05em] text-[#12382f] sm:text-5xl md:text-6xl xl:text-7xl">
+          <div className="relative mx-auto grid min-h-[calc(100vh-128px)] max-w-[1880px] gap-10 px-6 py-8 md:px-10 lg:grid-cols-[1fr_.9fr] lg:items-center xl:min-h-[610px]">
+            <div className="max-w-4xl -translate-y-3 xl:-translate-y-2">
+              <h1 className="home-animate-fade-delay-1 text-4xl font-black leading-[.95] tracking-[-.05em] text-[#12382f] sm:text-5xl md:text-6xl xl:text-7xl 2xl:text-[5.3rem]">
                 SPA do Doguinho
                 <span className="home-shimmer-text block font-serif italic">mais que um banho, um cuidado cheio de amor.</span>
               </h1>
-              <p className="home-animate-fade-delay-2 mt-6 max-w-2xl text-xl font-black leading-relaxed text-[#0d6b54]">
+              <p className="home-animate-fade-delay-2 mt-5 max-w-2xl text-lg font-black leading-relaxed text-[#0d6b54] md:text-xl">
                 Mais que um spa, um lugar de amor e cuidado para quem você mais ama.
               </p>
-              <p className="home-animate-fade-delay-2 mt-5 max-w-2xl text-base leading-relaxed text-slate-700 md:text-lg">
+              <p className="home-animate-fade-delay-2 mt-4 max-w-2xl text-base leading-relaxed text-slate-700 md:text-lg">
                 O SPA do Doguinho nasceu do amor incondicional pelos pets e do desejo de proporcionar muito mais do que beleza: aqui, cada banho, cada cuidado e cada detalhe são pensados para o bem-estar físico e emocional do seu melhor amigo.
               </p>
-              <p className="home-animate-fade-delay-2 mt-4 max-w-2xl text-base leading-relaxed text-slate-700 md:text-lg">
+              <p className="home-animate-fade-delay-2 mt-3 max-w-2xl text-base leading-relaxed text-slate-700 md:text-lg">
                 Somos um espaço moderno, seguro e acolhedor, com profissionais apaixonados e dedicados a oferecer uma experiência única de relaxamento, higiene e carinho.
               </p>
-              <div className="home-animate-fade-delay-3 mt-8 flex flex-wrap gap-4">
-                <Link to="/cliente-login" className="home-pulse-glow inline-flex items-center gap-3 rounded-2xl bg-[#0d6b54] px-6 py-4 font-black text-white shadow-xl transition hover:-translate-y-1 hover:bg-[#095642]"><LogIn size={20} /> Entrar para agendar</Link>
-                <a href={whatsappUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-3 rounded-2xl border border-[#25D366]/30 bg-[#e9fff2] px-6 py-4 font-black text-[#128c4b] shadow-sm transition hover:-translate-y-1"><MessageCircle size={20} /> Falar no WhatsApp</a>
+              <div className="home-animate-fade-delay-3 mt-6 flex flex-wrap gap-4">
+                <Link to="/cliente-login" className="home-pulse-glow inline-flex items-center gap-3 rounded-2xl bg-[#0d6b54] px-6 py-3.5 font-black text-white shadow-xl transition hover:-translate-y-1 hover:bg-[#095642]"><LogIn size={20} /> Entrar para agendar</Link>
+                <a href={whatsappUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-3 rounded-2xl border border-[#25D366]/30 bg-[#e9fff2] px-6 py-3.5 font-black text-[#128c4b] shadow-sm transition hover:-translate-y-1"><MessageCircle size={20} /> Falar no WhatsApp</a>
               </div>
             </div>
           </div>
