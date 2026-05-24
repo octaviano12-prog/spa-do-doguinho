@@ -39,20 +39,20 @@ const proof = [["+3.500", "pets atendidos"], ["5 estrelas", "experiência premiu
 export default function HomePage() {
   return (
     <PublicLayout>
-      <main className="overflow-hidden bg-[#fbf7ef] text-[#10231a]">
-        <section className="relative bg-[#f5efe4] px-5 pb-16 pt-12 md:px-8 lg:pb-20 2xl:px-10">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_12%,rgba(15,122,59,.13),transparent_30%),radial-gradient(circle_at_80%_8%,rgba(245,214,107,.20),transparent_26%)]" />
+      <main className="overflow-hidden bg-[#f2eadc] text-[#10231a]">
+        <section className="relative bg-[#eadfcd] px-5 pb-16 pt-12 md:px-8 lg:pb-20 2xl:px-10">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_12%,rgba(15,122,59,.16),transparent_30%),radial-gradient(circle_at_80%_8%,rgba(194,142,48,.18),transparent_26%)]" />
           <div className="relative mx-auto grid max-w-[1680px] gap-12 xl:grid-cols-[.9fr_1.1fr] xl:items-center">
             <div className="max-w-3xl">
               <span className="inline-flex items-center gap-2 rounded-full border border-emerald-900/10 bg-white/90 px-5 py-2 text-sm font-black text-emerald-900 shadow-sm"><Sparkles size={16} /> Boutique pet care em Sud Mennucci</span>
               <h1 className="mt-7 text-5xl font-black leading-[.93] tracking-tight md:text-7xl 2xl:text-8xl">Cuidado premium para seu pet voltar impecável.</h1>
-              <p className="mt-6 max-w-2xl text-lg leading-relaxed text-slate-600 md:text-xl">Banho, tosa, spa e vacinação em uma experiência calma, cheirosa e organizada para pets e tutores.</p>
-              <div className="mt-9 flex flex-wrap gap-4"><Link to="/agendamento" className="group inline-flex items-center gap-3 rounded-2xl bg-[#0f7a3b] px-7 py-4 font-black text-white shadow-[0_20px_45px_rgba(15,122,59,.24)] transition hover:-translate-y-0.5 hover:bg-[#0b6631]"><CalendarDays size={19} /> Agendar agora <ArrowRight size={18} className="transition group-hover:translate-x-1" /></Link><a href="https://wa.me/5518997493722" target="_blank" rel="noreferrer" className="inline-flex items-center gap-3 rounded-2xl border border-slate-300 bg-white px-7 py-4 font-black text-[#10231a] shadow-sm transition hover:-translate-y-0.5 hover:border-emerald-700"><MessageCircle size={19} /> Falar no WhatsApp</a></div>
-              <div className="mt-10 grid max-w-2xl grid-cols-3 overflow-hidden rounded-3xl border border-black/5 bg-white shadow-xl">{proof.map(([value, label]) => <div key={label} className="border-r border-slate-100 p-5 last:border-r-0"><div className="text-2xl font-black text-[#0f7a3b]">{value}</div><div className="mt-1 text-xs font-bold uppercase text-slate-500">{label}</div></div>)}</div>
+              <p className="mt-6 max-w-2xl text-lg leading-relaxed text-slate-700 md:text-xl">Banho, tosa, spa e vacinação em uma experiência calma, cheirosa e organizada para pets e tutores.</p>
+              <div className="mt-9 flex flex-wrap gap-4"><Link to="/agendamento" className="group inline-flex items-center gap-3 rounded-2xl bg-[#0f7a3b] px-7 py-4 font-black text-white shadow-[0_20px_45px_rgba(15,122,59,.24)] transition hover:-translate-y-0.5 hover:bg-[#0b6631]"><CalendarDays size={19} /> Agendar agora <ArrowRight size={18} className="transition group-hover:translate-x-1" /></Link><a href="https://wa.me/5518997493722" target="_blank" rel="noreferrer" className="inline-flex items-center gap-3 rounded-2xl border border-stone-300 bg-white px-7 py-4 font-black text-[#10231a] shadow-sm transition hover:-translate-y-0.5 hover:border-emerald-700"><MessageCircle size={19} /> Falar no WhatsApp</a></div>
+              <div className="mt-10 grid max-w-2xl grid-cols-3 overflow-hidden rounded-3xl border border-black/5 bg-white shadow-xl">{proof.map(([value, label]) => <div key={label} className="border-r border-stone-100 p-5 last:border-r-0"><div className="text-2xl font-black text-[#0f7a3b]">{value}</div><div className="mt-1 text-xs font-bold uppercase text-slate-500">{label}</div></div>)}</div>
             </div>
             <div className="relative min-h-[580px]">
               <div className="absolute right-0 top-6 h-[520px] w-[86%] overflow-hidden rounded-[48px] bg-slate-200 shadow-2xl ring-1 ring-black/5"><img src={photos.hero} alt="Pet limpo enrolado em toalha" className="h-full w-full object-cover" /></div>
-              <div className="absolute bottom-8 left-0 hidden w-[43%] overflow-hidden rounded-[34px] border-[10px] border-[#f5efe4] bg-white shadow-2xl md:block"><img src={photos.bath} alt="Banho pet premium" className="h-72 w-full object-cover" /></div>
+              <div className="absolute bottom-8 left-0 hidden w-[43%] overflow-hidden rounded-[34px] border-[10px] border-[#eadfcd] bg-white shadow-2xl md:block"><img src={photos.bath} alt="Banho pet premium" className="h-72 w-full object-cover" /></div>
               <div className="absolute right-8 bottom-10 max-w-sm rounded-[28px] border border-emerald-900/10 bg-white/92 p-5 shadow-2xl backdrop-blur"><div className="flex items-center gap-4"><div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-800"><ShieldCheck size={28} /></div><div><div className="font-black">Atendimento cuidadoso</div><div className="mt-1 flex text-yellow-500">{[1, 2, 3, 4, 5].map((item) => <Star key={item} size={15} fill="currentColor" />)}</div><p className="mt-1 text-sm text-slate-500">Rotina segura do começo ao fim.</p></div></div></div>
             </div>
           </div>
