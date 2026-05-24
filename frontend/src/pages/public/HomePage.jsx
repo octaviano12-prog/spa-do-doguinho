@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Bath, CalendarDays, Heart, MessageCircle, PawPrint, Scissors, ShieldCheck, Sparkles, Star, Syringe } from "lucide-react";
 import PublicLayout from "../../components/public/PublicLayout";
 
-const dogHero = "https://raw.githubusercontent.com/octaviano12-prog/spa-do-doguinho/main/frontend/public/images/hero-doguinho-banho-real.webp";
+const dogHero = "/images/hero-doguinho-banho-compatible.svg";
 
 const services = [
   { title: "Banho & Tosa", badge: "MAIS PEDIDO", icon: Bath, img: "/images/banho-tosa.svg", text: "Higiene completa, perfume e acabamento com muito carinho.", price: "R$ 60,00" },
