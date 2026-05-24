@@ -31,15 +31,14 @@ const navLinks = [
 const whatsappUrl = "https://wa.me/5518997493722?text=Olá! Gostaria de agendar um atendimento no SPA do Doguinho.";
 
 function BrandLogo({ small = false }) {
+  const size = small ? "w-12 h-12" : "w-[58px] h-[58px]";
   return (
-    <div className={`${small ? "w-12 h-12 rounded-2xl" : "w-16 h-16 rounded-[24px]"} relative shrink-0 overflow-hidden bg-gradient-to-br from-[#fff7dc] via-[#d9fff0] to-[#0fa87f] border border-teal-200/70 shadow-[0_0_28px_rgba(20,184,166,.35)] flex items-center justify-center`}>
-      <div className="absolute inset-[5px] rounded-[20px] bg-gradient-to-br from-white via-[#ecfff8] to-[#b6f4e1]" />
-      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-9 h-3 rounded-full bg-teal-500/90 shadow-inner" />
-      <div className="absolute bottom-[15px] left-1/2 -translate-x-1/2 w-8 h-4 rounded-t-full bg-teal-200 border border-white/80" />
-      <div className="absolute bottom-[20px] left-1/2 -translate-x-1/2 w-4 h-5 rounded-full bg-white shadow-sm" />
-      <div className="absolute bottom-[25px] right-[18px] w-1.5 h-1.5 rounded-full bg-teal-400" />
-      <div className="absolute bottom-[31px] left-[19px] w-1.5 h-1.5 rounded-full bg-teal-300" />
-      <PawPrint className="absolute top-2.5 text-[#071a24] drop-shadow-sm" size={small ? 22 : 27} />
+    <div className={`${size} relative shrink-0 rounded-[22px] overflow-hidden bg-gradient-to-br from-[#effff9] via-[#cbfff0] to-[#18b38b] border border-teal-200/80 shadow-[0_0_24px_rgba(20,184,166,.30)] flex items-center justify-center`}>
+      <div className="absolute inset-[5px] rounded-[18px] bg-white/86" />
+      <div className="absolute top-2 text-[#071924]"><PawPrint size={small ? 21 : 25} /></div>
+      <div className="absolute bottom-[9px] left-1/2 -translate-x-1/2 w-8 h-2.5 rounded-full bg-teal-600" />
+      <div className="absolute bottom-[14px] left-1/2 -translate-x-1/2 w-7 h-3.5 rounded-t-full bg-teal-200 border border-white" />
+      <div className="absolute bottom-[18px] left-1/2 -translate-x-1/2 w-3.5 h-4 rounded-full bg-white shadow" />
     </div>
   );
 }
@@ -49,37 +48,39 @@ export default function PublicLayout({ children }) {
 
   return (
     <div className="min-h-screen bg-[#050f0b] text-white overflow-x-hidden">
-      <header className="fixed top-0 left-0 right-0 z-50 px-2 sm:px-4 xl:px-6 pt-3">
-        <div className="max-w-[1760px] mx-auto rounded-[28px] border border-yellow-400/20 bg-[#03160d]/82 shadow-[0_18px_60px_rgba(0,0,0,.45)] backdrop-blur-2xl overflow-hidden">
-          <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(90deg,rgba(34,197,94,.13),transparent_38%,rgba(245,158,11,.09))]" />
-          <div className="relative min-h-[78px] px-3 sm:px-4 xl:px-5 2xl:px-6 flex items-center justify-between gap-3">
-            <Link to="/" className="group flex items-center gap-3 min-w-0 shrink-0 w-[245px] xl:w-[265px] 2xl:w-[305px]" onClick={() => setMobileOpen(false)}>
+      <header className="fixed top-0 left-0 right-0 z-50 px-3 md:px-6 pt-3">
+        <div className="max-w-[1680px] mx-auto rounded-[26px] border border-white/10 bg-[#03130d]/88 shadow-[0_18px_55px_rgba(0,0,0,.42)] backdrop-blur-2xl overflow-hidden">
+          <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(90deg,rgba(34,197,94,.12),transparent_36%,rgba(234,179,8,.08))]" />
+          <div className="relative min-h-[72px] px-4 2xl:px-5 flex items-center justify-between gap-3">
+            <Link to="/" className="group flex items-center gap-3 min-w-0 shrink-0 w-[250px] xl:w-[260px] 2xl:w-[285px]" onClick={() => setMobileOpen(false)}>
               <BrandLogo />
-              <div className="min-w-0">
-                <div className="flex items-baseline gap-1 leading-none">
-                  <span className="text-[20px] xl:text-[24px] 2xl:text-[27px] font-black tracking-tight text-white">SPA</span>
-                  <span className="text-[15px] xl:text-[18px] 2xl:text-[20px] font-black text-teal-200">do</span>
+              <div className="min-w-0 leading-none">
+                <div className="flex items-center gap-1">
+                  <span className="text-[22px] 2xl:text-[25px] font-black tracking-tight text-white">SPA</span>
+                  <span className="text-[16px] 2xl:text-[18px] font-black text-teal-200">do</span>
                 </div>
-                <h1 className="text-[21px] xl:text-[25px] 2xl:text-[28px] font-black leading-[.86] tracking-tight text-white">Doguinho</h1>
-                <p className="text-[10px] xl:text-[11px] text-yellow-300 mt-1.5 font-black whitespace-nowrap">Banho • Tosa • Veterinária</p>
+                <div className="text-[24px] 2xl:text-[28px] font-black tracking-tight text-white leading-[.82]">Doguinho</div>
+                <div className="text-[10px] 2xl:text-[11px] text-yellow-300 mt-2 font-black whitespace-nowrap">Banho • Tosa • Veterinária</div>
               </div>
             </Link>
 
-            <nav className="hidden xl:flex flex-1 items-center justify-center gap-1 font-black text-[13px] 2xl:text-[14px] min-w-0">
-              {navLinks.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <NavLink key={item.to} to={item.to} className={({ isActive }) => `relative px-3 2xl:px-4 py-3 rounded-2xl transition whitespace-nowrap flex items-center gap-2 ${isActive ? "text-white bg-white/7" : "text-white/75 hover:text-white hover:bg-white/7"}`}>
-                    {({ isActive }) => (<><Icon size={15} className={isActive ? "text-green-300" : "text-white/65"} /><span className="relative z-10">{item.label}</span>{isActive && <span className="absolute left-3 right-3 -bottom-[14px] h-[3px] rounded-full bg-green-400 shadow-[0_0_22px_rgba(74,222,128,.9)]" />}</>)}
-                  </NavLink>
-                );
-              })}
+            <nav className="hidden xl:flex flex-1 items-center justify-center min-w-0">
+              <div className="flex items-center gap-1 rounded-[22px] bg-black/18 border border-white/8 px-2 py-2 shadow-inner">
+                {navLinks.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <NavLink key={item.to} to={item.to} className={({ isActive }) => `relative px-3 2xl:px-4 py-2.5 rounded-2xl transition whitespace-nowrap flex items-center gap-2 text-[13px] 2xl:text-[14px] font-black ${isActive ? "text-white bg-green-500/18" : "text-white/66 hover:text-white hover:bg-white/7"}`}>
+                      {({ isActive }) => (<><Icon size={14} className={isActive ? "text-green-300" : "text-white/45"} /><span>{item.label}</span>{isActive && <span className="absolute left-4 right-4 -bottom-2 h-[2px] rounded-full bg-green-300 shadow-[0_0_18px_rgba(74,222,128,.95)]" />}</>)}
+                    </NavLink>
+                  );
+                })}
+              </div>
             </nav>
 
-            <div className="hidden lg:flex items-center gap-2 shrink-0 justify-end w-[365px] xl:w-[390px] 2xl:w-[450px]">
-              <Link to="/agendamento" className="group bg-gradient-to-br from-green-500 to-emerald-700 hover:from-green-400 hover:to-emerald-600 px-4 2xl:px-5 py-3.5 rounded-2xl shadow-xl shadow-green-900/30 font-black flex items-center gap-2 transition border border-green-300/20 whitespace-nowrap"><CalendarDays size={18} /> Agendar <ChevronRight size={16} className="group-hover:translate-x-1 transition" /></Link>
-              <Link to="/cliente-login" className="bg-[#07150f]/70 hover:bg-white/10 px-4 2xl:px-5 py-3.5 rounded-2xl border border-yellow-400/35 font-black flex items-center gap-2 transition text-yellow-50 whitespace-nowrap"><User size={18} /> Cliente</Link>
-              <Link to="/login" className="bg-[#07150f]/70 hover:bg-white/10 px-4 2xl:px-5 py-3.5 rounded-2xl border border-yellow-400/35 font-black flex items-center gap-2 transition text-yellow-50 whitespace-nowrap"><ShieldCheck size={18} /> Admin</Link>
+            <div className="hidden lg:flex items-center gap-2 shrink-0 justify-end w-[345px] xl:w-[365px] 2xl:w-[410px]">
+              <Link to="/agendamento" className="group bg-gradient-to-br from-green-500 to-emerald-700 hover:from-green-400 hover:to-emerald-600 px-4 2xl:px-5 py-3 rounded-2xl shadow-xl shadow-green-900/30 font-black flex items-center gap-2 transition border border-green-300/20 whitespace-nowrap text-sm 2xl:text-base"><CalendarDays size={17} /> Agendar <ChevronRight size={15} className="group-hover:translate-x-1 transition" /></Link>
+              <Link to="/cliente-login" className="bg-black/18 hover:bg-white/10 px-4 py-3 rounded-2xl border border-yellow-400/25 font-black flex items-center gap-2 transition text-yellow-50 whitespace-nowrap text-sm 2xl:text-base"><User size={17} /> Cliente</Link>
+              <Link to="/login" className="bg-black/18 hover:bg-white/10 px-4 py-3 rounded-2xl border border-yellow-400/25 font-black flex items-center gap-2 transition text-yellow-50 whitespace-nowrap text-sm 2xl:text-base"><ShieldCheck size={17} /> Admin</Link>
             </div>
 
             <button type="button" onClick={() => setMobileOpen((current) => !current)} className="lg:hidden w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center border border-yellow-400/20 shrink-0 p-3">{mobileOpen ? <X /> : <Menu />}</button>
@@ -87,7 +88,7 @@ export default function PublicLayout({ children }) {
         </div>
 
         {mobileOpen && (
-          <div className="lg:hidden max-w-[1760px] mx-auto mt-3 rounded-[30px] border border-yellow-400/20 bg-[#03160d]/96 backdrop-blur-2xl px-4 py-5 shadow-2xl">
+          <div className="lg:hidden max-w-[1680px] mx-auto mt-3 rounded-[28px] border border-yellow-400/20 bg-[#03160d]/96 backdrop-blur-2xl px-4 py-5 shadow-2xl">
             <nav className="grid gap-2 font-bold">
               {navLinks.map((item) => (<NavLink key={item.to} to={item.to} onClick={() => setMobileOpen(false)} className={({ isActive }) => `px-5 py-4 rounded-2xl transition ${isActive ? "bg-green-600 text-white" : "text-white/75 hover:bg-white/10"}`}>{item.label}</NavLink>))}
               <Link to="/agendamento" onClick={() => setMobileOpen(false)} className="mt-2 bg-green-600 hover:bg-green-700 px-5 py-4 rounded-2xl shadow-lg font-black flex items-center justify-center gap-2 transition"><CalendarDays size={18} /> Agendar atendimento</Link>
@@ -98,7 +99,7 @@ export default function PublicLayout({ children }) {
         )}
       </header>
 
-      <main className="pt-[108px]">{children}</main>
+      <main className="pt-[100px]">{children}</main>
       <Link to="/agendamento" className="fixed right-5 bottom-5 z-50 w-16 h-16 rounded-full bg-green-500 hover:bg-green-600 text-white flex items-center justify-center shadow-2xl shadow-green-900/40 transition hover:scale-105" aria-label="Agendar atendimento"><CalendarDays size={30} /></Link>
 
       <footer className="border-t border-white/10 bg-[#06140f] relative overflow-hidden">
