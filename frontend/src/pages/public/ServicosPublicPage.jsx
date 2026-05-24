@@ -36,8 +36,8 @@ function getServiceIcon(name = "", category = "") {
   return PawPrint;
 }
 
-function getServiceImage(name = "", category = "") {
-  return getPublicServicePhoto(name, category);
+function getServiceImage(service) {
+  return service.image_url || getPublicServicePhoto(service.name, service.category);
 }
 
 export default function ServicosPublicPage() {
@@ -65,138 +65,146 @@ export default function ServicosPublicPage() {
 
   return (
     <PublicLayout>
-      <main className="relative overflow-hidden">
-        <section className="relative bg-[#06150d] px-6 py-24">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,#22c55e55,transparent_30%),radial-gradient(circle_at_80%_10%,#f59e0b33,transparent_32%)]" />
-
-          <div className="relative max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
+      <main className="overflow-hidden bg-[#fbf7ef] text-[#10231a]">
+        <section className="relative bg-[#f5efe4] px-5 py-16 md:px-8">
+          <div className="mx-auto grid max-w-[1680px] gap-10 xl:grid-cols-[.9fr_1.1fr] xl:items-center">
             <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}>
-              <span className="inline-flex items-center gap-2 bg-white/10 border border-white/15 rounded-full px-5 py-2 text-green-100 font-black">
+              <span className="inline-flex items-center gap-2 rounded-full border border-emerald-900/10 bg-white px-5 py-2 text-sm font-black text-emerald-900 shadow-sm">
                 <Sparkles size={18} />
-                Serviços premium
+                Serviços boutique
               </span>
 
-              <h1 className="text-5xl md:text-7xl font-black text-white mt-7 leading-tight">
-                Cuidado completo para seu melhor amigo.
+              <h1 className="mt-7 max-w-4xl text-5xl font-black leading-[.96] md:text-7xl">
+                Banho, tosa e bem-estar com acabamento premium.
               </h1>
 
-              <p className="text-white/70 mt-6 text-xl leading-relaxed max-w-2xl">
-                Banho, tosa, estética, vacina e bem-estar com atendimento profissional, organizado e carinhoso.
+              <p className="mt-6 max-w-2xl text-lg leading-relaxed text-slate-600 md:text-xl">
+                Escolha o cuidado ideal para o seu pet com valores claros, atendimento organizado e uma experiência calma do início ao fim.
               </p>
 
-              <div className="flex flex-wrap gap-4 mt-9">
-                <Link to="/agendamento" className="bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-2xl font-black flex items-center gap-3 shadow-xl transition">
+              <div className="mt-9 flex flex-wrap gap-4">
+                <Link to="/agendamento" className="flex items-center gap-3 rounded-2xl bg-[#0f7a3b] px-8 py-4 font-black text-white shadow-[0_20px_45px_rgba(15,122,59,.22)] transition hover:bg-[#0b6631]">
+                  <CalendarDays size={20} />
                   Agendar agora
-                  <ArrowRight size={20} />
+                  <ArrowRight size={18} />
                 </Link>
 
-                <a href="https://wa.me/5518997493722" target="_blank" rel="noreferrer" className="bg-white/10 hover:bg-white/20 text-white px-8 py-4 rounded-2xl font-black flex items-center gap-3 border border-white/15 transition">
+                <a href="https://wa.me/5518997493722" target="_blank" rel="noreferrer" className="flex items-center gap-3 rounded-2xl border border-slate-300 bg-white px-8 py-4 font-black text-[#10231a] shadow-sm transition hover:border-emerald-700">
                   <MessageCircle size={20} />
                   Tirar dúvidas
                 </a>
               </div>
             </motion.div>
 
-            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-white/10 border border-white/10 rounded-[42px] p-4 shadow-2xl backdrop-blur-xl">
-              <img src={publicPhotos.bathCare} alt="Banho e tosa premium" className="h-[420px] w-full rounded-[34px] object-cover shadow-2xl" />
+            <motion.div initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} className="relative min-h-[560px]">
+              <img src={publicPhotos.bathCare} alt="Banho e tosa premium" className="absolute right-0 top-0 h-[440px] w-[82%] rounded-[42px] object-cover shadow-2xl" />
+              <img src={publicPhotos.grooming} alt="Tosa boutique" className="absolute bottom-0 left-0 hidden h-72 w-[44%] rounded-[32px] border-[10px] border-[#f5efe4] object-cover shadow-2xl md:block" />
+              <div className="absolute bottom-8 right-10 max-w-sm rounded-[28px] bg-white/90 p-5 shadow-2xl backdrop-blur">
+                <div className="flex items-center gap-4">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-800">
+                    <CheckCircle size={28} />
+                  </div>
+                  <div>
+                    <div className="font-black">Catálogo completo</div>
+                    <p className="mt-1 text-sm text-slate-500">Preços, tempo médio e agendamento em poucos cliques.</p>
+                  </div>
+                </div>
+              </div>
             </motion.div>
           </div>
         </section>
 
-        <section className="max-w-7xl mx-auto px-6 py-16 grid lg:grid-cols-3 gap-6">
+        <section className="mx-auto grid max-w-[1680px] gap-6 px-5 py-12 md:grid-cols-3 md:px-8">
           {[
-            ["Banho & Tosa", publicPhotos.bathCare, "Higiene, beleza e acabamento premium."],
-            ["Vacinação", publicPhotos.vet, "Prevenção, saúde e cuidado responsável."],
-            ["Spa Pet", publicPhotos.towel, "Relaxamento e carinho para seu pet."]
+            ["Banho Premium", publicPhotos.bathCare, "Higiene, hidratação e perfume na medida."],
+            ["Tosa Boutique", publicPhotos.grooming, "Acabamento bonito e adequado para cada pelagem."],
+            ["Spa Pet", publicPhotos.towel, "Bem-estar, pele e pelagem com carinho."]
           ].map(([title, image, text]) => (
-            <div key={title} className="bg-white rounded-[32px] p-5 shadow-2xl border border-green-100 hover:-translate-y-2 transition">
-              <img src={image} alt={title} className="h-[260px] w-full rounded-[26px] object-cover" />
-              <div className="p-4">
-                <h3 className="text-2xl font-black text-slate-900">{title}</h3>
-                <p className="text-slate-500 mt-2">{text}</p>
+            <article key={title} className="overflow-hidden rounded-[30px] bg-white shadow-xl ring-1 ring-black/5 transition hover:-translate-y-1">
+              <img src={image} alt={title} className="h-[280px] w-full object-cover" />
+              <div className="p-6">
+                <h3 className="text-2xl font-black">{title}</h3>
+                <p className="mt-2 text-slate-600">{text}</p>
               </div>
-            </div>
+            </article>
           ))}
         </section>
 
-        <section className="max-w-7xl mx-auto px-6 py-20">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
+        <section className="mx-auto max-w-[1680px] px-5 py-14 md:px-8">
+          <div className="mb-10 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
             <div>
-              <h2 className="text-4xl md:text-5xl font-black text-white">
-                Serviços cadastrados
-              </h2>
-              <p className="text-white/60 mt-4 text-lg">
-                Serviços ativos para escolher, comparar e agendar sem complicação.
-              </p>
+              <span className="inline-flex rounded-full bg-emerald-100 px-5 py-2 text-sm font-black text-emerald-900">Serviços ativos</span>
+              <h2 className="mt-5 text-4xl font-black leading-tight md:text-5xl">Escolha e agende com praticidade.</h2>
+              <p className="mt-3 max-w-3xl text-lg text-slate-600">Compare cuidados, duração e valores antes de reservar o melhor horário.</p>
             </div>
 
-            <div className="bg-white/10 border border-white/10 rounded-2xl px-6 py-4 text-white">
-              <strong>{services.length}</strong> serviços ativos
+            <div className="rounded-2xl border border-black/5 bg-white px-6 py-4 font-black text-[#0f7a3b] shadow-sm">
+              {services.length} serviços ativos
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-            {isLoading && [1, 2, 3, 4].map((item) => <div key={item} className="h-[420px] rounded-3xl bg-white/10 animate-pulse" />)}
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
+            {isLoading && [1, 2, 3, 4].map((item) => <div key={item} className="h-[420px] animate-pulse rounded-[30px] bg-white" />)}
 
             {!isLoading && services.length === 0 && (
-              <div className="md:col-span-2 xl:col-span-4 bg-white/10 border border-white/10 rounded-3xl p-10 text-center text-white">
+              <div className="rounded-[30px] bg-white p-10 text-center text-slate-500 shadow-xl md:col-span-2 xl:col-span-4">
                 Nenhum serviço ativo encontrado.
               </div>
             )}
 
             {!isLoading && services.map((service, index) => {
               const Icon = getServiceIcon(service.name, service.category);
-              const image = getServiceImage(service.name, service.category);
+              const image = getServiceImage(service);
 
               return (
-                <motion.div
+                <motion.article
                   key={service.id || service.name}
                   initial={{ opacity: 0, y: 24 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: index * 0.06 }}
-                  className="group bg-white rounded-[32px] p-5 shadow-2xl border border-green-100 hover:-translate-y-2 transition"
+                  transition={{ delay: index * 0.05 }}
+                  className="group overflow-hidden rounded-[30px] bg-white shadow-xl ring-1 ring-black/5 transition hover:-translate-y-1"
                 >
-                  <img src={image} alt={service.name} className="h-[210px] w-full rounded-[24px] object-cover mb-5" />
-
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="w-14 h-14 rounded-2xl bg-green-100 text-green-700 flex items-center justify-center group-hover:bg-green-600 group-hover:text-white transition">
-                      <Icon size={28} />
+                  <div className="relative h-[230px] overflow-hidden">
+                    <img src={image} alt={service.name} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+                    <div className="absolute left-5 top-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-emerald-800 shadow-xl">
+                      <Icon size={26} />
                     </div>
+                  </div>
 
-                    <span className="bg-green-50 text-green-700 px-3 py-1 rounded-full text-xs font-black">
+                  <div className="p-6">
+                    <div className="inline-flex rounded-full bg-emerald-50 px-3 py-1 text-xs font-black text-emerald-700">
                       {service.category || "Serviço"}
-                    </span>
-                  </div>
-
-                  <h3 className="text-2xl font-black text-slate-900 mt-6">{service.name}</h3>
-                  <p className="text-slate-500 mt-4 min-h-[92px]">{service.description || "Serviço especial para seu pet."}</p>
-
-                  {service.benefits && (
-                    <div className="bg-green-50 rounded-2xl p-4 mt-5 text-sm text-green-900">
-                      <div className="font-black mb-1">Benefícios</div>
-                      {service.benefits}
                     </div>
-                  )}
+                    <h3 className="mt-5 text-2xl font-black">{service.name}</h3>
+                    <p className="mt-3 min-h-[82px] text-slate-600">{service.description || "Serviço especial para seu pet."}</p>
 
-                  <div className="flex items-center gap-2 text-slate-500 mt-5">
-                    <Clock size={18} />
-                    {service.duration_minutes || 60} minutos
-                  </div>
+                    {service.benefits && (
+                      <div className="mt-5 rounded-2xl bg-emerald-50 p-4 text-sm text-emerald-900">
+                        <div className="mb-1 font-black">Benefícios</div>
+                        {service.benefits}
+                      </div>
+                    )}
 
-                  <div className="flex items-end justify-between mt-6 pt-6 border-t border-slate-100">
-                    <div>
-                      <div className="text-xs text-slate-400 font-bold">A partir de</div>
-                      <div className="text-2xl font-black text-green-700">{formatCurrency(service.price)}</div>
+                    <div className="mt-5 flex items-center gap-2 text-slate-500">
+                      <Clock size={18} />
+                      {service.duration_minutes || 60} minutos
                     </div>
-                    <CheckCircle className="text-green-500" />
-                  </div>
 
-                  <Link to="/agendamento" className="mt-7 w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-2xl font-black flex items-center justify-center gap-2 transition">
-                    <CalendarDays size={19} />
-                    Agendar
-                  </Link>
-                </motion.div>
+                    <div className="mt-6 flex items-end justify-between border-t border-slate-100 pt-6">
+                      <div>
+                        <div className="text-xs font-bold text-slate-400">A partir de</div>
+                        <div className="text-2xl font-black text-emerald-800">{formatCurrency(service.price)}</div>
+                      </div>
+                      <CheckCircle className="text-emerald-600" />
+                    </div>
+
+                    <Link to="/agendamento" className="mt-7 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#0f7a3b] py-4 font-black text-white transition hover:bg-[#0b6631]">
+                      <CalendarDays size={19} />
+                      Agendar
+                    </Link>
+                  </div>
+                </motion.article>
               );
             })}
           </div>
