@@ -14,7 +14,10 @@ import {
   Sparkles,
   Star,
   Syringe,
-  Truck
+  Truck,
+  UserPlus,
+  LogIn,
+  Dog
 } from "lucide-react";
 import PublicLayout from "../../components/public/PublicLayout";
 
@@ -34,6 +37,13 @@ const benefits = [
   ["Atendimento com amor", "Tratamos cada pet como parte da família.", Heart],
   ["Ambiente seguro e climatizado", "Espaço pensado para o bem-estar do seu pet.", ShieldCheck],
   ["Agendamento fácil e rápido", "Agende em poucos cliques pelo celular.", CalendarCheck]
+];
+
+const bookingSteps = [
+  [LogIn, "Entre na sua conta", "Acesse sua área do cliente com segurança."],
+  [Dog, "Cadastre seu pet", "Informe porte, dados e observações importantes."],
+  [Bath, "Escolha o serviço", "Selecione banho, tosa, spa ou outro cuidado."],
+  [CalendarCheck, "Confirme o horário", "Finalize o agendamento com tudo organizado."]
 ];
 
 const testimonials = [
@@ -66,7 +76,7 @@ export default function HomePage() {
           <div className="absolute inset-0 bg-gradient-to-r from-[#edf8f1]/96 via-[#edf8f1]/70 to-transparent" />
           <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#fffdf7] to-transparent" />
 
-          <div className="relative mx-auto flex min-h-[calc(100vh-128px)] max-w-[1760px] items-center px-6 py-8 md:px-10 xl:min-h-[620px]">
+          <div className="relative mx-auto flex min-h-[calc(100vh-128px)] max-w-[1880px] items-center px-6 py-8 md:px-10 xl:min-h-[620px]">
             <div className="max-w-3xl -translate-y-4 xl:-translate-y-2">
               <h1 className="home-animate-fade text-4xl font-black leading-[.95] tracking-[-.05em] text-[#12382f] sm:text-5xl md:text-6xl xl:text-7xl 2xl:text-[5.6rem]">
                 Mais que um banho,
@@ -79,8 +89,8 @@ export default function HomePage() {
               </p>
 
               <div className="home-animate-fade-delay-2 mt-6 flex flex-wrap gap-4">
-                <Link to="/agendamento" className="home-pulse-glow inline-flex items-center gap-3 rounded-2xl bg-[#0d6b54] px-6 py-3.5 font-black text-white shadow-xl transition hover:-translate-y-1 hover:bg-[#095642]">
-                  <CalendarDays size={20} /> Agende agora
+                <Link to="/cliente-login" className="home-pulse-glow inline-flex items-center gap-3 rounded-2xl bg-[#0d6b54] px-6 py-3.5 font-black text-white shadow-xl transition hover:-translate-y-1 hover:bg-[#095642]">
+                  <CalendarDays size={20} /> Entrar para agendar
                 </Link>
                 <Link to="/servicos" className="inline-flex items-center gap-3 rounded-2xl border border-[#0d6b54]/35 bg-white/85 px-6 py-3.5 font-black text-[#0d6b54] shadow-sm backdrop-blur transition hover:-translate-y-1">
                   <Heart size={20} /> Nossos serviços
@@ -108,7 +118,7 @@ export default function HomePage() {
         </section>
 
         <section className="relative -mt-8 px-5 md:px-8">
-          <div className="mx-auto max-w-[1500px]">
+          <div className="mx-auto max-w-[1880px]">
             <h2 className="home-animate-fade mb-7 text-center text-3xl font-black text-[#0d6b54] md:text-4xl">Nossos serviços</h2>
             <div className="grid gap-5 md:grid-cols-4">
               {services.map(({ icon: Icon, title, text, price }, index) => (
@@ -117,7 +127,7 @@ export default function HomePage() {
                   <h3 className="mt-5 text-lg font-black text-[#0d6b54]">{title}</h3>
                   <p className="mt-3 min-h-[56px] text-sm leading-relaxed text-slate-600">{text}</p>
                   <p className="mt-5 text-sm text-slate-500">{price}</p>
-                  <Link to="/agendamento" className="mt-4 inline-flex w-full justify-center rounded-full bg-[#16815f] px-5 py-3 font-black text-white transition hover:bg-[#0d6b54]">Agendar</Link>
+                  <Link to="/cliente-login" className="mt-4 inline-flex w-full justify-center rounded-full bg-[#16815f] px-5 py-3 font-black text-white transition hover:bg-[#0d6b54]">Entrar para agendar</Link>
                 </div>
               ))}
             </div>
@@ -125,7 +135,7 @@ export default function HomePage() {
         </section>
 
         <section className="px-5 py-16 md:px-8">
-          <div className="mx-auto max-w-[1300px]">
+          <div className="mx-auto max-w-[1760px]">
             <h2 className="home-animate-fade text-center text-3xl font-black text-[#0d6b54] md:text-4xl">Por que escolher o SPA do Doguinho?</h2>
             <div className="mt-10 grid gap-8 md:grid-cols-3">
               {benefits.map(([title, text, Icon], index) => (
@@ -139,29 +149,54 @@ export default function HomePage() {
         </section>
 
         <section className="px-5 pb-16 md:px-8">
-          <div className="home-animate-fade mx-auto grid max-w-[1400px] overflow-hidden rounded-[30px] bg-white shadow-xl ring-1 ring-[#e2eadf] lg:grid-cols-[.8fr_1.2fr]">
-            <ImagePlaceholder title="Imagem banho do pet" className="m-0 min-h-[360px] rounded-none" />
+          <div className="home-animate-fade mx-auto grid max-w-[1880px] overflow-hidden rounded-[34px] bg-white shadow-xl ring-1 ring-[#e2eadf] lg:grid-cols-[.9fr_1.1fr]">
+            <div className="relative overflow-hidden bg-[linear-gradient(135deg,#e6f5eb,#fff8e6)] p-8 md:p-10">
+              <div className="absolute -left-10 -top-10 h-44 w-44 rounded-full bg-[#0d8b67]/10 blur-2xl" />
+              <div className="absolute -bottom-10 -right-10 h-44 w-44 rounded-full bg-[#f4c86a]/25 blur-2xl" />
+              <div className="relative flex h-full min-h-[360px] flex-col justify-center rounded-[28px] border border-white/70 bg-white/55 p-8 backdrop-blur">
+                <span className="inline-flex w-fit items-center gap-2 rounded-full bg-[#0d6b54] px-4 py-2 text-sm font-black text-white">
+                  <ShieldCheck size={17} /> Agendamento seguro
+                </span>
+                <h2 className="mt-6 text-4xl font-black leading-tight text-[#12382f] md:text-5xl">
+                  Agende pela área do cliente.
+                </h2>
+                <p className="mt-4 max-w-xl text-lg leading-relaxed text-slate-600">
+                  Para proteger seus dados e organizar melhor o atendimento, o agendamento é feito após login.
+                </p>
+                <div className="mt-7 flex flex-wrap gap-3">
+                  <Link to="/cliente-login" className="inline-flex items-center gap-3 rounded-2xl bg-[#0d6b54] px-6 py-4 font-black text-white shadow-lg transition hover:-translate-y-1 hover:bg-[#095642]"><LogIn size={20} /> Entrar para agendar</Link>
+                  <Link to="/cliente-login" className="inline-flex items-center gap-3 rounded-2xl border border-[#0d6b54]/20 bg-white px-6 py-4 font-black text-[#0d6b54] shadow-sm transition hover:-translate-y-1"><UserPlus size={20} /> Criar conta</Link>
+                  <a href={whatsappUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-3 rounded-2xl border border-[#25D366]/30 bg-[#e9fff2] px-6 py-4 font-black text-[#128c4b] shadow-sm transition hover:-translate-y-1"><Phone size={20} /> WhatsApp</a>
+                </div>
+              </div>
+            </div>
+
             <div className="p-8 md:p-10">
-              <h2 className="text-3xl font-black text-[#0d6b54]">Agendamento rápido</h2>
-              <p className="mt-2 text-slate-600">Escolha o serviço ideal para o seu pet e pronto!</p>
-              <div className="mt-7 grid gap-4 md:grid-cols-3">
-                {["Escolher pet", "Porte do cachorro", "Serviço", "Data", "Horário"].map((label) => (
-                  <div key={label} className="rounded-2xl border border-[#e2eadf] bg-white px-5 py-4 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
-                    <div className="text-xs font-bold text-slate-500">{label}</div>
-                    <div className="mt-2 flex items-center justify-between font-black text-[#12382f]">Selecionar <ArrowRight size={16} /></div>
+              <h2 className="text-3xl font-black text-[#0d6b54]">Como funciona?</h2>
+              <p className="mt-2 text-slate-600">O fluxo completo acontece na área logada do cliente.</p>
+              <div className="mt-7 grid gap-4 md:grid-cols-2">
+                {bookingSteps.map(([Icon, title, text], index) => (
+                  <div key={title} className="rounded-3xl border border-[#e2eadf] bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
+                    <div className="flex items-start gap-4">
+                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#e7f4ed] text-[#0d6b54]"><Icon size={24} /></div>
+                      <div>
+                        <div className="text-xs font-black uppercase tracking-[.14em] text-[#0d6b54]">Passo {index + 1}</div>
+                        <h3 className="mt-1 text-lg font-black text-[#12382f]">{title}</h3>
+                        <p className="mt-1 text-sm leading-relaxed text-slate-600">{text}</p>
+                      </div>
+                    </div>
                   </div>
                 ))}
-                <Link to="/agendamento" className="flex items-center justify-center gap-2 rounded-2xl bg-[#0d6b54] px-5 py-4 font-black text-white shadow-lg transition hover:-translate-y-1 hover:bg-[#095642]"><CalendarDays size={18} /> Fazer agendamento</Link>
               </div>
               <div className="mt-6 grid gap-3 text-sm font-bold text-slate-600 md:grid-cols-3">
-                {["Confirmação imediata", "Sem taxa de agendamento", "Lembrete automático"].map((item) => <div key={item} className="flex items-center gap-2"><CheckCircle2 size={18} className="text-[#0d6b54]" /> {item}</div>)}
+                {["Dados protegidos", "Histórico do pet", "Agenda organizada"].map((item) => <div key={item} className="flex items-center gap-2"><CheckCircle2 size={18} className="text-[#0d6b54]" /> {item}</div>)}
               </div>
             </div>
           </div>
         </section>
 
         <section className="px-5 pb-16 md:px-8">
-          <div className="mx-auto max-w-[1400px] text-center">
+          <div className="mx-auto max-w-[1760px] text-center">
             <h2 className="home-animate-fade text-3xl font-black text-[#0d6b54] md:text-4xl">Nossa galeria</h2>
             <div className="mt-5 flex flex-wrap justify-center gap-2">{["Todos", "Banho", "Tosa", "Antes e Depois", "Clientes"].map((filter) => <span key={filter} className="rounded-full bg-[#edf2ec] px-5 py-2 text-sm font-black text-slate-600 transition hover:-translate-y-1 hover:bg-[#e7f4ed]">{filter}</span>)}</div>
             <div className="mt-8 grid gap-5 md:grid-cols-4">{[1, 2, 3, 4].map((item, index) => <div key={item} className="home-card-animate" style={{ animationDelay: `${index * 80}ms` }}><ImagePlaceholder title={`Imagem ${item}`} /></div>)}</div>
@@ -169,7 +204,7 @@ export default function HomePage() {
         </section>
 
         <section className="bg-[#e7f4ed] px-5 py-16 md:px-8">
-          <div className="mx-auto max-w-[1400px]">
+          <div className="mx-auto max-w-[1760px]">
             <h2 className="home-animate-fade text-center text-3xl font-black text-[#0d6b54] md:text-4xl">O que dizem nossos clientes</h2>
             <div className="mt-8 grid gap-5 md:grid-cols-3">
               {testimonials.map(([text, name, role], index) => (
@@ -185,12 +220,12 @@ export default function HomePage() {
         </section>
 
         <section className="px-5 py-12 md:px-8">
-          <div className="home-animate-fade mx-auto flex max-w-[1500px] flex-col gap-6 rounded-t-[90px] rounded-b-[28px] bg-[#0d6b54] p-8 text-white shadow-2xl md:flex-row md:items-center md:justify-between md:p-10">
+          <div className="home-animate-fade mx-auto flex max-w-[1880px] flex-col gap-6 rounded-t-[90px] rounded-b-[28px] bg-[#0d6b54] p-8 text-white shadow-2xl md:flex-row md:items-center md:justify-between md:p-10">
             <div className="flex items-center gap-6">
               <div className="home-float flex h-24 w-24 items-center justify-center rounded-full border-4 border-white/70"><PawPrint size={50} /></div>
-              <div><h2 className="text-3xl font-black">Seu pet merece esse cuidado!</h2><p className="mt-2 text-white/75">Agende agora e proporcione momentos de bem-estar para seu melhor amigo!</p></div>
+              <div><h2 className="text-3xl font-black">Seu pet merece esse cuidado!</h2><p className="mt-2 text-white/75">Entre na área do cliente e agende com segurança.</p></div>
             </div>
-            <a href={whatsappUrl} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-3 rounded-full bg-[#f7e7c4] px-8 py-4 font-black text-[#12382f] shadow-xl transition hover:-translate-y-1"><Phone size={20} /> Agendar pelo WhatsApp</a>
+            <Link to="/cliente-login" className="inline-flex items-center justify-center gap-3 rounded-full bg-[#f7e7c4] px-8 py-4 font-black text-[#12382f] shadow-xl transition hover:-translate-y-1"><CalendarDays size={20} /> Entrar para agendar</Link>
           </div>
         </section>
       </main>
