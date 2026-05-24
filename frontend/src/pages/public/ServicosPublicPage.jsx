@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import PublicLayout from "../../components/public/PublicLayout";
+import { getPublicServicePhoto, publicPhotos } from "../../data/publicPhotos";
 
 const API_PUBLIC = "https://spadodoguinho.com.br/api/public";
 
@@ -36,13 +37,7 @@ function getServiceIcon(name = "", category = "") {
 }
 
 function getServiceImage(name = "", category = "") {
-  const text = `${name} ${category}`.toLowerCase();
-
-  if (text.includes("vacina")) return "/images/vacina-pet.svg";
-  if (text.includes("spa")) return "/images/spa-pet.svg";
-  if (text.includes("banho") || text.includes("tosa")) return "/images/banho-tosa.svg";
-
-  return "/images/hero-doguinho.svg";
+  return getPublicServicePhoto(name, category);
 }
 
 export default function ServicosPublicPage() {
@@ -102,20 +97,20 @@ export default function ServicosPublicPage() {
               </div>
             </motion.div>
 
-            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-white/10 border border-white/10 rounded-[42px] p-6 shadow-2xl backdrop-blur-xl">
-              <img src="/images/banho-tosa.svg" alt="Banho e tosa premium" className="rounded-[34px] w-full shadow-2xl" />
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-white/10 border border-white/10 rounded-[42px] p-4 shadow-2xl backdrop-blur-xl">
+              <img src={publicPhotos.bathCare} alt="Banho e tosa premium" className="h-[420px] w-full rounded-[34px] object-cover shadow-2xl" />
             </motion.div>
           </div>
         </section>
 
         <section className="max-w-7xl mx-auto px-6 py-16 grid lg:grid-cols-3 gap-6">
           {[
-            ["Banho & Tosa", "/images/banho-tosa.svg", "Higiene, beleza e acabamento premium."],
-            ["Vacinação", "/images/vacina-pet.svg", "Prevenção, saúde e cuidado responsável."],
-            ["Spa Pet", "/images/spa-pet.svg", "Relaxamento e carinho para seu pet."]
+            ["Banho & Tosa", publicPhotos.bathCare, "Higiene, beleza e acabamento premium."],
+            ["Vacinação", publicPhotos.vet, "Prevenção, saúde e cuidado responsável."],
+            ["Spa Pet", publicPhotos.towel, "Relaxamento e carinho para seu pet."]
           ].map(([title, image, text]) => (
             <div key={title} className="bg-white rounded-[32px] p-5 shadow-2xl border border-green-100 hover:-translate-y-2 transition">
-              <img src={image} alt={title} className="rounded-[26px] w-full" />
+              <img src={image} alt={title} className="h-[260px] w-full rounded-[26px] object-cover" />
               <div className="p-4">
                 <h3 className="text-2xl font-black text-slate-900">{title}</h3>
                 <p className="text-slate-500 mt-2">{text}</p>
@@ -131,7 +126,7 @@ export default function ServicosPublicPage() {
                 Serviços cadastrados
               </h2>
               <p className="text-white/60 mt-4 text-lg">
-                Lista integrada com o MySQL do painel administrativo.
+                Serviços ativos para escolher, comparar e agendar sem complicação.
               </p>
             </div>
 
@@ -162,7 +157,7 @@ export default function ServicosPublicPage() {
                   transition={{ delay: index * 0.06 }}
                   className="group bg-white rounded-[32px] p-5 shadow-2xl border border-green-100 hover:-translate-y-2 transition"
                 >
-                  <img src={image} alt={service.name} className="rounded-[24px] w-full mb-5" />
+                  <img src={image} alt={service.name} className="h-[210px] w-full rounded-[24px] object-cover mb-5" />
 
                   <div className="flex items-start justify-between gap-4">
                     <div className="w-14 h-14 rounded-2xl bg-green-100 text-green-700 flex items-center justify-center group-hover:bg-green-600 group-hover:text-white transition">
