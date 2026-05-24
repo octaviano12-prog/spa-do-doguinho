@@ -1,347 +1,60 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  PawPrint,
-  CalendarDays,
-  Sparkles,
-  ShieldCheck,
-  Heart,
-  Star,
-  Clock,
-  MessageCircle,
-  CheckCircle,
-  Scissors,
-  Syringe,
-  Bath,
-  Gift,
-  ArrowRight
-} from "lucide-react";
+import { ArrowRight, Bath, CalendarDays, CheckCircle, Heart, MessageCircle, PawPrint, Scissors, ShieldCheck, Sparkles, Star, Syringe } from "lucide-react";
 import { motion } from "framer-motion";
 import PublicLayout from "../../components/public/PublicLayout";
 
 const API_PUBLIC = "https://spadodoguinho.com.br/api/public";
+const heroDog = "https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=900&q=90";
+const pugDog = "https://images.unsplash.com/photo-1517423440428-a5a00ad493e8?auto=format&fit=crop&w=900&q=90";
 
-function formatCurrency(value) {
-  const number = Number(value || 0);
+function money(value) { return Number(value || 0).toLocaleString("pt-BR", { style: "currency", currency: "BRL" }); }
+function iconFor(name = "", category = "") { const t = `${name} ${category}`.toLowerCase(); if (t.includes("tosa")) return Scissors; if (t.includes("vacina")) return Syringe; if (t.includes("spa")) return Sparkles; if (t.includes("banho")) return Bath; return PawPrint; }
+function imageFor(name = "", category = "") { const t = `${name} ${category}`.toLowerCase(); if (t.includes("vacina")) return "/images/vacina-pet.svg"; if (t.includes("spa")) return "/images/spa-pet.svg"; if (t.includes("tosa") || t.includes("banho")) return "/images/banho-tosa.svg"; return "/images/hero-doguinho.svg"; }
 
-  return number.toLocaleString("pt-BR", {
-    style: "currency",
-    currency: "BRL"
-  });
-}
+const features = [
+  [CalendarDays, "Agendamento fácil", "Agende em poucos cliques pelo site."],
+  [Sparkles, "Higiene premium", "Produtos de alta qualidade e seguros."],
+  [ShieldCheck, "Segurança", "Ambiente monitorado e profissionais treinados."],
+  [Heart, "Carinho", "Tratamos seu pet com amor e dedicação."]
+];
 
-function getServiceIcon(name = "", category = "") {
-  const text = `${name} ${category}`.toLowerCase();
-
-  if (text.includes("tosa")) return Scissors;
-  if (text.includes("vacina")) return Syringe;
-  if (text.includes("spa")) return Sparkles;
-  if (text.includes("banho")) return Bath;
-
-  return PawPrint;
-}
-
-function getServiceImage(name = "", category = "") {
-  const text = `${name} ${category}`.toLowerCase();
-
-  if (text.includes("vacina")) return "/images/vacina-pet.svg";
-  if (text.includes("spa")) return "/images/spa-pet.svg";
-  if (text.includes("banho") || text.includes("tosa")) return "/images/banho-tosa.svg";
-
-  return "/images/hero-doguinho.svg";
-}
+const fixedPlans = [
+  ["Pequeno", "até 10kg", "/images/hero-doguinho.svg", "60,00", "90,00", "70,00"],
+  ["Médio", "10,1kg a 25kg", "/images/banho-tosa.svg", "80,00", "120,00", "90,00"],
+  ["Grande", "25,1kg a 40kg", "/images/spa-pet.svg", "100,00", "150,00", "110,00"],
+  ["Gigante", "acima de 40kg", "/images/cliente-premium.svg", "120,00", "180,00", "130,00"]
+];
 
 export default function HomePage() {
   const [services, setServices] = useState([]);
-  const [isLoadingServices, setIsLoadingServices] = useState(true);
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    async function loadServices() {
-      try {
-        const response = await fetch(`${API_PUBLIC}/services`);
-        const data = await response.json();
+  useEffect(() => { async function load() { try { const res = await fetch(`${API_PUBLIC}/services`); const data = await res.json(); if (Array.isArray(data)) setServices(data.filter((s) => Number(s.active ?? 1) === 1)); } catch (err) { console.error("Erro ao carregar serviços:", err); } finally { setLoading(false); } } load(); }, []);
 
-        if (Array.isArray(data)) {
-          setServices(data.filter((item) => Number(item.active ?? 1) === 1));
-        }
-      } catch (error) {
-        console.error("Erro ao carregar serviços públicos:", error);
-      } finally {
-        setIsLoadingServices(false);
-      }
-    }
+  return <PublicLayout><main className="relative overflow-hidden bg-[#03150d] text-white"><div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_12%,rgba(34,197,94,.28),transparent_28%),radial-gradient(circle_at_80%_20%,rgba(245,158,11,.18),transparent_25%),linear-gradient(180deg,#03150d,#062415_45%,#02100a)]"/><div className="relative">
+    <section className="max-w-7xl mx-auto px-6 pt-20 pb-10 grid lg:grid-cols-2 gap-12 items-center min-h-[760px]">
+      <motion.div initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .7 }}>
+        <span className="inline-flex items-center gap-2 rounded-full border border-yellow-400/25 bg-white/8 px-5 py-2 text-yellow-100 font-black shadow-xl"><PawPrint size={18}/> Cuidado que seu pet merece!</span>
+        <h1 className="mt-8 text-5xl md:text-7xl font-black leading-[.98] tracking-tight">Seu pet limpo, <span className="text-green-300">cheiroso e feliz.</span></h1>
+        <p className="mt-6 max-w-xl text-lg text-white/75 leading-relaxed">Banho, tosa, estética animal e muito mais, com todo carinho e segurança que seu melhor amigo merece.</p>
+        <div className="mt-9 flex flex-wrap gap-4"><Link to="/agendamento" className="group rounded-2xl bg-green-600 hover:bg-green-700 px-8 py-4 font-black text-white shadow-xl shadow-green-900/30 flex items-center gap-3">Agendar agora <ArrowRight size={20} className="group-hover:translate-x-1 transition"/></Link><Link to="/servicos" className="rounded-2xl border border-yellow-400/35 bg-white/5 hover:bg-white/10 px-8 py-4 font-black text-yellow-100 flex items-center gap-3"><PawPrint size={20}/> Nossos serviços</Link></div>
+        <div className="mt-10 grid grid-cols-3 gap-4 max-w-xl">{[["+3.500", "Pets atendidos"], ["6+", "Anos de experiência"], ["Online", "Agendamentos fáceis"]].map(([n,l]) => <div key={l} className="rounded-3xl border border-white/10 bg-white/7 p-5 backdrop-blur-xl"><div className="text-2xl md:text-3xl font-black">{n}</div><div className="text-white/60 text-sm mt-1">{l}</div></div>)}</div>
+      </motion.div>
+      <motion.div initial={{ opacity: 0, scale: .94 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: .7, delay: .1 }} className="relative">
+        <div className="absolute -inset-8 rounded-[56px] bg-green-500/10 blur-2xl"/><div className="relative rounded-[46px] border border-yellow-400/20 bg-white/8 p-6 shadow-2xl backdrop-blur-xl"><img src={heroDog} alt="Cachorro feliz no SPA do Doguinho" className="h-[500px] w-full object-cover rounded-[38px] shadow-2xl"/><div className="absolute -bottom-5 -left-2 md:left-[-26px] bg-[#fffaf0] text-slate-900 rounded-3xl p-5 shadow-2xl border border-yellow-100"><div className="flex items-center gap-3"><Star className="text-yellow-500 fill-yellow-500"/><div><p className="font-black">Atendimento 5 estrelas</p><p className="text-xs text-slate-500">Baseado em avaliações reais</p></div></div></div><div className="absolute right-6 bottom-8 w-20 h-20 rounded-full bg-green-800/80 border border-yellow-300/40 flex items-center justify-center text-yellow-200 shadow-2xl"><PawPrint size={38}/></div></div>
+      </motion.div>
+    </section>
 
-    loadServices();
-  }, []);
+    <section className="max-w-7xl mx-auto px-6 pb-16"><div className="rounded-[34px] border border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl grid md:grid-cols-4 overflow-hidden">{features.map(([Icon,title,text],i)=><div key={title} className="p-8 border-white/10 md:border-r last:border-r-0"><Icon className="text-yellow-300 mb-5" size={34}/><h3 className="text-xl font-black">{title}</h3><p className="text-white/60 mt-2 text-sm leading-relaxed">{text}</p></div>)}</div></section>
 
-  const highlights = [
-    {
-      icon: CalendarDays,
-      title: "Agenda fácil",
-      text: "Escolha o melhor horário com praticidade."
-    },
-    {
-      icon: Sparkles,
-      title: "Higiene premium",
-      text: "Produtos selecionados e acabamento caprichado."
-    },
-    {
-      icon: ShieldCheck,
-      title: "Segurança",
-      text: "Cuidado responsável e ambiente organizado."
-    },
-    {
-      icon: Heart,
-      title: "Carinho",
-      text: "Atendimento humanizado para cada doguinho."
-    }
-  ];
+    <section className="max-w-7xl mx-auto px-6 py-16"><div className="text-center max-w-3xl mx-auto"><span className="inline-flex items-center gap-2 rounded-full border border-yellow-400/25 bg-white/8 px-5 py-2 text-yellow-100 font-black"><PawPrint size={18}/> Nossos serviços</span><h2 className="mt-6 text-4xl md:text-6xl font-black">Tudo para o bem-estar do seu pet</h2><p className="mt-4 text-white/60">Serviços completos para deixar seu doguinho sempre lindo e saudável.</p></div><div className="mt-12 grid md:grid-cols-3 gap-7">{[["Banho & Tosa","/images/banho-tosa.svg","Higiene completa com muito carinho e produtos premium."],["Hidratação & Bem-estar","/images/vacina-pet.svg","Hidratação profunda para pelos macios e saudáveis."],["Spa Relaxante","/images/spa-pet.svg","Relaxamento e cuidado especial para o seu melhor amigo."]].map(([title,img,text])=><div key={title} className="rounded-[34px] bg-[#fffaf0] p-5 text-slate-900 shadow-2xl border border-yellow-100 hover:-translate-y-2 transition"><img src={img} alt={title} className="w-full h-56 object-cover rounded-[26px] bg-green-50"/><div className="p-4"><h3 className="text-2xl font-black">{title}</h3><p className="text-slate-500 mt-2 min-h-[48px]">{text}</p><Link to="/servicos" className="mt-5 inline-flex items-center gap-2 bg-green-100 hover:bg-green-200 text-green-800 px-5 py-3 rounded-2xl font-black">Saiba mais <PawPrint size={16}/></Link></div></div>)}</div></section>
 
-  return (
-    <PublicLayout>
-      <section className="relative overflow-hidden bg-[#06150d] min-h-[780px]">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,#22c55e55,transparent_28%),radial-gradient(circle_at_80%_25%,#f59e0b33,transparent_30%),linear-gradient(135deg,#06150d,#042413_55%,#020617)]" />
-        <div className="absolute right-[-160px] top-20 h-[520px] w-[520px] rounded-full bg-green-400/20 blur-[110px]" />
-        <div className="absolute left-[-180px] bottom-10 h-[420px] w-[420px] rounded-full bg-orange-300/20 blur-[110px]" />
+    <section className="max-w-7xl mx-auto px-6 py-16"><div className="rounded-[38px] border border-white/10 bg-white/5 p-7 md:p-10 shadow-2xl"><div className="text-center max-w-3xl mx-auto"><span className="inline-flex items-center gap-2 rounded-full border border-yellow-400/25 bg-white/8 px-5 py-2 text-yellow-100 font-black"><PawPrint size={18}/> Escolha o porte do seu doguinho</span><h2 className="mt-6 text-4xl md:text-6xl font-black">Planos que cabem no seu bolso</h2><p className="mt-4 text-white/60">Preços justos para cuidados excepcionais.</p></div><div className="mt-12 grid md:grid-cols-2 xl:grid-cols-4 gap-5">{fixedPlans.map(([name,range,img,banho,combo,tosa])=><div key={name} className="rounded-[30px] bg-[#fffaf0] p-6 text-slate-900 shadow-xl border border-yellow-100"><div className="text-center"><h3 className="text-2xl font-black">{name}</h3><p className="text-sm text-slate-500">{range}</p><img src={img} alt={name} className="mt-5 mx-auto h-36 w-36 rounded-full object-cover bg-green-50 border border-green-100"/></div><div className="mt-6 space-y-3 text-sm"><PlanLine label="Banho" value={`R$ ${banho}`}/><PlanLine label="Banho e Tosa" value={`R$ ${combo}`}/><PlanLine label="Só Tosa" value={`R$ ${tosa}`}/></div><Link to="/agendamento" className="mt-6 block rounded-2xl bg-green-700 hover:bg-green-800 text-white text-center p-4 font-black">A partir de<br/><span className="text-xl">R$ {banho}</span></Link></div>)}</div><p className="mt-8 text-center text-yellow-100/75 text-sm">Os valores podem variar conforme necessidades específicas do seu pet.</p></div></section>
 
-        <div className="relative max-w-7xl mx-auto px-6 py-24 grid lg:grid-cols-2 gap-14 items-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-          >
-            <div className="inline-flex items-center gap-2 bg-white/10 border border-white/15 rounded-full px-5 py-2 text-green-100 mb-7 shadow-xl backdrop-blur-xl">
-              <PawPrint size={18} />
-              Experiência premium para pets
-            </div>
+    {services.length > 0 && <section className="max-w-7xl mx-auto px-6 py-16"><div className="text-center max-w-3xl mx-auto"><span className="inline-flex items-center gap-2 bg-green-100 text-green-800 px-5 py-2 rounded-full font-black"><Sparkles size={18}/> Serviços cadastrados</span><h2 className="text-4xl md:text-6xl font-black mt-6">Catálogo conectado ao sistema</h2><p className="text-white/60 mt-4">Esses serviços vêm direto do painel administrativo.</p></div><div className="mt-12 grid md:grid-cols-2 xl:grid-cols-4 gap-6">{!loading && services.slice(0,8).map((service,index)=>{const Icon=iconFor(service.name,service.category); return <motion.div key={service.id || service.name} initial={{opacity:0,y:20}} whileInView={{opacity:1,y:0}} viewport={{once:true}} transition={{delay:index*.04}} className="rounded-[30px] bg-white p-5 text-slate-900 shadow-2xl border border-green-100 hover:-translate-y-2 transition"><img src={imageFor(service.name,service.category)} alt={service.name} className="w-full h-40 object-cover rounded-[22px] mb-5 bg-green-50"/><div className="w-12 h-12 rounded-2xl bg-green-100 text-green-700 flex items-center justify-center"><Icon size={24}/></div><h3 className="text-xl font-black mt-4 break-words">{service.name}</h3><p className="text-slate-500 mt-2 text-sm min-h-[56px] break-words">{service.description || "Cuidado especial para seu pet."}</p><div className="mt-5 pt-5 border-t flex items-end justify-between"><div><div className="text-xs text-slate-400 font-bold">A partir de</div><div className="text-xl font-black text-green-700">{money(service.price)}</div></div><CheckCircle className="text-green-500"/></div></motion.div>})}</div></section>}
 
-            <h1 className="text-5xl md:text-7xl font-black leading-tight text-white">
-              Seu pet limpo, cheiroso e feliz.
-            </h1>
-
-            <p className="text-white/75 text-xl mt-6 max-w-xl leading-relaxed">
-              Banho, tosa, estética pet, vacinação e cuidado profissional com
-              carinho, segurança e visual premium.
-            </p>
-
-            <div className="flex flex-wrap gap-4 mt-9">
-              <Link
-                to="/agendamento"
-                className="group bg-green-500 hover:bg-green-600 px-8 py-4 rounded-2xl font-black shadow-xl shadow-green-600/30 text-white flex items-center gap-3 transition"
-              >
-                Agendar agora
-                <ArrowRight size={20} className="group-hover:translate-x-1 transition" />
-              </Link>
-
-              <a
-                href="https://wa.me/5518997493722"
-                target="_blank"
-                rel="noreferrer"
-                className="bg-white/10 hover:bg-white/20 px-8 py-4 rounded-2xl font-black text-white border border-white/15 flex items-center gap-3 transition"
-              >
-                <MessageCircle size={20} />
-                WhatsApp
-              </a>
-            </div>
-
-            <div className="grid sm:grid-cols-3 gap-4 mt-12">
-              {[
-                ["+3.500", "Pets atendidos"],
-                ["5★", "Avaliação premium"],
-                ["Online", "Agendamento fácil"]
-              ].map(([number, label]) => (
-                <div
-                  key={label}
-                  className="bg-white/10 border border-white/10 rounded-3xl p-5 backdrop-blur-xl"
-                >
-                  <div className="text-3xl font-black text-white">{number}</div>
-                  <div className="text-green-100/80 mt-1">{label}</div>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.94 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            className="relative"
-          >
-            <div className="rounded-[44px] bg-white/10 border border-white/10 p-6 shadow-2xl backdrop-blur-xl">
-              <img
-                src="/images/hero-doguinho.svg"
-                alt="Doguinho feliz no SPA do Doguinho"
-                className="w-full rounded-[36px] shadow-2xl object-cover"
-              />
-            </div>
-
-            <div className="absolute -bottom-6 -left-4 bg-white text-slate-900 rounded-3xl p-5 shadow-2xl">
-              <div className="flex items-center gap-3">
-                <Star className="text-yellow-500 fill-yellow-500" />
-                <div>
-                  <p className="font-black">Atendimento 5 estrelas</p>
-                  <p className="text-sm text-slate-500">Cuidado com amor</p>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      <section className="max-w-7xl mx-auto px-6 -mt-16 relative z-10 grid md:grid-cols-4 gap-6">
-        {highlights.map((item, index) => {
-          const Icon = item.icon;
-
-          return (
-            <motion.div
-              key={item.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.07 }}
-              className="bg-[#10251a] border border-white/10 rounded-3xl p-7 hover:-translate-y-1 transition shadow-2xl"
-            >
-              <Icon size={40} className="text-green-300 mb-5" />
-              <h3 className="text-2xl font-black text-white">{item.title}</h3>
-              <p className="text-white/60 mt-3">{item.text}</p>
-            </motion.div>
-          );
-        })}
-      </section>
-
-      <section className="max-w-7xl mx-auto px-6 py-20 grid lg:grid-cols-3 gap-6">
-        {[
-          ["Banho & Tosa", "/images/banho-tosa.svg", "Higiene, acabamento e beleza para seu pet."],
-          ["Vacinação", "/images/vacina-pet.svg", "Cuidado preventivo e bem-estar animal."],
-          ["Spa Relaxante", "/images/spa-pet.svg", "Uma experiência especial de carinho e relaxamento."]
-        ].map(([title, image, text]) => (
-          <div key={title} className="bg-white rounded-[32px] p-5 shadow-2xl border border-green-100 hover:-translate-y-2 transition">
-            <img src={image} alt={title} className="w-full rounded-[26px]" />
-            <div className="p-4">
-              <h3 className="text-2xl font-black text-slate-900">{title}</h3>
-              <p className="text-slate-500 mt-2">{text}</p>
-            </div>
-          </div>
-        ))}
-      </section>
-
-      <section className="max-w-7xl mx-auto px-6 py-20">
-        <div className="text-center max-w-3xl mx-auto">
-          <span className="inline-flex items-center gap-2 bg-green-100 text-green-800 px-5 py-2 rounded-full font-black">
-            <Sparkles size={18} />
-            Serviços reais do SPA
-          </span>
-
-          <h2 className="text-4xl md:text-6xl font-black text-white mt-6">
-            Tudo que seu doguinho precisa em um só lugar
-          </h2>
-
-          <p className="text-white/60 text-lg mt-5">
-            Os serviços abaixo vêm direto do banco MySQL e podem ser gerenciados
-            pelo painel administrativo.
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-6 mt-14">
-          {isLoadingServices &&
-            [1, 2, 3, 4].map((item) => (
-              <div key={item} className="h-[380px] rounded-3xl bg-white/10 animate-pulse" />
-            ))}
-
-          {!isLoadingServices && services.length === 0 && (
-            <div className="md:col-span-2 xl:col-span-4 bg-white/10 border border-white/10 rounded-3xl p-8 text-center text-white">
-              Nenhum serviço ativo cadastrado ainda.
-            </div>
-          )}
-
-          {!isLoadingServices &&
-            services.map((service, index) => {
-              const Icon = getServiceIcon(service.name, service.category);
-              const image = getServiceImage(service.name, service.category);
-
-              return (
-                <motion.div
-                  key={service.id || service.name}
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.06 }}
-                  className="group bg-white rounded-[32px] p-5 shadow-2xl hover:-translate-y-2 transition border border-green-100"
-                >
-                  <img src={image} alt={service.name} className="w-full rounded-[24px] mb-5" />
-
-                  <div className="w-14 h-14 rounded-2xl bg-green-100 text-green-700 flex items-center justify-center mb-5 group-hover:bg-green-600 group-hover:text-white transition">
-                    <Icon size={28} />
-                  </div>
-
-                  <div className="text-sm font-black text-green-600 uppercase tracking-wider">
-                    {service.category || "Serviço"}
-                  </div>
-
-                  <h3 className="text-2xl font-black text-slate-900 mt-2">
-                    {service.name}
-                  </h3>
-
-                  <p className="text-slate-500 mt-4 min-h-[78px]">
-                    {service.description || "Cuidado especial para seu pet."}
-                  </p>
-
-                  <div className="flex items-center gap-2 text-slate-500 mt-4">
-                    <Clock size={18} />
-                    {service.duration_minutes || 60} min
-                  </div>
-
-                  <div className="flex items-end justify-between mt-6 pt-6 border-t border-slate-100">
-                    <div>
-                      <div className="text-xs text-slate-400 font-bold">A partir de</div>
-                      <div className="text-2xl font-black text-green-700">
-                        {formatCurrency(service.price)}
-                      </div>
-                    </div>
-
-                    <CheckCircle className="text-green-500" />
-                  </div>
-                </motion.div>
-              );
-            })}
-        </div>
-      </section>
-
-      <section className="max-w-7xl mx-auto px-6 pb-24">
-        <div className="rounded-[36px] bg-gradient-to-r from-green-700 to-emerald-500 p-10 md:p-14 text-white shadow-2xl grid md:grid-cols-2 gap-8 items-center overflow-hidden relative">
-          <div className="absolute right-0 bottom-0 opacity-20 w-[360px] hidden md:block">
-            <img src="/images/cliente-premium.svg" alt="Área do cliente" />
-          </div>
-          <div className="relative">
-            <div className="inline-flex items-center gap-2 bg-white/15 px-5 py-2 rounded-full font-black">
-              <Gift size={18} />
-              Agendamento fácil
-            </div>
-            <h2 className="text-4xl md:text-5xl font-black mt-5">
-              Pronto para mimar seu doguinho?
-            </h2>
-            <p className="text-white/85 mt-4 text-lg">
-              Fale pelo WhatsApp ou agende pelo site em poucos cliques.
-            </p>
-          </div>
-
-          <div className="relative flex flex-col sm:flex-row gap-4 md:justify-end">
-            <Link
-              to="/agendamento"
-              className="bg-orange-400 hover:bg-orange-500 px-8 py-4 rounded-2xl font-black text-center transition"
-            >
-              Começar agendamento
-            </Link>
-
-            <Link
-              to="/cliente-login"
-              className="bg-white/15 hover:bg-white/25 px-8 py-4 rounded-2xl font-black text-center border border-white/20 transition"
-            >
-              Área do Cliente
-            </Link>
-          </div>
-        </div>
-      </section>
-    </PublicLayout>
-  );
+    <section className="max-w-7xl mx-auto px-6 py-16 pb-24"><div className="relative overflow-hidden rounded-[36px] bg-gradient-to-r from-green-700 via-emerald-600 to-green-500 p-8 md:p-12 shadow-2xl grid md:grid-cols-[1fr_auto] gap-8 items-center"><div><h2 className="text-4xl md:text-5xl font-black">Pronto para mimar seu doguinho?</h2><p className="mt-4 text-white/85 text-lg max-w-xl">Agende agora e proporcione o melhor para quem te dá tanto amor todos os dias.</p></div><div className="flex flex-col sm:flex-row gap-4"><Link to="/agendamento" className="bg-orange-400 hover:bg-orange-500 text-white px-8 py-4 rounded-2xl font-black flex items-center justify-center gap-2">Agendar agora <ArrowRight size={20}/></Link><a href="https://wa.me/5518997493722" target="_blank" rel="noreferrer" className="bg-white/15 hover:bg-white/25 border border-white/20 text-white px-8 py-4 rounded-2xl font-black flex items-center justify-center gap-2"><MessageCircle size={20}/> Falar no WhatsApp</a></div><img src={pugDog} alt="Pet no banho" className="absolute right-0 bottom-0 h-48 w-48 object-cover rounded-tl-[40px] opacity-25 hidden lg:block"/></div></section>
+  </div></main></PublicLayout>;
 }
+function PlanLine({ label, value }) { return <div className="flex items-center justify-between gap-3"><span>{label}</span><b className="text-green-700">{value}</b></div>; }
