@@ -33,85 +33,95 @@ export default function GaleriaPublicPage() {
 
   return (
     <PublicLayout>
-      <main className="relative overflow-hidden">
-        <section className="relative bg-[#06150d] px-6 py-24">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,#22c55e55,transparent_30%),radial-gradient(circle_at_85%_10%,#f59e0b33,transparent_30%)]" />
-
-          <div className="relative max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
+      <main className="overflow-hidden bg-[#fbf7ef] text-[#10231a]">
+        <section className="relative bg-[#f5efe4] px-5 py-16 md:px-8">
+          <div className="mx-auto grid max-w-[1680px] gap-10 xl:grid-cols-[.9fr_1.1fr] xl:items-center">
             <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}>
-              <span className="inline-flex items-center gap-2 bg-white/10 border border-white/15 rounded-full px-5 py-2 text-green-100 font-black">
+              <span className="inline-flex items-center gap-2 rounded-full border border-emerald-900/10 bg-white px-5 py-2 text-sm font-black text-emerald-900 shadow-sm">
                 <Camera size={18} />
-                Galeria de momentos felizes
+                Galeria premium
               </span>
 
-              <h1 className="text-5xl md:text-7xl font-black text-white mt-7 leading-tight">
-                Cada atendimento conta uma história de cuidado.
+              <h1 className="mt-7 max-w-4xl text-5xl font-black leading-[.96] md:text-7xl">
+                Momentos bonitos de pets limpos, cheirosos e felizes.
               </h1>
 
-              <p className="text-white/70 mt-6 text-xl leading-relaxed max-w-3xl">
-                Veja registros, resultados e detalhes do carinho que entregamos em cada banho, tosa e cuidado especial.
+              <p className="mt-6 max-w-3xl text-lg leading-relaxed text-slate-600 md:text-xl">
+                Registros de banho, tosa, spa e cuidados especiais para mostrar a experiência que seu pet recebe por aqui.
               </p>
             </motion.div>
 
-            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-white/10 border border-white/10 rounded-[42px] p-4 shadow-2xl backdrop-blur-xl">
-              <img src={publicPhotos.towel} alt="Galeria SPA do Doguinho" className="h-[420px] w-full rounded-[34px] object-cover shadow-2xl" />
+            <motion.div initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} className="relative min-h-[560px]">
+              <img src={publicPhotos.towel} alt="Galeria SPA do Doguinho" className="absolute right-0 top-0 h-[440px] w-[84%] rounded-[42px] object-cover shadow-2xl" />
+              <img src={publicPhotos.grooming} alt="Tosa e cuidado pet" className="absolute bottom-0 left-0 hidden h-72 w-[44%] rounded-[32px] border-[10px] border-[#f5efe4] object-cover shadow-2xl md:block" />
+              <div className="absolute bottom-8 right-10 rounded-[28px] bg-white/90 p-5 shadow-2xl backdrop-blur">
+                <div className="flex items-center gap-4">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-800">
+                    <ImageIcon size={28} />
+                  </div>
+                  <div>
+                    <div className="font-black">{gallery.length || fallbackGallery.length} registros</div>
+                    <p className="mt-1 text-sm text-slate-500">Fotos para inspirar confiança antes de agendar.</p>
+                  </div>
+                </div>
+              </div>
             </motion.div>
           </div>
         </section>
 
-        <section className="max-w-7xl mx-auto px-6 py-20">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <section className="mx-auto max-w-[1680px] px-5 py-12 md:px-8">
+          <div className="mb-12 grid grid-cols-1 gap-6 md:grid-cols-3">
             {[
               ["Fotos selecionadas", "Visual acolhedor", ImageIcon],
               ["Pets felizes", "Cuidado com carinho", Heart],
               ["Resultado premium", "Acabamento especial", Sparkles]
             ].map(([title, text, Icon], index) => (
-              <motion.div key={title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.06 }} className="bg-white/10 border border-white/10 rounded-3xl p-7 text-white shadow-2xl">
-                <Icon className="text-green-300 mb-4" size={36} />
+              <motion.div key={title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.05 }} className="rounded-[30px] bg-white p-7 shadow-xl ring-1 ring-black/5">
+                <Icon className="mb-4 text-[#0f7a3b]" size={36} />
                 <h3 className="text-2xl font-black">{title}</h3>
-                <p className="text-white/60 mt-2">{text}</p>
+                <p className="mt-2 text-slate-600">{text}</p>
               </motion.div>
             ))}
           </div>
 
-          <div className="flex items-end justify-between gap-6 mb-10">
+          <div className="mb-10 flex items-end justify-between gap-6">
             <div>
-              <h2 className="text-4xl md:text-5xl font-black text-white">Galeria</h2>
-              <p className="text-white/60 mt-3">Registros do painel e fotos de apoio para manter a página sempre bonita.</p>
+              <span className="inline-flex rounded-full bg-emerald-100 px-5 py-2 text-sm font-black text-emerald-900">Galeria</span>
+              <h2 className="mt-5 text-4xl font-black md:text-5xl">Cuidado que dá gosto de ver.</h2>
+              <p className="mt-3 text-slate-600">Banho, tosa e bem-estar com acabamento caprichado.</p>
             </div>
 
-            <div className="hidden md:block bg-white/10 border border-white/10 rounded-2xl px-6 py-4 text-white">
-              <strong>{gallery.length}</strong> registros
+            <div className="hidden rounded-2xl border border-black/5 bg-white px-6 py-4 font-black text-[#0f7a3b] shadow-sm md:block">
+              {gallery.length} registros
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {isLoading && [1, 2, 3, 4, 5, 6].map((item) => <div key={item} className="h-[420px] rounded-3xl bg-white/10 animate-pulse" />)}
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+            {isLoading && [1, 2, 3, 4, 5, 6].map((item) => <div key={item} className="h-[420px] animate-pulse rounded-[30px] bg-white" />)}
 
             {!isLoading && gallery.map((item, index) => (
-              <motion.article key={item.id || index} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.05 }} className="group bg-white rounded-[32px] overflow-hidden shadow-2xl border border-green-100 hover:-translate-y-2 transition">
+              <motion.article key={item.id || index} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.04 }} className="group overflow-hidden rounded-[30px] bg-white shadow-xl ring-1 ring-black/5 transition hover:-translate-y-1">
                 {item.image_url ? (
                   item.image_url.endsWith(".svg") ? (
-                    <div className="h-[300px] bg-slate-50 flex items-center justify-center p-4">
-                      <img src={item.image_url} alt={item.title || "Galeria"} className="w-full h-full object-contain rounded-2xl" />
+                    <div className="flex h-[320px] items-center justify-center bg-slate-50 p-4">
+                      <img src={item.image_url} alt={item.title || "Galeria"} className="h-full w-full rounded-2xl object-contain" />
                     </div>
                   ) : (
-                    <div className="h-[300px] bg-cover bg-center" style={{ backgroundImage: `url('${item.image_url}')` }} />
+                    <div className="h-[320px] bg-cover bg-center transition duration-500 group-hover:scale-105" style={{ backgroundImage: `url('${item.image_url}')` }} />
                   )
                 ) : (
-                  <div className="h-[300px] bg-gradient-to-br from-green-400 via-emerald-600 to-green-950 flex items-center justify-center relative overflow-hidden">
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,#ffffff55,transparent_24%),radial-gradient(circle_at_75%_70%,#fbbf2455,transparent_30%)]" />
+                  <div className="relative flex h-[320px] items-center justify-center overflow-hidden bg-gradient-to-br from-emerald-300 via-emerald-600 to-emerald-950">
                     <PawPrint size={120} className="relative text-white drop-shadow-2xl" />
                   </div>
                 )}
 
                 <div className="p-7">
-                  <div className="flex text-yellow-400 gap-1 mb-4">
+                  <div className="mb-4 flex gap-1 text-yellow-500">
                     {[1, 2, 3, 4, 5].map((star) => <Star key={star} size={17} fill="currentColor" />)}
                   </div>
 
-                  <h2 className="text-2xl font-black text-slate-900">{item.title || `Atendimento #${index + 1}`}</h2>
-                  <p className="text-slate-500 mt-3">{item.description || "Resultado incrível para nossos clientes pets."}</p>
+                  <h2 className="text-2xl font-black">{item.title || `Atendimento #${index + 1}`}</h2>
+                  <p className="mt-3 text-slate-600">{item.description || "Resultado incrível para nossos clientes pets."}</p>
                 </div>
               </motion.article>
             ))}
