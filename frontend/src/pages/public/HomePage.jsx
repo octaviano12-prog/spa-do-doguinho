@@ -25,6 +25,14 @@ const whatsappUrl =
   "https://wa.me/5518997493722?text=Olá! Gostaria de agendar um atendimento no SPA do Doguinho.";
 
 const heroImage = "/images/hero-doguinho-card.webp";
+const bookingImage = "/images/banho-pet-home.webp";
+
+const homeGalleryImages = [
+  "/images/galeria-pet-01.webp",
+  "/images/galeria-pet-02.webp",
+  "/images/galeria-pet-03.webp",
+  "/images/galeria-pet-04.webp"
+];
 
 const services = [
   { icon: Bath, title: "Banho Premium", text: "Banho com produtos de alta qualidade e muito carinho.", price: "A partir de R$ 70,00" },
@@ -52,17 +60,11 @@ const testimonials = [
   ["A busca e leva facilitou muito a minha rotina!", "Patrícia A.", "Tutora do Thor"]
 ];
 
-function ImagePlaceholder({ title = "Imagem do pet", className = "" }) {
+function HomeImage({ src, alt, className = "" }) {
   return (
-    <div className={`relative flex min-h-[220px] items-center justify-center overflow-hidden rounded-[24px] border border-dashed border-[#0d6b54]/25 bg-[linear-gradient(135deg,#e6f5eb,#fff8e6)] p-6 text-center ${className}`}>
-      <div className="absolute -left-10 -top-10 h-32 w-32 rounded-full bg-[#0d8b67]/10 blur-2xl" />
-      <div className="absolute -bottom-10 -right-10 h-32 w-32 rounded-full bg-[#f4c86a]/25 blur-2xl" />
-      <div className="relative">
-        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-[22px] bg-white text-[#0d6b54] shadow-xl home-float">
-          <PawPrint size={30} />
-        </div>
-        <h3 className="mt-4 text-lg font-black text-[#12382f]">{title}</h3>
-      </div>
+    <div className={`group relative min-h-[220px] overflow-hidden rounded-[24px] bg-[#e6f5eb] shadow-lg ring-1 ring-[#e2eadf] ${className}`}>
+      <img src={src} alt={alt} className="absolute inset-0 h-full w-full object-cover object-center transition duration-700 group-hover:scale-105" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#0b352b]/10 via-transparent to-white/5" />
     </div>
   );
 }
@@ -150,26 +152,7 @@ export default function HomePage() {
 
         <section className="px-5 pb-16 md:px-8">
           <div className="home-animate-fade mx-auto grid max-w-[1880px] overflow-hidden rounded-[34px] bg-white shadow-xl ring-1 ring-[#e2eadf] lg:grid-cols-[.9fr_1.1fr]">
-            <div className="relative overflow-hidden bg-[linear-gradient(135deg,#e6f5eb,#fff8e6)] p-8 md:p-10">
-              <div className="absolute -left-10 -top-10 h-44 w-44 rounded-full bg-[#0d8b67]/10 blur-2xl" />
-              <div className="absolute -bottom-10 -right-10 h-44 w-44 rounded-full bg-[#f4c86a]/25 blur-2xl" />
-              <div className="relative flex h-full min-h-[360px] flex-col justify-center rounded-[28px] border border-white/70 bg-white/55 p-8 backdrop-blur">
-                <span className="inline-flex w-fit items-center gap-2 rounded-full bg-[#0d6b54] px-4 py-2 text-sm font-black text-white">
-                  <ShieldCheck size={17} /> Agendamento seguro
-                </span>
-                <h2 className="mt-6 text-4xl font-black leading-tight text-[#12382f] md:text-5xl">
-                  Agende pela área do cliente.
-                </h2>
-                <p className="mt-4 max-w-xl text-lg leading-relaxed text-slate-600">
-                  Para proteger seus dados e organizar melhor o atendimento, o agendamento é feito após login.
-                </p>
-                <div className="mt-7 flex flex-wrap gap-3">
-                  <Link to="/cliente-login" className="inline-flex items-center gap-3 rounded-2xl bg-[#0d6b54] px-6 py-4 font-black text-white shadow-lg transition hover:-translate-y-1 hover:bg-[#095642]"><LogIn size={20} /> Entrar para agendar</Link>
-                  <Link to="/cliente-login" className="inline-flex items-center gap-3 rounded-2xl border border-[#0d6b54]/20 bg-white px-6 py-4 font-black text-[#0d6b54] shadow-sm transition hover:-translate-y-1"><UserPlus size={20} /> Criar conta</Link>
-                  <a href={whatsappUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-3 rounded-2xl border border-[#25D366]/30 bg-[#e9fff2] px-6 py-4 font-black text-[#128c4b] shadow-sm transition hover:-translate-y-1"><Phone size={20} /> WhatsApp</a>
-                </div>
-              </div>
-            </div>
+            <HomeImage src={bookingImage} alt="Banho pet SPA do Doguinho" className="min-h-[420px] rounded-none" />
 
             <div className="p-8 md:p-10">
               <h2 className="text-3xl font-black text-[#0d6b54]">Como funciona?</h2>
@@ -191,6 +174,11 @@ export default function HomePage() {
               <div className="mt-6 grid gap-3 text-sm font-bold text-slate-600 md:grid-cols-3">
                 {["Dados protegidos", "Histórico do pet", "Agenda organizada"].map((item) => <div key={item} className="flex items-center gap-2"><CheckCircle2 size={18} className="text-[#0d6b54]" /> {item}</div>)}
               </div>
+              <div className="mt-7 flex flex-wrap gap-3">
+                <Link to="/cliente-login" className="inline-flex items-center gap-3 rounded-2xl bg-[#0d6b54] px-6 py-4 font-black text-white shadow-lg transition hover:-translate-y-1 hover:bg-[#095642]"><LogIn size={20} /> Entrar para agendar</Link>
+                <Link to="/cliente-login" className="inline-flex items-center gap-3 rounded-2xl border border-[#0d6b54]/20 bg-white px-6 py-4 font-black text-[#0d6b54] shadow-sm transition hover:-translate-y-1"><UserPlus size={20} /> Criar conta</Link>
+                <a href={whatsappUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-3 rounded-2xl border border-[#25D366]/30 bg-[#e9fff2] px-6 py-4 font-black text-[#128c4b] shadow-sm transition hover:-translate-y-1"><Phone size={20} /> WhatsApp</a>
+              </div>
             </div>
           </div>
         </section>
@@ -199,7 +187,13 @@ export default function HomePage() {
           <div className="mx-auto max-w-[1760px] text-center">
             <h2 className="home-animate-fade text-3xl font-black text-[#0d6b54] md:text-4xl">Nossa galeria</h2>
             <div className="mt-5 flex flex-wrap justify-center gap-2">{["Todos", "Banho", "Tosa", "Antes e Depois", "Clientes"].map((filter) => <span key={filter} className="rounded-full bg-[#edf2ec] px-5 py-2 text-sm font-black text-slate-600 transition hover:-translate-y-1 hover:bg-[#e7f4ed]">{filter}</span>)}</div>
-            <div className="mt-8 grid gap-5 md:grid-cols-4">{[1, 2, 3, 4].map((item, index) => <div key={item} className="home-card-animate" style={{ animationDelay: `${index * 80}ms` }}><ImagePlaceholder title={`Imagem ${item}`} /></div>)}</div>
+            <div className="mt-8 grid gap-5 md:grid-cols-4">
+              {homeGalleryImages.map((image, index) => (
+                <div key={image} className="home-card-animate" style={{ animationDelay: `${index * 80}ms` }}>
+                  <HomeImage src={image} alt={`Galeria SPA do Doguinho ${index + 1}`} className="min-h-[260px]" />
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
