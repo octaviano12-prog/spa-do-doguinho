@@ -185,12 +185,17 @@ export default function HomePage() {
 
         <section className="px-5 pb-16 md:px-8">
           <div className="mx-auto max-w-[1760px] text-center">
-            <h2 className="home-animate-fade text-3xl font-black text-[#0d6b54] md:text-4xl">Nossa galeria</h2>
-            <div className="mt-5 flex flex-wrap justify-center gap-2">{["Todos", "Banho", "Tosa", "Antes e Depois", "Clientes"].map((filter) => <span key={filter} className="rounded-full bg-[#edf2ec] px-5 py-2 text-sm font-black text-slate-600 transition hover:-translate-y-1 hover:bg-[#e7f4ed]">{filter}</span>)}</div>
+            <span className="inline-flex items-center gap-2 rounded-full bg-[#e7f4ed] px-5 py-2 text-sm font-black text-[#0d6b54]">
+              <Sparkles size={16} /> Momentos especiais
+            </span>
+            <h2 className="home-animate-fade mt-5 text-3xl font-black text-[#0d6b54] md:text-4xl">Pets que passaram por aqui</h2>
+            <p className="mx-auto mt-3 max-w-2xl text-slate-600">
+              Uma prévia carinhosa da experiência SPA do Doguinho: banho, tosa, cuidado e muito amor.
+            </p>
             <div className="mt-8 grid gap-5 md:grid-cols-4">
               {homeGalleryImages.map((image, index) => (
                 <div key={image} className="home-card-animate" style={{ animationDelay: `${index * 80}ms` }}>
-                  <HomeImage src={image} alt={`Galeria SPA do Doguinho ${index + 1}`} className="min-h-[260px]" />
+                  <HomeImage src={image} alt={`Pet atendido no SPA do Doguinho ${index + 1}`} className="min-h-[260px]" />
                 </div>
               ))}
             </div>
