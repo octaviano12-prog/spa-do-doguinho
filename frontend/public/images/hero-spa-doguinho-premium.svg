@@ -1,0 +1,110 @@
+<svg width="1400" height="1000" viewBox="0 0 1400 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bg1" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(930 340) rotate(127) scale(720 650)">
+      <stop offset="0" stop-color="#2DDC83" stop-opacity="0.55"/>
+      <stop offset="0.42" stop-color="#0B5F3D" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#03120B"/>
+    </radialGradient>
+    <radialGradient id="gold" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1050 230) rotate(116) scale(410 350)">
+      <stop stop-color="#FFE9A3" stop-opacity="0.8"/>
+      <stop offset="0.55" stop-color="#EAB308" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#EAB308" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="card" x1="255" y1="114" x2="1180" y2="896" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0B3B24" stop-opacity="0.75"/>
+      <stop offset="0.52" stop-color="#0C2E22" stop-opacity="0.7"/>
+      <stop offset="1" stop-color="#07120C" stop-opacity="0.78"/>
+    </linearGradient>
+    <linearGradient id="dog" x1="600" y1="248" x2="844" y2="862" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFE1A3"/>
+      <stop offset="0.36" stop-color="#D6923F"/>
+      <stop offset="1" stop-color="#7A3D16"/>
+    </linearGradient>
+    <linearGradient id="bandana" x1="520" y1="650" x2="895" y2="835" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#063D25"/>
+      <stop offset="1" stop-color="#0BA765"/>
+    </linearGradient>
+    <filter id="shadow" x="140" y="70" width="1120" height="900" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="34" stdDeviation="36" flood-color="#000000" flood-opacity="0.45"/>
+    </filter>
+    <filter id="glow" x="320" y="40" width="780" height="910" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="45" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.1 0 0 0 0 1 0 0 0 0 0.55 0 0 0 0.7 0"/>
+      <feBlend in="SourceGraphic" mode="screen"/>
+    </filter>
+  </defs>
+
+  <rect width="1400" height="1000" rx="56" fill="#020D08"/>
+  <rect width="1400" height="1000" rx="56" fill="url(#bg1)"/>
+  <rect width="1400" height="1000" rx="56" fill="url(#gold)"/>
+
+  <g opacity="0.18">
+    <circle cx="210" cy="190" r="7" fill="#BBF7D0"/>
+    <circle cx="1180" cy="140" r="8" fill="#FDE68A"/>
+    <circle cx="1125" cy="760" r="7" fill="#BBF7D0"/>
+    <circle cx="325" cy="790" r="5" fill="#FDE68A"/>
+    <path d="M144 372c24-33 62-47 104-37-14 42-46 67-93 72l-11-35Z" fill="#22C55E"/>
+    <path d="M1190 380c-39-6-68-31-82-72 43-11 81 5 103 39l-21 33Z" fill="#22C55E"/>
+    <path d="M203 633c-7 43-32 73-76 87-11-44 6-82 43-104l33 17Z" fill="#86EFAC"/>
+    <path d="M1245 640c38 23 54 61 43 104-43-14-69-44-76-87l33-17Z" fill="#86EFAC"/>
+  </g>
+
+  <g opacity="0.12" stroke="#FDE68A" stroke-width="2">
+    <path d="M138 128h1124"/>
+    <path d="M138 872h1124"/>
+    <path d="M86 500h1260"/>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="190" y="105" width="1020" height="790" rx="64" fill="url(#card)" stroke="#FDE68A" stroke-opacity="0.22" stroke-width="2"/>
+    <rect x="226" y="141" width="948" height="718" rx="48" fill="#FFFFFF" fill-opacity="0.05" stroke="#FFFFFF" stroke-opacity="0.12"/>
+  </g>
+
+  <g filter="url(#glow)" opacity="0.9">
+    <ellipse cx="712" cy="575" rx="330" ry="360" fill="#22C55E" opacity="0.20"/>
+    <ellipse cx="700" cy="420" rx="240" ry="210" fill="#FDE68A" opacity="0.10"/>
+  </g>
+
+  <g transform="translate(0 -10)">
+    <ellipse cx="705" cy="850" rx="300" ry="54" fill="#000" opacity="0.28"/>
+
+    <path d="M449 470C418 333 478 212 585 222c61 6 93 45 119 100 31-57 79-97 143-93 106 7 155 133 111 264-30 88-78 171-158 202-54 21-129 19-184-4-88-37-145-123-167-221Z" fill="url(#dog)"/>
+    <path d="M536 378c-72-16-130 40-124 122 4 58 38 93 90 105 51 12 86-21 100-78 18-73 6-133-66-149Z" fill="#6B3514" opacity="0.85"/>
+    <path d="M871 381c76-12 130 50 117 131-9 57-45 89-99 96-52 7-84-30-93-88-12-74 2-129 75-139Z" fill="#6B3514" opacity="0.85"/>
+
+    <ellipse cx="704" cy="440" rx="150" ry="170" fill="#FFEBC2"/>
+    <path d="M578 474c26 56 72 88 126 88s100-32 126-88c9 96-41 172-126 172S568 570 578 474Z" fill="#FFF8E8" opacity="0.9"/>
+    <ellipse cx="646" cy="432" rx="18" ry="22" fill="#071924"/>
+    <ellipse cx="762" cy="432" rx="18" ry="22" fill="#071924"/>
+    <ellipse cx="704" cy="500" rx="38" ry="31" fill="#2A130C"/>
+    <path d="M655 555c24 35 74 45 101 0" stroke="#2A130C" stroke-width="13" stroke-linecap="round"/>
+    <path d="M686 530c12 11 24 11 36 0" stroke="#2A130C" stroke-width="9" stroke-linecap="round" opacity="0.55"/>
+
+    <path d="M504 660c92 66 299 66 400 0-13 110-81 193-199 193-116 0-184-83-201-193Z" fill="url(#bandana)"/>
+    <path d="M577 684c68 46 189 47 256 0-38 60-80 96-128 126-48-30-91-66-128-126Z" fill="#0B5F3D" opacity="0.9"/>
+    <path d="M681 724c11-12 28-12 39 0 10-12 28-12 38 0 12 14 7 35-38 62-46-27-51-48-39-62Z" fill="#FDE68A"/>
+  </g>
+
+  <g opacity="0.95">
+    <circle cx="410" cy="640" r="45" fill="#EFFFF7" opacity="0.94"/>
+    <circle cx="990" cy="615" r="38" fill="#EFFFF7" opacity="0.8"/>
+    <circle cx="370" cy="565" r="18" fill="#BBF7D0" opacity="0.82"/>
+    <circle cx="1025" cy="535" r="16" fill="#FDE68A" opacity="0.72"/>
+    <circle cx="500" cy="265" r="12" fill="#BBF7D0" opacity="0.72"/>
+    <circle cx="905" cy="295" r="15" fill="#FDE68A" opacity="0.7"/>
+  </g>
+
+  <g transform="translate(170 720)">
+    <rect width="370" height="110" rx="30" fill="#FFF9E9" filter="url(#shadow)"/>
+    <text x="32" y="48" fill="#064E3B" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="900">Banho • Tosa • Veterinária</text>
+    <text x="32" y="80" fill="#64748B" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">Cuidado premium para seu doguinho</text>
+    <circle cx="326" cy="56" r="28" fill="#16A34A"/>
+    <path d="M326 42c10 0 16 7 16 16 0 13-16 23-16 23s-16-10-16-23c0-9 6-16 16-16Z" fill="#FEF3C7"/>
+  </g>
+
+  <g transform="translate(875 170)">
+    <rect width="275" height="92" rx="28" fill="#052E1D" fill-opacity="0.82" stroke="#FDE68A" stroke-opacity="0.35"/>
+    <text x="28" y="42" fill="#FDE68A" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="900">Atendimento 5 estrelas</text>
+    <text x="28" y="68" fill="#D1FAE5" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">Limpo, cheiroso e feliz ✨</text>
+  </g>
+</svg>
