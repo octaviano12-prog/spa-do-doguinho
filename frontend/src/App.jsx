@@ -24,6 +24,7 @@ import PetsPage from "./pages/admin/PetsPage";
 import ServicosPage from "./pages/admin/ServicosPage";
 import AgendamentosPage from "./pages/admin/AgendamentosPage";
 import FinanceiroPage from "./pages/admin/FinanceiroPage";
+import CaixaPage from "./pages/admin/CaixaPage";
 import EstoquePage from "./pages/admin/EstoquePage";
 import VacinasPage from "./pages/admin/VacinasPage";
 import GaleriaPage from "./pages/admin/GaleriaPage";
@@ -61,6 +62,7 @@ export default function App() {
         <Route path="/admin/servicos" element={<PrivateRoute><ServicosPage /></PrivateRoute>} />
         <Route path="/admin/agendamentos" element={<PrivateRoute><AgendamentosPage /></PrivateRoute>} />
         <Route path="/admin/financeiro" element={<PrivateRoute><FinanceiroPage /></PrivateRoute>} />
+        <Route path="/admin/caixa" element={<PrivateRoute><CaixaPage /></PrivateRoute>} />
         <Route path="/admin/estoque" element={<PrivateRoute><EstoquePage /></PrivateRoute>} />
         <Route path="/admin/vacinas" element={<PrivateRoute><VacinasPage /></PrivateRoute>} />
         <Route path="/admin/galeria" element={<PrivateRoute><GaleriaPage /></PrivateRoute>} />
