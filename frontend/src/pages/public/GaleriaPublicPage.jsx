@@ -2,41 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Camera, Heart, Image as ImageIcon, PawPrint, Sparkles, Star } from "lucide-react";
 import { motion } from "framer-motion";
 import PublicLayout from "../../components/public/PublicLayout";
+import { fallbackGallery, publicPhotos } from "../../data/publicPhotos";
 
 const API_PUBLIC = "https://spadodoguinho.com.br/api/public";
-
-const fallbackGallery = [
-  {
-    id: "fallback-1",
-    title: "Banho premium",
-    description: "Cuidado completo, carinho e acabamento especial.",
-    image_url: "/images/banho-tosa.svg"
-  },
-  {
-    id: "fallback-2",
-    title: "Vacinação e bem-estar",
-    description: "Cuidado preventivo e atenção para seu pet.",
-    image_url: "/images/vacina-pet.svg"
-  },
-  {
-    id: "fallback-3",
-    title: "Spa relaxante",
-    description: "Bem-estar, hidratação e pele protegida.",
-    image_url: "/images/spa-pet.svg"
-  },
-  {
-    id: "fallback-4",
-    title: "Área do cliente",
-    description: "Histórico, pets e agendamentos em um só lugar.",
-    image_url: "/images/cliente-premium.svg"
-  },
-  {
-    id: "fallback-5",
-    title: "Doguinho feliz",
-    description: "Uma experiência premium para cada atendimento.",
-    image_url: "/images/hero-doguinho.svg"
-  }
-];
 
 export default function GaleriaPublicPage() {
   const [gallery, setGallery] = useState([]);
@@ -85,8 +53,8 @@ export default function GaleriaPublicPage() {
               </p>
             </motion.div>
 
-            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-white/10 border border-white/10 rounded-[42px] p-6 shadow-2xl backdrop-blur-xl">
-              <img src="/images/hero-doguinho.svg" alt="Galeria SPA do Doguinho" className="rounded-[34px] w-full shadow-2xl" />
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-white/10 border border-white/10 rounded-[42px] p-4 shadow-2xl backdrop-blur-xl">
+              <img src={publicPhotos.towel} alt="Galeria SPA do Doguinho" className="h-[420px] w-full rounded-[34px] object-cover shadow-2xl" />
             </motion.div>
           </div>
         </section>
@@ -94,7 +62,7 @@ export default function GaleriaPublicPage() {
         <section className="max-w-7xl mx-auto px-6 py-20">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
             {[
-              ["Fotos reais", "Registros do dia a dia", ImageIcon],
+              ["Fotos selecionadas", "Visual acolhedor", ImageIcon],
               ["Pets felizes", "Cuidado com carinho", Heart],
               ["Resultado premium", "Acabamento especial", Sparkles]
             ].map(([title, text, Icon], index) => (
@@ -109,7 +77,7 @@ export default function GaleriaPublicPage() {
           <div className="flex items-end justify-between gap-6 mb-10">
             <div>
               <h2 className="text-4xl md:text-5xl font-black text-white">Galeria</h2>
-              <p className="text-white/60 mt-3">Imagens integradas ao painel administrativo.</p>
+              <p className="text-white/60 mt-3">Registros do painel e fotos de apoio para manter a página sempre bonita.</p>
             </div>
 
             <div className="hidden md:block bg-white/10 border border-white/10 rounded-2xl px-6 py-4 text-white">
