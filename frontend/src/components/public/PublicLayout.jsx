@@ -22,10 +22,10 @@ export default function PublicLayout({ children }) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-[#fbf7ef] text-[#10231a]">
-      <header className="fixed left-0 right-0 top-0 z-50 px-3 pt-3 md:px-6">
-        <div className="mx-auto max-w-[1680px] overflow-hidden rounded-[24px] border border-emerald-900/10 bg-white/82 shadow-[0_16px_45px_rgba(15,35,26,.14)] backdrop-blur-2xl">
-          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(15,122,59,.08),transparent_42%,rgba(245,214,107,.12))]" />
+    <div className="min-h-screen overflow-x-hidden bg-[#f2eadc] text-[#10231a]">
+      <header className="fixed left-0 right-0 top-0 z-50 bg-[#eadfcd]/92 px-3 py-3 shadow-[0_10px_30px_rgba(15,35,26,.10)] backdrop-blur-2xl md:px-6">
+        <div className="mx-auto max-w-[1680px] overflow-hidden rounded-[24px] border border-emerald-900/10 bg-[#eadfcd]/78 shadow-[0_14px_38px_rgba(15,35,26,.10)] backdrop-blur-2xl">
+          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(15,122,59,.07),transparent_42%,rgba(194,142,48,.10))]" />
           <div className="relative flex min-h-[66px] items-center justify-between gap-3 px-4 2xl:px-5">
             <Link to="/" className="group flex w-[235px] min-w-0 shrink-0 items-center gap-3 xl:w-[245px] 2xl:w-[270px]" onClick={() => setMobileOpen(false)}>
               <BrandLogo />
@@ -37,7 +37,7 @@ export default function PublicLayout({ children }) {
             </Link>
 
             <nav className="hidden min-w-0 flex-1 items-center justify-center xl:flex">
-              <div className="flex items-center gap-1 rounded-[20px] border border-emerald-900/8 bg-[#f7fbf6]/80 px-2 py-1.5 shadow-inner">
+              <div className="flex items-center gap-1 rounded-[20px] border border-emerald-900/8 bg-white/66 px-2 py-1.5 shadow-inner backdrop-blur">
                 {navLinks.map((item) => {
                   const Icon = item.icon;
                   return <NavLink key={item.to} to={item.to} className={({ isActive }) => `relative flex items-center gap-2 whitespace-nowrap rounded-xl px-3 py-2 text-[12px] font-black transition 2xl:px-4 2xl:text-[13px] ${isActive ? "bg-emerald-100 text-emerald-900" : "text-slate-600 hover:bg-white hover:text-emerald-900"}`}>{({ isActive }) => <><Icon size={13} className={isActive ? "text-emerald-700" : "text-slate-400"} /><span>{item.label}</span>{isActive && <span className="absolute -bottom-1.5 left-4 right-4 h-[2px] rounded-full bg-emerald-500" />}</>}</NavLink>;
@@ -47,18 +47,18 @@ export default function PublicLayout({ children }) {
 
             <div className="hidden w-[300px] shrink-0 items-center justify-end gap-2 lg:flex xl:w-[315px] 2xl:w-[345px]">
               <Link to="/agendamento" className="flex items-center gap-2 whitespace-nowrap rounded-xl border border-emerald-500/20 bg-[#0f7a3b] px-3.5 py-2.5 text-[13px] font-black text-white shadow-lg shadow-emerald-900/15 transition hover:-translate-y-0.5 hover:bg-[#0b6631]"><CalendarDays size={15} /> Agendar</Link>
-              <Link to="/cliente-login" className="flex items-center gap-2 whitespace-nowrap rounded-xl border border-emerald-900/10 bg-white px-3.5 py-2.5 text-[13px] font-black text-[#10231a] shadow-sm transition hover:-translate-y-0.5 hover:border-emerald-600"><User size={15} /> Cliente</Link>
-              <Link to="/login" className="flex items-center gap-2 whitespace-nowrap rounded-xl border border-emerald-900/10 bg-white px-3.5 py-2.5 text-[13px] font-black text-[#10231a] shadow-sm transition hover:-translate-y-0.5 hover:border-emerald-600"><ShieldCheck size={15} /> Admin</Link>
+              <Link to="/cliente-login" className="flex items-center gap-2 whitespace-nowrap rounded-xl border border-emerald-900/10 bg-white/78 px-3.5 py-2.5 text-[13px] font-black text-[#10231a] shadow-sm transition hover:-translate-y-0.5 hover:border-emerald-600"><User size={15} /> Cliente</Link>
+              <Link to="/login" className="flex items-center gap-2 whitespace-nowrap rounded-xl border border-emerald-900/10 bg-white/78 px-3.5 py-2.5 text-[13px] font-black text-[#10231a] shadow-sm transition hover:-translate-y-0.5 hover:border-emerald-600"><ShieldCheck size={15} /> Admin</Link>
             </div>
 
-            <button type="button" onClick={() => setMobileOpen((current) => !current)} className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-emerald-900/10 bg-white p-3 text-[#10231a] shadow-sm lg:hidden">{mobileOpen ? <X /> : <Menu />}</button>
+            <button type="button" onClick={() => setMobileOpen((current) => !current)} className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-emerald-900/10 bg-white/80 p-3 text-[#10231a] shadow-sm lg:hidden">{mobileOpen ? <X /> : <Menu />}</button>
           </div>
         </div>
 
-        {mobileOpen && <div className="mx-auto mt-3 max-w-[1680px] rounded-[28px] border border-emerald-900/10 bg-white/96 px-4 py-5 text-[#10231a] shadow-2xl backdrop-blur-2xl lg:hidden"><nav className="grid gap-2 font-bold">{navLinks.map((item) => <NavLink key={item.to} to={item.to} onClick={() => setMobileOpen(false)} className={({ isActive }) => `rounded-2xl px-5 py-4 transition ${isActive ? "bg-emerald-700 text-white" : "text-slate-700 hover:bg-emerald-50"}`}>{item.label}</NavLink>)}<Link to="/agendamento" onClick={() => setMobileOpen(false)} className="mt-2 flex items-center justify-center gap-2 rounded-2xl bg-emerald-700 px-5 py-4 font-black text-white shadow-lg transition hover:bg-emerald-800"><CalendarDays size={18} /> Agendar atendimento</Link><Link to="/cliente-login" onClick={() => setMobileOpen(false)} className="flex items-center justify-center gap-2 rounded-2xl border border-emerald-900/10 bg-emerald-50 px-5 py-4 font-black text-emerald-900 transition hover:bg-emerald-100"><User size={18} /> Área do Cliente</Link><Link to="/login" onClick={() => setMobileOpen(false)} className="flex items-center justify-center gap-2 rounded-2xl border border-emerald-900/10 bg-emerald-50 px-5 py-4 font-black text-emerald-900 transition hover:bg-emerald-100"><ShieldCheck size={18} /> Área Admin</Link></nav></div>}
+        {mobileOpen && <div className="mx-auto mt-3 max-w-[1680px] rounded-[28px] border border-emerald-900/10 bg-[#eadfcd]/96 px-4 py-5 text-[#10231a] shadow-2xl backdrop-blur-2xl lg:hidden"><nav className="grid gap-2 font-bold">{navLinks.map((item) => <NavLink key={item.to} to={item.to} onClick={() => setMobileOpen(false)} className={({ isActive }) => `rounded-2xl px-5 py-4 transition ${isActive ? "bg-emerald-700 text-white" : "text-slate-700 hover:bg-white/70"}`}>{item.label}</NavLink>)}<Link to="/agendamento" onClick={() => setMobileOpen(false)} className="mt-2 flex items-center justify-center gap-2 rounded-2xl bg-emerald-700 px-5 py-4 font-black text-white shadow-lg transition hover:bg-emerald-800"><CalendarDays size={18} /> Agendar atendimento</Link><Link to="/cliente-login" onClick={() => setMobileOpen(false)} className="flex items-center justify-center gap-2 rounded-2xl border border-emerald-900/10 bg-white/70 px-5 py-4 font-black text-emerald-900 transition hover:bg-white"><User size={18} /> Área do Cliente</Link><Link to="/login" onClick={() => setMobileOpen(false)} className="flex items-center justify-center gap-2 rounded-2xl border border-emerald-900/10 bg-white/70 px-5 py-4 font-black text-emerald-900 transition hover:bg-white"><ShieldCheck size={18} /> Área Admin</Link></nav></div>}
       </header>
 
-      <main className="pt-[92px]">{children}</main>
+      <main className="pt-[104px]">{children}</main>
       <Link to="/agendamento" className="fixed bottom-5 right-5 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-600 text-white shadow-xl shadow-emerald-900/25 transition hover:scale-105 hover:bg-emerald-700 md:h-14 md:w-14" aria-label="Agendar atendimento"><CalendarDays size={24} /></Link>
 
       <footer className="relative overflow-hidden border-t border-emerald-900/10 bg-[#071b12] text-white">
