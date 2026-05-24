@@ -21,6 +21,8 @@ import PublicLayout from "../../components/public/PublicLayout";
 const whatsappUrl =
   "https://wa.me/5518997493722?text=Olá! Gostaria de agendar um atendimento no SPA do Doguinho.";
 
+const heroImage = "/images/hero-doguinho-card.webp";
+
 const services = [
   {
     icon: Bath,
@@ -59,6 +61,19 @@ const testimonials = [
   ["O agendamento online facilitou demais. Visual lindo e serviço excelente.", "Tutora feliz"],
   ["Ambiente organizado, bonito e com muito cuidado pelos pets.", "Cliente premium"]
 ];
+
+function FullImageCard({ src, alt, className = "" }) {
+  return (
+    <div className={`relative min-h-[520px] overflow-hidden rounded-[34px] bg-[#dff3ea] shadow-[0_35px_90px_rgba(13,107,84,.18)] ring-1 ring-white/70 ${className}`}>
+      <img
+        src={src}
+        alt={alt}
+        className="absolute inset-0 h-full w-full object-cover object-center"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#12382f]/10 via-transparent to-white/5" />
+    </div>
+  );
+}
 
 function ImagePlaceholder({ title = "Imagem do pet", tall = false }) {
   return (
@@ -118,7 +133,7 @@ export default function HomePage() {
             </div>
 
             <div className="relative">
-              <ImagePlaceholder title="Imagem principal do doguinho" tall />
+              <FullImageCard src={heroImage} alt="Doguinho no SPA" />
               <div className="absolute left-2 top-8 hidden rounded-[26px] bg-white/90 p-4 shadow-2xl backdrop-blur md:block">
                 <div className="flex items-center gap-3">
                   <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#e6f5eb] text-[#0d6b54]"><Heart fill="currentColor" /></div>
