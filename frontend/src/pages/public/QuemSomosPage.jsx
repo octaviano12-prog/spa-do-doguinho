@@ -1,8 +1,33 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Award, CalendarDays, CheckCircle, Heart, MessageCircle, PawPrint, ShieldCheck, Sparkles, Star, Users } from "lucide-react";
+import {
+  Award,
+  Bath,
+  CalendarCheck,
+  CalendarDays,
+  CheckCircle2,
+  Heart,
+  LogIn,
+  MessageCircle,
+  PawPrint,
+  Phone,
+  ShieldCheck,
+  Sparkles,
+  Star,
+  Users
+} from "lucide-react";
 import PublicLayout from "../../components/public/PublicLayout";
-import { publicPhotos } from "../../data/publicPhotos";
+
+const whatsappUrl =
+  "https://wa.me/5518997493722?text=Olá! Gostaria de conhecer melhor o SPA do Doguinho.";
+
+const heroImage = "/images/hero-doguinho-card.webp";
+const aboutImage = "/images/banho-pet-home.webp";
+const galleryImages = [
+  "/images/galeria-pet-01.webp",
+  "/images/galeria-pet-02.webp",
+  "/images/galeria-pet-03.webp"
+];
 
 const values = [
   { icon: Heart, title: "Carinho em primeiro lugar", text: "Cada pet é recebido com paciência, respeito e atenção aos sinais de conforto." },
@@ -21,45 +46,117 @@ const steps = [
 export default function QuemSomosPage() {
   return (
     <PublicLayout>
-      <main className="overflow-hidden bg-[#fbf7ef] text-[#10231a]">
-        <section className="relative bg-[#f5efe4] px-5 py-16 md:px-8 md:py-24">
-          <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-[#06140f] to-transparent opacity-10" />
-          <div className="relative mx-auto grid max-w-[1680px] gap-10 xl:grid-cols-[.92fr_1.08fr] xl:items-center">
-            <div className="max-w-3xl">
-              <span className="inline-flex items-center gap-2 rounded-full border border-emerald-900/10 bg-white px-5 py-2 text-sm font-black text-emerald-900 shadow-sm"><PawPrint size={16} /> Sobre o SPA do Doguinho</span>
-              <h1 className="mt-7 text-5xl font-black leading-[.95] md:text-7xl">Um espaço pensado para cuidar do seu pet como família.</h1>
-              <p className="mt-6 max-w-2xl text-lg leading-relaxed text-slate-600 md:text-xl">Unimos estética animal, bem-estar, organização e atendimento humano em uma experiência segura para pets e tutores.</p>
-              <div className="mt-9 flex flex-wrap gap-4">
-                <Link to="/agendamento" className="inline-flex items-center gap-3 rounded-2xl bg-[#0f7a3b] px-7 py-4 font-black text-white shadow-[0_20px_45px_rgba(15,122,59,.24)] transition hover:bg-[#0b6631]"><CalendarDays size={19} /> Agendar atendimento</Link>
-                <a href="https://wa.me/5518997493722" target="_blank" rel="noreferrer" className="inline-flex items-center gap-3 rounded-2xl border border-slate-300 bg-white px-7 py-4 font-black text-[#10231a] shadow-sm transition hover:border-emerald-700"><MessageCircle size={19} /> Falar no WhatsApp</a>
-              </div>
-            </div>
-            <div className="rounded-[44px] bg-white p-4 shadow-2xl ring-1 ring-black/5">
-              <img src={publicPhotos.heroBath} alt="SPA do Doguinho" className="h-[430px] w-full rounded-[34px] object-cover" />
-              <div className="mt-4 grid grid-cols-3 gap-3">
-                {[["+3.500", "pets"], ["5★", "experiência"], ["100%", "carinho"]].map(([number, label]) => <div key={label} className="rounded-3xl bg-[#f5efe4] p-5 text-center"><div className="text-2xl font-black text-[#0f7a3b]">{number}</div><div className="mt-1 text-xs font-black uppercase text-slate-500">{label}</div></div>)}
+      <main className="overflow-hidden bg-[#fffdf7] text-[#12382f]">
+        <section className="relative min-h-[560px] overflow-hidden bg-[#e9f6ee]">
+          <img src={heroImage} alt="Sobre o SPA do Doguinho" className="home-hero-image absolute inset-0 h-full w-full object-cover object-center" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#edf8f1]/97 via-[#edf8f1]/78 to-white/10" />
+          <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#fffdf7] to-transparent" />
+
+          <div className="relative mx-auto flex min-h-[560px] max-w-[1880px] items-center px-6 py-12 md:px-10">
+            <div className="max-w-4xl">
+              <span className="home-animate-fade inline-flex items-center gap-2 rounded-full bg-white/85 px-5 py-2 text-sm font-black text-[#0d6b54] shadow-sm backdrop-blur">
+                <PawPrint size={16} /> Sobre o SPA do Doguinho
+              </span>
+              <h1 className="home-animate-fade-delay-1 mt-6 text-4xl font-black leading-[.95] tracking-[-.05em] text-[#12382f] sm:text-5xl md:text-6xl xl:text-7xl">
+                Um espaço criado para cuidar do seu pet
+                <span className="home-shimmer-text block font-serif italic">como parte da família.</span>
+              </h1>
+              <p className="home-animate-fade-delay-2 mt-6 max-w-2xl text-base leading-relaxed text-slate-700 md:text-lg">
+                Unimos estética animal, bem-estar, segurança e atendimento humano em uma experiência bonita, tranquila e confiável para pets e tutores.
+              </p>
+              <div className="home-animate-fade-delay-3 mt-8 flex flex-wrap gap-4">
+                <Link to="/cliente-login" className="home-pulse-glow inline-flex items-center gap-3 rounded-2xl bg-[#0d6b54] px-6 py-4 font-black text-white shadow-xl transition hover:-translate-y-1 hover:bg-[#095642]"><LogIn size={20} /> Entrar para agendar</Link>
+                <a href={whatsappUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-3 rounded-2xl border border-[#25D366]/30 bg-[#e9fff2] px-6 py-4 font-black text-[#128c4b] shadow-sm transition hover:-translate-y-1"><MessageCircle size={20} /> Falar no WhatsApp</a>
               </div>
             </div>
           </div>
         </section>
 
-        <section className="mx-auto grid max-w-[1680px] gap-8 px-5 py-16 md:px-8 xl:grid-cols-[1fr_1fr]">
-          <div className="rounded-[36px] bg-white p-8 shadow-xl ring-1 ring-black/5 md:p-10">
-            <img src={publicPhotos.towel} alt="Spa pet relaxante" className="mb-8 h-[360px] w-full rounded-[28px] object-cover" />
-            <span className="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-5 py-2 font-black text-emerald-900"><Award size={18} /> Nossa essência</span>
-            <h2 className="mt-6 text-4xl font-black leading-tight md:text-5xl">Mais do que banho e tosa: uma experiência de confiança.</h2>
-            <p className="mt-5 text-lg leading-relaxed text-slate-600">Cada atendimento é pensado para transmitir segurança ao tutor e conforto ao animal, desde a chegada até a finalização.</p>
-            <div className="mt-8 space-y-4">{steps.map((step) => <div key={step} className="flex items-center gap-4 rounded-2xl border border-slate-100 bg-slate-50 p-5"><CheckCircle className="text-emerald-700" /><span className="font-bold text-slate-700">{step}</span></div>)}</div>
+        <section className="relative -mt-8 px-5 md:px-8">
+          <div className="mx-auto grid max-w-[1880px] gap-5 rounded-[34px] bg-white p-5 shadow-xl ring-1 ring-[#e2eadf] md:grid-cols-3 md:p-6">
+            {[["+500", "pets felizes"], ["5★", "experiência premium"], ["100%", "cuidado com amor"]].map(([number, label], index) => (
+              <div key={label} className="home-card-animate rounded-[26px] bg-[#fffdf7] p-7 text-center ring-1 ring-[#e2eadf]" style={{ animationDelay: `${index * 90}ms` }}>
+                <div className="text-4xl font-black text-[#0d6b54]">{number}</div>
+                <div className="mt-2 text-sm font-black uppercase tracking-[.12em] text-slate-500">{label}</div>
+              </div>
+            ))}
           </div>
-          <div className="grid gap-5 sm:grid-cols-2">
-            {values.map((item) => { const Icon = item.icon; return <div key={item.title} className="rounded-[30px] bg-white p-7 shadow-xl ring-1 ring-black/5 transition hover:-translate-y-1"><Icon className="mb-5 text-emerald-700" size={38} /><h3 className="text-2xl font-black">{item.title}</h3><p className="mt-3 leading-relaxed text-slate-600">{item.text}</p></div>; })}
+        </section>
+
+        <section className="px-5 py-16 md:px-8">
+          <div className="mx-auto grid max-w-[1880px] gap-8 lg:grid-cols-[.95fr_1.05fr] lg:items-center">
+            <div className="home-animate-fade overflow-hidden rounded-[34px] bg-white shadow-xl ring-1 ring-[#e2eadf]">
+              <img src={aboutImage} alt="Banho pet no SPA do Doguinho" className="h-[520px] w-full object-cover object-center" />
+            </div>
+            <div>
+              <span className="inline-flex items-center gap-2 rounded-full bg-[#e7f4ed] px-5 py-2 text-sm font-black text-[#0d6b54]"><Award size={18} /> Nossa essência</span>
+              <h2 className="mt-6 text-4xl font-black leading-tight tracking-[-.04em] md:text-6xl">Mais do que banho e tosa: uma experiência de confiança.</h2>
+              <p className="mt-5 max-w-3xl text-lg leading-relaxed text-slate-600">
+                Cada atendimento é pensado para transmitir segurança ao tutor e conforto ao animal, desde a chegada até a finalização.
+              </p>
+              <div className="mt-8 grid gap-4 md:grid-cols-2">
+                {steps.map((step, index) => (
+                  <div key={step} className="home-card-animate flex items-center gap-4 rounded-3xl border border-[#e2eadf] bg-white p-5 shadow-sm" style={{ animationDelay: `${index * 80}ms` }}>
+                    <CheckCircle2 className="shrink-0 text-[#0d6b54]" />
+                    <span className="font-bold text-slate-700">{step}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </section>
 
         <section className="px-5 pb-16 md:px-8">
-          <div className="mx-auto grid max-w-[1680px] gap-8 overflow-hidden rounded-[40px] bg-[#10231a] p-8 text-white shadow-2xl md:p-12 xl:grid-cols-[1fr_360px] xl:items-center">
-            <div><span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-5 py-2 font-black text-emerald-100"><Sparkles size={18} /> Diferenciais</span><h2 className="mt-6 text-4xl font-black leading-tight md:text-5xl">Visual moderno, atendimento humano e cuidado profissional.</h2><p className="mt-5 max-w-3xl text-lg text-white/70">Nosso objetivo é entregar uma experiência bonita, prática e segura: do agendamento ao pós-atendimento.</p></div>
-            <div className="rounded-3xl border border-white/15 bg-white/10 p-7"><div className="mb-4 flex gap-1 text-yellow-300">{[1, 2, 3, 4, 5].map((item) => <Star key={item} size={20} fill="currentColor" />)}</div><h3 className="text-2xl font-black">Seu pet merece esse carinho</h3><p className="mt-3 text-white/75">Agende um horário e conheça nosso cuidado de perto.</p></div>
+          <div className="mx-auto max-w-[1880px]">
+            <div className="text-center">
+              <span className="inline-flex items-center gap-2 rounded-full bg-[#e7f4ed] px-5 py-2 text-sm font-black text-[#0d6b54]"><Sparkles size={16} /> Nossos valores</span>
+              <h2 className="mt-5 text-4xl font-black tracking-[-.04em] md:text-5xl">O cuidado que guia cada atendimento.</h2>
+            </div>
+            <div className="mt-10 grid gap-5 md:grid-cols-4">
+              {values.map((item, index) => {
+                const Icon = item.icon;
+                return (
+                  <div key={item.title} className="home-card-animate rounded-[30px] bg-white p-7 shadow-xl ring-1 ring-[#e2eadf]" style={{ animationDelay: `${index * 90}ms` }}>
+                    <div className="home-icon-pop flex h-16 w-16 items-center justify-center rounded-3xl bg-[#e7f4ed] text-[#0d6b54]"><Icon size={34} /></div>
+                    <h3 className="mt-6 text-2xl font-black text-[#0d6b54]">{item.title}</h3>
+                    <p className="mt-3 leading-relaxed text-slate-600">{item.text}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        <section className="px-5 pb-16 md:px-8">
+          <div className="mx-auto max-w-[1880px] rounded-[40px] bg-[#e7f4ed] p-7 md:p-10">
+            <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+              <div>
+                <span className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2 text-sm font-black text-[#0d6b54]"><Bath size={16} /> Ambiente e carinho</span>
+                <h2 className="mt-5 text-4xl font-black tracking-[-.04em] md:text-5xl">Uma experiência pensada para tranquilidade.</h2>
+              </div>
+              <p className="max-w-xl text-slate-600">Do banho ao acabamento, buscamos tornar o cuidado mais leve, bonito e seguro.</p>
+            </div>
+            <div className="grid gap-5 md:grid-cols-3">
+              {galleryImages.map((image, index) => (
+                <div key={image} className="home-card-animate group h-[320px] overflow-hidden rounded-[30px] bg-white shadow-lg" style={{ animationDelay: `${index * 90}ms` }}>
+                  <img src={image} alt={`Ambiente SPA do Doguinho ${index + 1}`} className="h-full w-full object-cover object-center transition duration-700 group-hover:scale-105" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="px-5 pb-16 md:px-8">
+          <div className="mx-auto grid max-w-[1880px] gap-8 overflow-hidden rounded-[44px] bg-[#0b352b] p-8 text-white shadow-2xl md:p-12 lg:grid-cols-[1fr_auto] lg:items-center">
+            <div>
+              <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-5 py-2 text-sm font-black text-[#f4c86a]"><Star size={16} fill="currentColor" /> SPA do Doguinho</span>
+              <h2 className="mt-6 max-w-4xl text-4xl font-black leading-tight tracking-[-.04em] md:text-6xl">Seu pet merece esse carinho de perto.</h2>
+              <p className="mt-5 max-w-2xl text-lg leading-relaxed text-white/70">Entre na área do cliente ou fale conosco pelo WhatsApp para conhecer melhor nosso atendimento.</p>
+            </div>
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <Link to="/cliente-login" className="inline-flex items-center justify-center gap-3 rounded-2xl bg-[#f7e7c4] px-8 py-4 font-black text-[#12382f] shadow-xl transition hover:-translate-y-1"><CalendarDays size={20} /> Entrar para agendar</Link>
+              <a href={whatsappUrl} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-3 rounded-2xl border border-white/15 bg-white/10 px-8 py-4 font-black text-white backdrop-blur transition hover:-translate-y-1"><Phone size={20} /> WhatsApp</a>
+            </div>
           </div>
         </section>
       </main>
