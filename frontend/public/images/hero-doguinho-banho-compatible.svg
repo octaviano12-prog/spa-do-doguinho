@@ -1,0 +1,89 @@
+<svg width="900" height="1200" viewBox="0 0 900 1200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bg" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(450 470) rotate(90) scale(610 500)">
+      <stop offset="0" stop-color="#1a4d2b" stop-opacity="0.95"/>
+      <stop offset="0.42" stop-color="#061f13" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#020d08" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="goldGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(455 380) scale(390 320)">
+      <stop stop-color="#fde68a" stop-opacity="0.55"/>
+      <stop offset="0.55" stop-color="#facc15" stop-opacity="0.15"/>
+      <stop offset="1" stop-color="#facc15" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="fur" x1="302" y1="210" x2="610" y2="800" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ffe2a8"/>
+      <stop offset="0.34" stop-color="#d79743"/>
+      <stop offset="0.72" stop-color="#9b5a25"/>
+      <stop offset="1" stop-color="#5c2e12"/>
+    </linearGradient>
+    <linearGradient id="towel" x1="195" y1="690" x2="710" y2="940" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2d4a18"/>
+      <stop offset="0.35" stop-color="#516d24"/>
+      <stop offset="1" stop-color="#0f4b2d"/>
+    </linearGradient>
+    <filter id="shadow" x="0" y="0" width="900" height="1200" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="28" stdDeviation="30" flood-color="#000" flood-opacity="0.45"/>
+    </filter>
+    <filter id="soft" x="-50" y="-50" width="1000" height="1300" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="22"/>
+    </filter>
+  </defs>
+  <rect width="900" height="1200" fill="transparent"/>
+  <ellipse cx="450" cy="540" rx="410" ry="570" fill="url(#bg)"/>
+  <ellipse cx="450" cy="410" rx="390" ry="350" fill="url(#goldGlow)"/>
+  <circle cx="450" cy="430" r="280" stroke="#facc15" stroke-width="8" opacity="0.75"/>
+  <circle cx="450" cy="430" r="292" stroke="#fde68a" stroke-width="2" opacity="0.22"/>
+
+  <g opacity="0.45">
+    <circle cx="170" cy="200" r="36" stroke="#facc15" stroke-width="5" opacity="0.45"/>
+    <circle cx="108" cy="360" r="24" stroke="#facc15" stroke-width="4" opacity="0.35"/>
+    <circle cx="742" cy="250" r="32" stroke="#facc15" stroke-width="5" opacity="0.42"/>
+    <circle cx="805" cy="530" r="26" stroke="#facc15" stroke-width="4" opacity="0.38"/>
+    <circle cx="250" cy="405" r="16" fill="#bef264" opacity="0.7"/>
+    <circle cx="280" cy="405" r="12" fill="#bef264" opacity="0.7"/>
+    <circle cx="265" cy="380" r="12" fill="#bef264" opacity="0.7"/>
+    <path d="M248 424c20-18 42-18 60 0-10 20-50 20-60 0Z" fill="#bef264" opacity="0.7"/>
+    <circle cx="705" cy="365" r="15" fill="#bef264" opacity="0.68"/>
+    <circle cx="735" cy="365" r="12" fill="#bef264" opacity="0.68"/>
+    <circle cx="720" cy="340" r="12" fill="#bef264" opacity="0.68"/>
+    <path d="M703 384c20-18 42-18 60 0-10 20-50 20-60 0Z" fill="#bef264" opacity="0.68"/>
+  </g>
+
+  <g filter="url(#soft)" opacity="0.5">
+    <ellipse cx="450" cy="1035" rx="390" ry="75" fill="#facc15" opacity="0.22"/>
+    <ellipse cx="450" cy="1000" rx="430" ry="90" fill="#ffffff" opacity="0.16"/>
+  </g>
+
+  <g filter="url(#shadow)">
+    <ellipse cx="450" cy="1030" rx="330" ry="54" fill="#000" opacity="0.32"/>
+
+    <path d="M285 432c-54-120-6-238 90-230 58 5 92 40 116 91 28-51 72-87 130-84 103 6 150 123 105 240-26 69-71 126-133 154-48 22-118 23-172 4-69-24-110-86-136-175Z" fill="url(#fur)"/>
+    <path d="M315 385c-74-20-132 41-118 122 12 70 70 112 131 90 48-18 61-78 52-128-8-45-25-73-65-84Z" fill="#6d3515"/>
+    <path d="M586 387c73-19 131 42 117 123-12 70-70 111-130 89-47-18-60-78-52-128 8-45 25-73 65-84Z" fill="#6d3515"/>
+    <ellipse cx="452" cy="430" rx="135" ry="164" fill="#f8d79a"/>
+    <path d="M333 468c38 62 64 92 119 92 54 0 80-30 117-92 20 116-32 213-117 213-86 0-139-97-119-213Z" fill="#fff1cd" opacity="0.9"/>
+    <ellipse cx="397" cy="418" rx="18" ry="23" fill="#101820"/>
+    <ellipse cx="507" cy="418" rx="18" ry="23" fill="#101820"/>
+    <ellipse cx="452" cy="489" rx="37" ry="30" fill="#24130d"/>
+    <path d="M404 548c25 38 72 48 96 0" stroke="#28150d" stroke-width="12" stroke-linecap="round"/>
+    <path d="M438 523c10 8 20 8 30 0" stroke="#28150d" stroke-width="7" stroke-linecap="round" opacity="0.55"/>
+
+    <path d="M165 715c80-86 176-113 286-111 110 2 207 28 290 111 22 155-58 268-291 284-232-16-310-129-285-284Z" fill="url(#towel)"/>
+    <path d="M208 744c75 47 156 70 242 72 86-2 167-25 242-72" stroke="#8aa34a" stroke-width="18" stroke-linecap="round" opacity="0.5"/>
+    <path d="M240 808c73 42 143 62 210 64 67-2 137-22 210-64" stroke="#81933f" stroke-width="16" stroke-linecap="round" opacity="0.45"/>
+    <path d="M282 882c57 28 113 42 168 44 55-2 111-16 168-44" stroke="#6e8135" stroke-width="14" stroke-linecap="round" opacity="0.48"/>
+    <path d="M430 646c45 40 54 109 18 202-64-58-124-100-226-134 55-73 128-92 208-68Z" fill="#405e22" opacity="0.75"/>
+    <path d="M471 646c-45 40-54 109-18 202 64-58 124-100 226-134-55-73-128-92-208-68Z" fill="#173f25" opacity="0.82"/>
+    <ellipse cx="378" cy="1005" rx="58" ry="35" fill="#b87331"/>
+    <ellipse cx="520" cy="1005" rx="58" ry="35" fill="#b87331"/>
+  </g>
+
+  <g opacity="0.72">
+    <ellipse cx="128" cy="965" rx="92" ry="36" fill="#fff4c2" opacity="0.55"/>
+    <ellipse cx="760" cy="965" rx="92" ry="36" fill="#fff4c2" opacity="0.50"/>
+    <circle cx="110" cy="910" r="22" fill="#fff8dc" opacity="0.45"/>
+    <circle cx="785" cy="910" r="20" fill="#fff8dc" opacity="0.42"/>
+    <circle cx="170" cy="940" r="15" fill="#fff8dc" opacity="0.38"/>
+    <circle cx="710" cy="940" r="15" fill="#fff8dc" opacity="0.36"/>
+  </g>
+</svg>
