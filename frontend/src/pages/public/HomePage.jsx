@@ -4,7 +4,8 @@ import {
   ArrowRight,
   Bath,
   CalendarDays,
-  Crown,
+  CheckCircle,
+  Clock,
   Heart,
   MessageCircle,
   PawPrint,
@@ -16,224 +17,178 @@ import {
 } from "lucide-react";
 import PublicLayout from "../../components/public/PublicLayout";
 
-const heroImage = "/images/hero-doguinho-banho-compatible.svg";
+const photos = {
+  hero: "https://images.pexels.com/photos/6131158/pexels-photo-6131158.jpeg?auto=compress&cs=tinysrgb&w=1800",
+  bath: "https://images.pexels.com/photos/19145888/pexels-photo-19145888.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  towel: "https://images.pexels.com/photos/6131162/pexels-photo-6131162.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  grooming: "https://images.pexels.com/photos/19145882/pexels-photo-19145882.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  care: "https://images.pexels.com/photos/4432261/pexels-photo-4432261.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  vet: "https://images.pexels.com/photos/7468980/pexels-photo-7468980.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  happy: "https://images.pexels.com/photos/6816863/pexels-photo-6816863.jpeg?auto=compress&cs=tinysrgb&w=1200"
+};
 
 const services = [
-  {
-    title: "Banho & Tosa",
-    icon: Bath,
-    image: "/images/banho-tosa.svg",
-    text: "Higiene completa, perfume e acabamento com carinho.",
-    price: "R$ 60,00"
-  },
-  {
-    title: "Vacinação",
-    icon: Syringe,
-    image: "/images/vacina-pet.svg",
-    text: "Registro, cuidado preventivo e acompanhamento.",
-    price: "R$ 120,00"
-  },
-  {
-    title: "Tosa",
-    icon: Scissors,
-    image: "/images/banho-tosa.svg",
-    text: "Tosa higiênica ou completa conforme o pet.",
-    price: "R$ 80,00"
-  },
-  {
-    title: "Spa Relaxante",
-    icon: Sparkles,
-    image: "/images/spa-pet.svg",
-    text: "Bem-estar, relaxamento, pele e pelagem.",
-    price: "R$ 95,00"
-  }
+  { title: "Banho Premium", icon: Bath, image: photos.bath, text: "Limpeza delicada, hidratação e perfume na medida.", price: "R$ 60,00" },
+  { title: "Tosa Boutique", icon: Scissors, image: photos.grooming, text: "Acabamento bonito, seguro e adequado para cada pelagem.", price: "R$ 80,00" },
+  { title: "Spa Relaxante", icon: Sparkles, image: photos.towel, text: "Cuidado de pele, pelagem e bem-estar para o pet relaxar.", price: "R$ 95,00" },
+  { title: "Vacinação", icon: Syringe, image: photos.vet, text: "Prevenção, orientação e registro para manter a saúde em dia.", price: "R$ 120,00" }
 ];
 
-const stats = [
-  { icon: PawPrint, value: "+3.500", label: "Pets atendidos" },
-  { icon: ShieldCheck, value: "6+", label: "Anos de experiência" },
-  { icon: CalendarDays, value: "Online", label: "Agendamento fácil" }
+const steps = [
+  ["01", "Recepção tranquila", "Seu pet chega sem pressa e é acolhido com cuidado."],
+  ["02", "Avaliação do cuidado", "Observamos porte, pelagem, pele e preferências do tutor."],
+  ["03", "Banho ou tosa", "Produtos adequados e rotina feita com paciência."],
+  ["04", "Finalização premium", "Perfume, acabamento e orientação antes da entrega."]
 ];
 
-const benefits = [
-  { icon: CalendarDays, title: "Agendamento fácil", text: "Rápido pelo site ou WhatsApp." },
-  { icon: Crown, title: "Cuidado premium", text: "Produtos adequados para cada pet." },
-  { icon: ShieldCheck, title: "Ambiente seguro", text: "Atendimento organizado e monitorado." },
-  { icon: Heart, title: "Carinho", text: "Seu doguinho tratado com amor." }
+const packages = [
+  { name: "Pequeno", detail: "até 10 kg", price: "R$ 60", time: "~1h" },
+  { name: "Médio", detail: "10 a 25 kg", price: "R$ 80", time: "~1h30" },
+  { name: "Grande", detail: "25 a 40 kg", price: "R$ 100", time: "~2h" },
+  { name: "Gigante", detail: "acima de 40 kg", price: "R$ 120", time: "~2h30" }
 ];
 
-const plans = [
-  {
-    name: "Pequeno",
-    range: "até 10 kg",
-    price: "R$ 60,00",
-    time: "~1h de atendimento",
-    progress: "25%",
-    image: "https://images.pexels.com/photos/4587998/pexels-photo-4587998.jpeg?auto=compress&cs=tinysrgb&w=600"
-  },
-  {
-    name: "Médio",
-    range: "10,1 a 25 kg",
-    price: "R$ 80,00",
-    time: "~1h30 de atendimento",
-    progress: "50%",
-    image: "https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg?auto=compress&cs=tinysrgb&w=600"
-  },
-  {
-    name: "Grande",
-    range: "25,1 a 40 kg",
-    price: "R$ 100,00",
-    time: "~2h de atendimento",
-    progress: "75%",
-    image: "https://images.pexels.com/photos/2253275/pexels-photo-2253275.jpeg?auto=compress&cs=tinysrgb&w=600"
-  },
-  {
-    name: "Gigante",
-    range: "acima de 40 kg",
-    price: "R$ 120,00",
-    time: "~2h30 de atendimento",
-    progress: "100%",
-    image: "https://images.pexels.com/photos/1189673/pexels-photo-1189673.jpeg?auto=compress&cs=tinysrgb&w=600"
-  }
-];
-
-const trustItems = [
-  [Sparkles, "Produtos Premium", "Apenas o melhor para o seu pet."],
-  [ShieldCheck, "Equipe Especializada", "Profissionais treinados com amor e cuidado."],
-  [Heart, "Ambiente Agradável", "Espaço seguro, limpo e climatizado."]
+const proof = [
+  ["+3.500", "pets atendidos"],
+  ["5 estrelas", "experiência premium"],
+  ["online", "agendamento fácil"]
 ];
 
 export default function HomePage() {
   return (
     <PublicLayout>
-      <main className="relative overflow-hidden bg-[#020d08] text-white">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_8%,rgba(34,197,94,.28),transparent_28%),radial-gradient(circle_at_72%_8%,rgba(250,204,21,.24),transparent_30%),linear-gradient(180deg,#020d08_0%,#042616_44%,#03160e_100%)]" />
-        <div className="absolute inset-0 opacity-[.18] bg-[linear-gradient(rgba(255,255,255,.06)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.06)_1px,transparent_1px)] bg-[size:72px_72px]" />
+      <main className="overflow-hidden bg-[#fbf7ef] text-[#10231a]">
+        <section className="relative min-h-[720px] bg-[#f5efe4]">
+          <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-[#06140f] to-transparent opacity-10" />
+          <div className="relative mx-auto grid max-w-[1680px] gap-10 px-5 pb-14 pt-12 md:px-8 2xl:px-10 xl:grid-cols-[.88fr_1.12fr] xl:items-center">
+            <div className="relative z-10 max-w-3xl">
+              <span className="inline-flex items-center gap-2 rounded-full border border-emerald-900/10 bg-white px-5 py-2 text-sm font-black text-emerald-900 shadow-sm">
+                <Sparkles size={16} />
+                Boutique pet care em Sud Mennucci
+              </span>
+              <h1 className="mt-7 text-5xl font-black leading-[.94] text-[#10231a] md:text-7xl 2xl:text-8xl">
+                Cuidado premium para seu pet voltar impecável.
+              </h1>
+              <p className="mt-6 max-w-2xl text-lg leading-relaxed text-slate-600 md:text-xl">
+                Banho, tosa, spa e vacinação em uma experiência calma, cheirosa e organizada para pets e tutores.
+              </p>
 
-        <section className="relative max-w-[1680px] mx-auto px-5 md:px-8 2xl:px-10 pt-10 pb-8 grid xl:grid-cols-[.93fr_1.07fr] gap-8 items-center min-h-[700px]">
-          <div className="relative z-10">
-            <Badge icon={Star}>Cuidado premium para seu pet</Badge>
-            <h1 className="mt-7 max-w-4xl text-5xl md:text-7xl 2xl:text-8xl font-black leading-none">
-              Seu pet limpo, <span className="text-green-300">cheiroso</span> e feliz.
-            </h1>
-            <p className="mt-6 max-w-2xl text-lg md:text-xl text-white/78 leading-relaxed">
-              Banho, tosa, estética animal, vacinação e bem-estar com carinho, segurança e uma experiência premium.
-            </p>
+              <div className="mt-9 flex flex-wrap gap-4">
+                <Link to="/agendamento" className="group inline-flex items-center gap-3 rounded-2xl bg-[#0f7a3b] px-7 py-4 font-black text-white shadow-[0_20px_45px_rgba(15,122,59,.24)] transition hover:bg-[#0b6631]">
+                  <CalendarDays size={19} />
+                  Agendar agora
+                  <ArrowRight size={18} className="transition group-hover:translate-x-1" />
+                </Link>
+                <a href="https://wa.me/5518997493722" target="_blank" rel="noreferrer" className="inline-flex items-center gap-3 rounded-2xl border border-slate-300 bg-white px-7 py-4 font-black text-[#10231a] shadow-sm transition hover:border-emerald-700">
+                  <MessageCircle size={19} />
+                  Falar no WhatsApp
+                </a>
+              </div>
 
-            <div className="mt-9 flex flex-wrap gap-4">
-              <Link to="/agendamento" className="group rounded-2xl bg-gradient-to-br from-green-400 to-green-700 px-8 py-4 font-black text-white shadow-[0_0_34px_rgba(34,197,94,.34)] transition hover:scale-[1.02] flex items-center gap-3">
-                <CalendarDays size={19} />
-                Agendar agora
-                <ArrowRight size={19} className="transition group-hover:translate-x-1" />
-              </Link>
-              <Link to="/servicos" className="group rounded-2xl border border-yellow-200/30 bg-black/20 px-8 py-4 font-black text-yellow-50 transition hover:bg-white/10 flex items-center gap-3">
-                Ver serviços
-                <ArrowRight size={19} className="transition group-hover:translate-x-1" />
-              </Link>
-            </div>
-
-            <div className="mt-9 grid sm:grid-cols-3 gap-0 overflow-hidden rounded-3xl border border-green-200/18 bg-white/8 shadow-2xl backdrop-blur-xl">
-              {stats.map((item) => <StatCard key={item.label} {...item} />)}
-            </div>
-          </div>
-
-          <div className="relative min-h-[560px] flex items-center justify-center">
-            <div className="absolute h-[430px] w-[430px] md:h-[540px] md:w-[540px] rounded-full border-[8px] border-yellow-200/75 shadow-[0_0_90px_rgba(250,204,21,.38),inset_0_0_70px_rgba(250,204,21,.22)]" />
-            <div className="absolute h-[560px] w-[560px] rounded-full bg-yellow-300/10 blur-3xl" />
-            <img src={heroImage} alt="Doguinho limpo e feliz" className="relative z-10 h-[520px] md:h-[650px] 2xl:h-[720px] w-full object-contain drop-shadow-[0_38px_60px_rgba(0,0,0,.65)]" />
-            <div className="absolute right-4 md:right-12 bottom-16 z-20 rounded-3xl border border-yellow-200/25 bg-[#19361f]/82 px-5 py-4 shadow-2xl backdrop-blur-xl">
-              <div className="flex items-center gap-4">
-                <div className="h-16 w-16 rounded-full bg-white/90 text-green-800 flex items-center justify-center shadow-[0_0_28px_rgba(255,255,255,.38)]">
-                  <ShieldCheck size={32} />
-                </div>
-                <div>
-                  <p className="font-black">Atendimento 5 estrelas</p>
-                  <div className="mt-1 flex text-yellow-300">
-                    {[1, 2, 3, 4, 5].map((item) => <Star key={item} size={15} fill="currentColor" />)}
+              <div className="mt-10 grid max-w-2xl grid-cols-3 overflow-hidden rounded-3xl border border-black/5 bg-white shadow-xl">
+                {proof.map(([value, label]) => (
+                  <div key={label} className="border-r border-slate-100 p-5 last:border-r-0">
+                    <div className="text-2xl font-black text-[#0f7a3b]">{value}</div>
+                    <div className="mt-1 text-xs font-bold uppercase text-slate-500">{label}</div>
                   </div>
-                  <p className="mt-1 text-xs text-white/72">Cuidado com amor e segurança</p>
+                ))}
+              </div>
+            </div>
+
+            <div className="relative min-h-[600px]">
+              <div className="absolute right-0 top-8 h-[520px] w-[88%] overflow-hidden rounded-[44px] bg-slate-200 shadow-2xl">
+                <img src={photos.hero} alt="Pet limpo enrolado em toalha" className="h-full w-full object-cover" />
+              </div>
+              <div className="absolute bottom-4 left-0 hidden w-[42%] overflow-hidden rounded-[34px] border-[10px] border-[#f5efe4] bg-white shadow-2xl md:block">
+                <img src={photos.bath} alt="Banho pet premium" className="h-72 w-full object-cover" />
+              </div>
+              <div className="absolute right-8 bottom-0 max-w-sm rounded-[28px] border border-emerald-900/10 bg-white/90 p-5 shadow-2xl backdrop-blur">
+                <div className="flex items-center gap-4">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-800">
+                    <ShieldCheck size={28} />
+                  </div>
+                  <div>
+                    <div className="font-black">Atendimento cuidadoso</div>
+                    <div className="mt-1 flex text-yellow-500">
+                      {[1, 2, 3, 4, 5].map((item) => <Star key={item} size={15} fill="currentColor" />)}
+                    </div>
+                    <p className="mt-1 text-sm text-slate-500">Rotina segura do começo ao fim.</p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        <section className="relative max-w-[1680px] mx-auto px-5 md:px-8 2xl:px-10 pb-12">
-          <div className="grid md:grid-cols-4 overflow-hidden rounded-3xl border border-green-200/16 bg-[#062416]/86 shadow-2xl backdrop-blur-xl">
-            {benefits.map((item) => <BenefitCard key={item.title} {...item} />)}
-          </div>
+        <section className="mx-auto grid max-w-[1680px] gap-5 px-5 py-8 md:grid-cols-4 md:px-8 2xl:px-10">
+          {[
+            [CalendarDays, "Agenda prática", "Reserve pelo site em poucos minutos."],
+            [Sparkles, "Produtos premium", "Shampoos e finalizadores adequados."],
+            [ShieldCheck, "Ambiente seguro", "Higiene, organização e atenção."],
+            [Heart, "Carinho real", "Cada pet tratado com calma e respeito."]
+          ].map(([Icon, title, text]) => <Feature key={title} Icon={Icon} title={title} text={text} />)}
         </section>
 
-        <section className="relative max-w-[1680px] mx-auto px-5 md:px-8 2xl:px-10 py-12">
-          <SectionTitle badge="Nossos Serviços" title="Escolha o cuidado ideal" text="Uma experiência completa de carinho, higiene e bem-estar para o seu melhor amigo." />
-          <div className="mt-10 grid sm:grid-cols-2 xl:grid-cols-4 gap-5">
+        <section className="mx-auto max-w-[1680px] px-5 py-14 md:px-8 2xl:px-10">
+          <SectionTitle eyebrow="Serviços" title="Tudo que seu pet precisa para ficar lindo e saudável" text="Cards com fotos reais, preços claros e caminhos rápidos para agendar." />
+          <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             {services.map((service) => <ServiceCard key={service.title} {...service} />)}
           </div>
         </section>
 
-        <section className="relative max-w-[1680px] mx-auto px-5 md:px-8 2xl:px-10 py-8">
-          <div className="rounded-[32px] border border-green-200/20 bg-[#082619]/82 p-5 md:p-8 shadow-2xl backdrop-blur-xl">
-            <div className="grid xl:grid-cols-[.8fr_1fr] gap-6 items-end">
-              <div>
-                <Badge icon={PawPrint}>Planos por porte</Badge>
-                <h2 className="mt-5 text-4xl md:text-5xl font-black">Preços por tamanho</h2>
-                <p className="mt-2 text-white/70">O valor muda conforme o porte do doguinho.</p>
-              </div>
-              <SizeScale />
+        <section className="bg-[#10231a] py-16 text-white">
+          <div className="mx-auto grid max-w-[1680px] gap-10 px-5 md:px-8 2xl:px-10 xl:grid-cols-[.9fr_1.1fr] xl:items-center">
+            <div>
+              <span className="inline-flex rounded-full bg-white/10 px-5 py-2 text-sm font-black text-emerald-100">Experiência</span>
+              <h2 className="mt-5 text-4xl font-black leading-tight md:text-6xl">Um fluxo de cuidado sem bagunça.</h2>
+              <p className="mt-5 max-w-xl text-lg leading-relaxed text-white/70">
+                A página precisa passar confiança. Por isso a Home agora mostra processo, fotos, preço e agendamento sem excesso de decoração.
+              </p>
+              <Link to="/agendamento" className="mt-8 inline-flex items-center gap-3 rounded-2xl bg-[#f5d66b] px-7 py-4 font-black text-[#10231a] transition hover:bg-yellow-300">
+                Agendar atendimento <ArrowRight size={18} />
+              </Link>
             </div>
-
-            <div className="mt-7 grid md:grid-cols-2 xl:grid-cols-4 gap-5">
-              {plans.map((plan) => <PlanCard key={plan.name} {...plan} />)}
-            </div>
-          </div>
-        </section>
-
-        <section className="relative max-w-[1680px] mx-auto px-5 md:px-8 2xl:px-10 py-8">
-          <div className="rounded-[32px] border border-green-200/16 bg-[#062416]/86 p-6 md:p-8 shadow-2xl backdrop-blur-xl">
-            <div className="grid xl:grid-cols-[.7fr_1fr_.7fr] gap-8 items-center">
-              <div>
-                <h2 className="text-4xl md:text-5xl font-black leading-none">Seu pet em boas patas!</h2>
-                <div className="mt-5 flex -space-x-3">
-                  {plans.map((plan) => <img key={plan.name} src={plan.image} alt={plan.name} className="h-12 w-12 rounded-full object-cover ring-2 ring-[#062416]" />)}
-                </div>
-                <div className="mt-4 flex items-center gap-3 text-yellow-300">
-                  {[1, 2, 3, 4, 5].map((item) => <Star key={item} size={18} fill="currentColor" />)}
-                  <span className="text-sm font-black text-white">5,0</span>
-                </div>
-                <p className="mt-1 text-sm text-white/64">+500 avaliações no Google</p>
-              </div>
-
-              <div className="grid sm:grid-cols-3 gap-5">
-                {trustItems.map(([Icon, title, text]) => <TrustItem key={title} Icon={Icon} title={title} text={text} />)}
-              </div>
-
-              <div className="relative hidden xl:block min-h-[190px]">
-                <div className="absolute right-20 top-0 rotate-[-7deg] rounded-xl border-[6px] border-white bg-white p-2 shadow-2xl">
-                  <img src="/images/cliente-premium.svg" alt="Espaço SPA do Doguinho" className="h-32 w-44 rounded-md object-cover" />
-                </div>
-                <div className="absolute right-0 top-8 rotate-[6deg] rounded-xl border-[6px] border-white bg-white p-2 shadow-2xl">
-                  <img src="/images/hero-spa-doguinho-premium.svg" alt="SPA do Doguinho" className="h-32 w-44 rounded-md object-cover" />
-                </div>
-              </div>
+            <div className="grid gap-4 md:grid-cols-2">
+              {steps.map(([number, title, text]) => <StepCard key={number} number={number} title={title} text={text} />)}
             </div>
           </div>
         </section>
 
-        <section className="relative max-w-[1680px] mx-auto px-5 md:px-8 2xl:px-10 pt-2 pb-12">
-          <div className="relative overflow-hidden rounded-[32px] bg-gradient-to-r from-green-800 via-green-600 to-green-500 p-7 md:p-9 shadow-[0_24px_70px_rgba(22,163,74,.22)]">
-            <img src={heroImage} alt="Doguinho pronto para atendimento" className="absolute -left-8 bottom-[-86px] hidden h-60 object-contain opacity-85 md:block" />
-            <div className="relative grid lg:grid-cols-[1fr_auto] gap-6 items-center md:pl-48">
+        <section className="mx-auto max-w-[1680px] px-5 py-16 md:px-8 2xl:px-10">
+          <div className="grid gap-8 xl:grid-cols-[.85fr_1.15fr]">
+            <div className="rounded-[36px] bg-white p-8 shadow-xl">
+              <span className="inline-flex rounded-full bg-emerald-100 px-5 py-2 text-sm font-black text-emerald-900">Pacotes</span>
+              <h2 className="mt-5 text-4xl font-black leading-tight md:text-5xl">Preços por porte, sem complicar.</h2>
+              <p className="mt-4 text-slate-600">O tutor entende rápido quanto custa, quanto tempo leva e já pode agendar.</p>
+              <img src={photos.care} alt="Kit de cuidado pet" className="mt-8 h-72 w-full rounded-[28px] object-cover" />
+            </div>
+            <div className="grid gap-5 md:grid-cols-2">
+              {packages.map((item) => <PackageCard key={item.name} {...item} />)}
+            </div>
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-[1680px] px-5 pb-16 md:px-8 2xl:px-10">
+          <div className="grid gap-5 md:grid-cols-[1.1fr_.9fr_1fr]">
+            <GalleryPhoto image={photos.grooming} title="Tosa com acabamento" />
+            <GalleryPhoto image={photos.towel} title="Pós-banho confortável" tall />
+            <GalleryPhoto image={photos.happy} title="Rotina com carinho" />
+          </div>
+        </section>
+
+        <section className="px-5 pb-16 md:px-8 2xl:px-10">
+          <div className="mx-auto max-w-[1680px] overflow-hidden rounded-[40px] bg-[#0f7a3b] shadow-2xl">
+            <div className="grid gap-8 p-8 text-white md:p-10 xl:grid-cols-[1fr_auto] xl:items-center">
               <div>
-                <h2 className="text-3xl md:text-5xl font-black">Pronto para mimar seu doguinho?</h2>
-                <p className="mt-2 max-w-3xl text-white/82">Agende agora e proporcione uma experiência completa de cuidado, higiene e carinho.</p>
+                <h2 className="text-4xl font-black md:text-5xl">Pronto para deixar seu pet impecável?</h2>
+                <p className="mt-3 max-w-3xl text-white/75">Agende banho, tosa ou spa e ofereça uma experiência premium para seu melhor amigo.</p>
               </div>
               <div className="flex flex-wrap gap-4">
-                <Link to="/agendamento" className="rounded-2xl bg-yellow-300 px-7 py-4 font-black text-slate-950 shadow-xl transition hover:bg-yellow-200 flex items-center gap-2">
+                <Link to="/agendamento" className="inline-flex items-center gap-2 rounded-2xl bg-white px-7 py-4 font-black text-[#0f7a3b] transition hover:bg-emerald-50">
                   <CalendarDays size={18} />
                   Agendar agora
-                  <ArrowRight size={18} />
                 </Link>
-                <a href="https://wa.me/5518997493722" target="_blank" rel="noreferrer" className="rounded-2xl border border-white/35 bg-white/10 px-7 py-4 font-black text-white transition hover:bg-white/18 flex items-center gap-2">
+                <a href="https://wa.me/5518997493722" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-2xl border border-white/30 px-7 py-4 font-black text-white transition hover:bg-white/10">
                   <MessageCircle size={18} />
                   WhatsApp
                 </a>
@@ -246,108 +201,93 @@ export default function HomePage() {
   );
 }
 
-function Badge({ icon: Icon, children }) {
-  return <span className="inline-flex items-center gap-2 rounded-full border border-yellow-300/25 bg-black/24 px-5 py-2 text-yellow-100 font-black text-sm shadow-lg backdrop-blur"><Icon size={16} />{children}</span>;
-}
-
-function StatCard({ icon: Icon, value, label }) {
-  return (
-    <div className="flex items-center gap-4 border-b border-white/10 p-6 sm:border-b-0 sm:border-r last:border-r-0">
-      <Icon className="text-green-200" size={34} />
-      <div>
-        <div className="text-2xl font-black">{value}</div>
-        <div className="mt-1 text-sm text-white/62">{label}</div>
-      </div>
-    </div>
-  );
-}
-
-function BenefitCard({ icon: Icon, title, text }) {
-  return (
-    <div className="flex items-start gap-4 border-b border-white/10 p-6 md:border-b-0 md:border-r last:border-r-0">
-      <Icon className="mt-1 text-green-200" size={34} />
-      <div>
-        <h3 className="font-black">{title}</h3>
-        <p className="mt-1 text-sm text-white/64">{text}</p>
-      </div>
-    </div>
-  );
-}
-
-function SectionTitle({ badge, title, text }) {
+function SectionTitle({ eyebrow, title, text }) {
   return (
     <div className="mx-auto max-w-4xl text-center">
-      <Badge icon={PawPrint}>{badge}</Badge>
-      <h2 className="mt-4 text-4xl md:text-5xl font-black">{title}</h2>
-      <p className="mt-3 text-white/72">{text}</p>
+      <span className="inline-flex rounded-full bg-emerald-100 px-5 py-2 text-sm font-black text-emerald-900">{eyebrow}</span>
+      <h2 className="mt-5 text-4xl font-black leading-tight md:text-6xl">{title}</h2>
+      <p className="mt-4 text-lg text-slate-600">{text}</p>
+    </div>
+  );
+}
+
+function Feature({ Icon, title, text }) {
+  return (
+    <div className="rounded-[28px] bg-white p-6 shadow-sm ring-1 ring-black/5">
+      <Icon className="text-emerald-700" size={32} />
+      <h3 className="mt-5 text-xl font-black">{title}</h3>
+      <p className="mt-2 text-sm leading-relaxed text-slate-600">{text}</p>
     </div>
   );
 }
 
 function ServiceCard({ title, icon: Icon, image, text, price }) {
   return (
-    <article className="group overflow-hidden rounded-[22px] border border-yellow-100 bg-[#fffaf0] p-4 text-slate-950 shadow-2xl transition hover:-translate-y-1">
-      <div className="relative h-44 overflow-hidden rounded-2xl bg-green-50">
+    <article className="group overflow-hidden rounded-[30px] bg-white shadow-xl ring-1 ring-black/5 transition hover:-translate-y-1">
+      <div className="relative h-64 overflow-hidden">
         <img src={image} alt={title} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
-        <div className="absolute bottom-3 left-3 flex h-10 w-10 items-center justify-center rounded-xl bg-green-100 text-green-800 shadow-lg">
-          <Icon size={21} />
+        <div className="absolute left-5 top-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-emerald-800 shadow-xl">
+          <Icon size={24} />
         </div>
       </div>
-      <h3 className="mt-5 text-2xl font-black">{title}</h3>
-      <p className="mt-2 min-h-[58px] text-slate-600">{text}</p>
-      <div className="mt-5 flex items-end justify-between border-t border-slate-200 pt-4">
-        <span className="text-sm text-slate-500">A partir de</span>
-        <strong className="text-xl text-green-800">{price}</strong>
+      <div className="p-6">
+        <h3 className="text-2xl font-black">{title}</h3>
+        <p className="mt-3 min-h-[72px] text-slate-600">{text}</p>
+        <div className="mt-5 flex items-end justify-between border-t border-slate-100 pt-5">
+          <span className="text-sm font-bold text-slate-400">A partir de</span>
+          <strong className="text-2xl text-emerald-800">{price}</strong>
+        </div>
       </div>
     </article>
   );
 }
 
-function SizeScale() {
+function StepCard({ number, title, text }) {
   return (
-    <div className="hidden md:block">
-      <div className="grid grid-cols-4 gap-4 text-center text-white/72">
-        {plans.map((plan) => <PawPrint key={plan.name} className="mx-auto text-white/75" size={plan.name === "Gigante" ? 34 : 26} />)}
+    <div className="rounded-[28px] border border-white/10 bg-white/10 p-6">
+      <div className="flex items-center gap-4">
+        <span className="flex h-12 w-12 items-center justify-center rounded-full bg-[#f5d66b] font-black text-[#10231a]">{number}</span>
+        <h3 className="text-xl font-black">{title}</h3>
       </div>
-      <div className="mt-3 h-2 rounded-full bg-white/16">
-        <div className="h-full w-1/2 rounded-full bg-green-300 shadow-[0_0_20px_rgba(134,239,172,.75)]" />
-      </div>
-      <div className="mt-2 grid grid-cols-4 gap-4 text-center text-xs text-white/72">
-        {plans.map((plan) => <span key={plan.name}>{plan.name}</span>)}
-      </div>
+      <p className="mt-4 text-white/70">{text}</p>
     </div>
   );
 }
 
-function PlanCard({ name, range, price, time, image, progress }) {
+function PackageCard({ name, detail, price, time }) {
   return (
-    <article className="relative min-h-[250px] overflow-hidden rounded-[18px] border border-yellow-100 bg-[#fffaf0] p-6 text-slate-950 shadow-xl">
-      <div className="relative z-10 max-w-[58%]">
-        <h3 className="text-2xl font-black">{name}</h3>
-        <p className="mt-1 text-sm text-slate-500">{range}</p>
-        <p className="mt-5 text-sm text-slate-500">Banho a partir de</p>
-        <div className="text-3xl font-black text-green-800">{price}</div>
-        <p className="mt-2 text-sm text-slate-600">{time}</p>
-        <Link to="/agendamento" className="mt-5 inline-flex rounded-2xl bg-green-700 px-8 py-3 text-sm font-black text-white transition hover:bg-green-800">
-          Agendar
-        </Link>
+    <div className="rounded-[30px] bg-white p-6 shadow-xl ring-1 ring-black/5">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h3 className="text-2xl font-black">{name}</h3>
+          <p className="mt-1 text-slate-500">{detail}</p>
+        </div>
+        <PawPrint className="text-emerald-700" size={30} />
       </div>
-      <img src={image} alt={name} className="absolute bottom-0 right-0 h-[86%] w-[48%] object-cover object-center" />
-      <div className="absolute bottom-0 left-0 right-0 h-1 bg-slate-100">
-        <div className="h-full bg-green-600" style={{ width: progress }} />
+      <p className="mt-8 text-sm font-bold text-slate-400">Banho a partir de</p>
+      <div className="mt-1 text-4xl font-black text-emerald-800">{price}</div>
+      <div className="mt-5 flex items-center gap-2 text-slate-600">
+        <Clock size={18} />
+        {time}
       </div>
-    </article>
+      <Link to="/agendamento" className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#10231a] px-5 py-4 font-black text-white transition hover:bg-emerald-900">
+        Agendar <ArrowRight size={18} />
+      </Link>
+    </div>
   );
 }
 
-function TrustItem({ Icon, title, text }) {
+function GalleryPhoto({ image, title, tall = false }) {
   return (
-    <div className="border-l border-white/10 pl-6">
-      <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-400/12 text-yellow-200">
-        <Icon size={24} />
+    <div className={`group relative overflow-hidden rounded-[34px] bg-slate-200 shadow-xl ${tall ? "md:-mt-10" : ""}`}>
+      <img src={image} alt={title} className="h-[430px] w-full object-cover transition duration-500 group-hover:scale-105" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/58 via-transparent to-transparent" />
+      <div className="absolute bottom-5 left-5 right-5">
+        <div className="inline-flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 font-black text-[#10231a] shadow-lg">
+          <CheckCircle size={17} className="text-emerald-700" />
+          {title}
+        </div>
       </div>
-      <h3 className="font-black">{title}</h3>
-      <p className="mt-2 text-sm text-white/64">{text}</p>
     </div>
   );
 }
