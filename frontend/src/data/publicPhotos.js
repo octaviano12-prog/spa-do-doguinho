@@ -1,16 +1,20 @@
 export const publicPhotos = {
   heroBath:
-    "https://images.unsplash.com/photo-1581887936036-3f4f7f0b6679?auto=format&fit=crop&w=1600&q=82",
+    "https://images.pexels.com/photos/6131158/pexels-photo-6131158.jpeg?auto=compress&cs=tinysrgb&w=1800",
   bathCare:
-    "https://images.pexels.com/photos/19145895/pexels-photo-19145895.jpeg?auto=compress&cs=tinysrgb&w=1400",
+    "https://images.pexels.com/photos/19145888/pexels-photo-19145888.jpeg?auto=compress&cs=tinysrgb&w=1400",
   grooming:
-    "https://images.pexels.com/photos/19145885/pexels-photo-19145885.jpeg?auto=compress&cs=tinysrgb&w=1400",
+    "https://images.pexels.com/photos/19145884/pexels-photo-19145884.jpeg?auto=compress&cs=tinysrgb&w=1400",
   towel:
-    "https://images.pexels.com/photos/16544122/pexels-photo-16544122.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    "https://images.pexels.com/photos/6131162/pexels-photo-6131162.jpeg?auto=compress&cs=tinysrgb&w=1400",
   vet:
-    "https://images.pexels.com/photos/7470752/pexels-photo-7470752.jpeg?auto=compress&cs=tinysrgb&w=1400",
+    "https://images.pexels.com/photos/7468980/pexels-photo-7468980.jpeg?auto=compress&cs=tinysrgb&w=1400",
   vetCare:
-    "https://images.pexels.com/photos/7469222/pexels-photo-7469222.jpeg?auto=compress&cs=tinysrgb&w=1400"
+    "https://images.pexels.com/photos/6234626/pexels-photo-6234626.jpeg?auto=compress&cs=tinysrgb&w=1400",
+  essentials:
+    "https://images.pexels.com/photos/4432261/pexels-photo-4432261.jpeg?auto=compress&cs=tinysrgb&w=1400",
+  salon:
+    "https://images.pexels.com/photos/6816863/pexels-photo-6816863.jpeg?auto=compress&cs=tinysrgb&w=1400"
 };
 
 export const homePhotoStories = [
@@ -61,6 +65,12 @@ export const fallbackGallery = [
     title: "Saúde em dia",
     description: "Acompanhamento para tutores que querem praticidade e segurança.",
     image_url: publicPhotos.vetCare
+  },
+  {
+    id: "fallback-6",
+    title: "Rotina pet organizada",
+    description: "Produtos, espaço e atendimento preparados para uma experiência tranquila.",
+    image_url: publicPhotos.essentials
   }
 ];
 
