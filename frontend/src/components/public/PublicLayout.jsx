@@ -130,9 +130,15 @@ export default function PublicLayout({ children }) {
 
       <main className="pt-[96px] lg:pt-[128px]">{children}</main>
 
-      <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3">
-        <a href={whatsappUrl} target="_blank" rel="noreferrer" className="hidden items-center gap-2 rounded-full bg-[#25D366] px-5 py-3 text-sm font-black text-white shadow-xl shadow-emerald-900/20 transition hover:scale-105 md:flex"><MessageCircle size={19} /> WhatsApp</a>
-        <Link to="/agendamento" className="flex h-14 w-14 items-center justify-center rounded-full bg-[#0d6b54] text-white shadow-xl shadow-emerald-900/25 ring-4 ring-white/70 transition hover:scale-105 hover:bg-[#095642] md:h-16 md:w-16" aria-label="Agendar atendimento"><CalendarDays size={26} /></Link>
+      <div className="fixed bottom-6 right-5 z-50 flex flex-col items-end gap-3 md:right-6">
+        <a href={whatsappUrl} target="_blank" rel="noreferrer" className="group hidden items-center gap-3 rounded-full bg-[#25D366] px-5 py-3 text-sm font-black text-white shadow-[0_18px_40px_rgba(37,211,102,.35)] ring-4 ring-white/70 transition hover:-translate-y-1 hover:scale-[1.03] hover:bg-[#1ebe5d] md:flex">
+          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/18"><MessageCircle size={20} /></span>
+          <span>WhatsApp</span>
+        </a>
+        <Link to="/agendamento" className="group flex items-center gap-3 rounded-full bg-[#0d6b54] px-4 py-3 text-white shadow-[0_18px_45px_rgba(13,107,84,.35)] ring-4 ring-white/75 transition hover:-translate-y-1 hover:scale-[1.03] hover:bg-[#095642] md:px-5" aria-label="Agendar atendimento">
+          <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white/14"><CalendarDays size={24} /></span>
+          <span className="hidden pr-1 text-sm font-black md:inline">Agendar</span>
+        </Link>
       </div>
 
       <footer className="relative overflow-hidden border-t border-[#d7eadf] bg-[#0b352b] text-white">
