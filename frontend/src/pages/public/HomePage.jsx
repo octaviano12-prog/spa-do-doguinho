@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Bath, CalendarDays, Heart, MessageCircle, PawPrint, Scissors, ShieldCheck, Sparkles, Star, Syringe } from "lucide-react";
 import PublicLayout from "../../components/public/PublicLayout";
 
-const dogHero = "https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=1300&q=90";
+const dogHero = "/images/hero-doguinho-banho-real.webp";
 
 const services = [
   { title: "Banho & Tosa", badge: "MAIS PEDIDO", icon: Bath, img: "/images/banho-tosa.svg", text: "Higiene completa, perfume e acabamento com muito carinho.", price: "R$ 60,00" },
@@ -65,7 +65,7 @@ export default function HomePage() {
             <div className="absolute inset-0 rounded-[60px] bg-gradient-to-br from-green-400/25 to-yellow-300/10 blur-3xl" />
             <div className="absolute top-8 right-8 h-52 w-52 rounded-full bg-yellow-300/15 blur-2xl" />
             <div className="relative w-full max-w-[680px] rounded-[46px] border border-yellow-300/25 bg-white/8 p-5 shadow-2xl backdrop-blur-xl overflow-visible">
-              <img src={dogHero} alt="Cachorro feliz" className="relative z-10 h-[500px] 2xl:h-[620px] w-full object-cover rounded-[36px] shadow-2xl" />
+              <img src={dogHero} alt="Cachorro no banho" className="relative z-10 h-[500px] 2xl:h-[620px] w-full object-contain rounded-[36px] drop-shadow-[0_28px_55px_rgba(0,0,0,.65)]" />
               <div className="absolute -left-5 bottom-10 z-20 rounded-3xl bg-[#fffaf0] px-5 py-4 text-slate-900 shadow-2xl border border-yellow-100">
                 <div className="flex items-center gap-2 text-yellow-500"><Star className="fill-yellow-500" size={18}/><Star className="fill-yellow-500" size={18}/><Star className="fill-yellow-500" size={18}/><Star className="fill-yellow-500" size={18}/><Star className="fill-yellow-500" size={18}/></div>
                 <p className="mt-2 font-black">Atendimento 5 estrelas</p>
