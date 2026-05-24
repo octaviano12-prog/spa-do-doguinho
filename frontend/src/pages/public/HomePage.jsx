@@ -61,42 +61,42 @@ export default function HomePage() {
   return (
     <PublicLayout>
       <main className="overflow-hidden bg-[#fffdf7] text-[#12382f]">
-        <section className="relative min-h-[700px] overflow-hidden bg-[#e9f6ee]">
+        <section className="relative min-h-[calc(100vh-128px)] overflow-hidden bg-[#e9f6ee] xl:min-h-[620px]">
           <img src={heroImage} alt="SPA do Doguinho" className="absolute inset-0 h-full w-full object-cover object-center" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#edf8f1]/95 via-[#edf8f1]/68 to-transparent" />
-          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#fffdf7] to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#edf8f1]/96 via-[#edf8f1]/70 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#fffdf7] to-transparent" />
 
-          <div className="relative mx-auto flex min-h-[700px] max-w-[1760px] items-center px-6 py-16 md:px-10">
-            <div className="max-w-3xl">
-              <h1 className="text-5xl font-black leading-[.95] tracking-[-.05em] text-[#12382f] md:text-7xl xl:text-8xl">
+          <div className="relative mx-auto flex min-h-[calc(100vh-128px)] max-w-[1760px] items-center px-6 py-8 md:px-10 xl:min-h-[620px]">
+            <div className="max-w-3xl -translate-y-4 xl:-translate-y-2">
+              <h1 className="text-4xl font-black leading-[.95] tracking-[-.05em] text-[#12382f] sm:text-5xl md:text-6xl xl:text-7xl 2xl:text-[5.6rem]">
                 Mais que um banho,
                 <span className="block font-serif italic text-[#0d8b67]">um momento de amor!</span>
               </h1>
 
-              <p className="mt-7 max-w-xl text-lg leading-relaxed text-slate-700 md:text-xl">
+              <p className="mt-5 max-w-xl text-base leading-relaxed text-slate-700 md:text-lg">
                 No SPA do Doguinho, seu pet recebe cuidado especial, com carinho,
                 segurança e muito amor. Porque aqui, ele se sente em casa!
               </p>
 
-              <div className="mt-8 flex flex-wrap gap-4">
-                <Link to="/agendamento" className="inline-flex items-center gap-3 rounded-2xl bg-[#0d6b54] px-7 py-4 font-black text-white shadow-xl transition hover:-translate-y-1 hover:bg-[#095642]">
+              <div className="mt-6 flex flex-wrap gap-4">
+                <Link to="/agendamento" className="inline-flex items-center gap-3 rounded-2xl bg-[#0d6b54] px-6 py-3.5 font-black text-white shadow-xl transition hover:-translate-y-1 hover:bg-[#095642]">
                   <CalendarDays size={20} /> Agende agora
                 </Link>
-                <Link to="/servicos" className="inline-flex items-center gap-3 rounded-2xl border border-[#0d6b54]/35 bg-white/85 px-7 py-4 font-black text-[#0d6b54] shadow-sm backdrop-blur transition hover:-translate-y-1">
+                <Link to="/servicos" className="inline-flex items-center gap-3 rounded-2xl border border-[#0d6b54]/35 bg-white/85 px-6 py-3.5 font-black text-[#0d6b54] shadow-sm backdrop-blur transition hover:-translate-y-1">
                   <Heart size={20} /> Nossos serviços
                 </Link>
               </div>
 
-              <div className="mt-8 flex flex-wrap items-center gap-4">
+              <div className="mt-6 flex flex-wrap items-center gap-4">
                 <div className="flex gap-1 text-[#f4b942]">
-                  {[1, 2, 3, 4, 5].map((i) => <Star key={i} size={19} fill="currentColor" />)}
+                  {[1, 2, 3, 4, 5].map((i) => <Star key={i} size={18} fill="currentColor" />)}
                 </div>
                 <p className="text-sm font-black text-slate-600">Mais de 500 pets felizes!</p>
               </div>
             </div>
           </div>
 
-          <div className="absolute bottom-16 right-8 hidden max-w-[280px] rounded-[26px] bg-[#0d6b54] p-5 text-white shadow-2xl xl:block">
+          <div className="absolute bottom-10 right-8 hidden max-w-[280px] rounded-[26px] bg-[#0d6b54] p-5 text-white shadow-2xl xl:block">
             <div className="flex items-center gap-4">
               <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15"><PawPrint size={30} /></div>
               <div>
@@ -107,7 +107,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="relative -mt-10 px-5 md:px-8">
+        <section className="relative -mt-8 px-5 md:px-8">
           <div className="mx-auto max-w-[1500px]">
             <h2 className="mb-7 text-center text-3xl font-black text-[#0d6b54] md:text-4xl">Nossos serviços</h2>
             <div className="grid gap-5 md:grid-cols-4">
