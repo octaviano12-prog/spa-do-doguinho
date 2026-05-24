@@ -6,7 +6,6 @@ import {
   CalendarDays,
   CheckCircle2,
   Heart,
-  Image,
   LogIn,
   MessageCircle,
   PawPrint,
@@ -26,6 +25,15 @@ import PublicLayout from "../../components/public/PublicLayout";
 
 const whatsappUrl =
   "https://wa.me/5518997493722?text=Olá! Gostaria de conhecer melhor o SPA do Doguinho.";
+
+const images = {
+  hero: "/images/sobre-hero.webp",
+  essence: "/images/sobre-essencia.webp",
+  ambience01: "/images/sobre-ambiente-01.webp",
+  ambience02: "/images/sobre-ambiente-02.webp",
+  ambience03: "/images/sobre-ambiente-03.webp",
+  cta: "/images/sobre-cta.webp"
+};
 
 const pillars = [
   { icon: Heart, title: "Amor", text: "Cuidado com afeto e atenção em cada detalhe." },
@@ -57,18 +65,11 @@ const ambienceItems = [
   [PawPrint, "Áreas pensadas para o conforto do pet"]
 ];
 
-function ImagePlaceholder({ title, subtitle = "Espaço reservado para nova imagem", className = "" }) {
+function PhotoCard({ src, alt, className = "" }) {
   return (
-    <div className={`relative flex min-h-[320px] items-center justify-center overflow-hidden rounded-[34px] border border-dashed border-[#0d6b54]/25 bg-[linear-gradient(135deg,#e6f5eb,#fff8e6)] p-8 text-center shadow-lg ring-1 ring-white/70 ${className}`}>
-      <div className="absolute -left-12 -top-12 h-44 w-44 rounded-full bg-[#0d8b67]/10 blur-2xl" />
-      <div className="absolute -bottom-12 -right-12 h-44 w-44 rounded-full bg-[#f4c86a]/25 blur-2xl" />
-      <div className="relative">
-        <div className="home-float mx-auto flex h-20 w-20 items-center justify-center rounded-[28px] bg-white text-[#0d6b54] shadow-xl">
-          <Image size={36} />
-        </div>
-        <h3 className="mt-5 text-2xl font-black text-[#12382f]">{title}</h3>
-        <p className="mt-2 text-sm font-bold text-slate-500">{subtitle}</p>
-      </div>
+    <div className={`group relative overflow-hidden rounded-[34px] bg-[#e6f5eb] shadow-lg ring-1 ring-white/70 ${className}`}>
+      <img src={src} alt={alt} className="absolute inset-0 h-full w-full object-cover object-center transition duration-700 group-hover:scale-105" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#0b352b]/15 via-transparent to-white/5" />
     </div>
   );
 }
@@ -78,7 +79,8 @@ export default function QuemSomosPage() {
     <PublicLayout>
       <main className="overflow-hidden bg-[#fffdf7] text-[#12382f]">
         <section className="relative min-h-[620px] overflow-hidden bg-[linear-gradient(135deg,#fffdf7,#e6f5eb,#fff8e6)]">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_18%,rgba(13,139,103,.18),transparent_28%),radial-gradient(circle_at_88%_20%,rgba(244,200,106,.28),transparent_30%)]" />
+          <img src={images.hero} alt="Quem somos - SPA do Doguinho" className="home-hero-image absolute inset-0 h-full w-full object-cover object-center" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#fffdf7]/96 via-[#fffdf7]/80 to-transparent" />
           <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#fffdf7] to-transparent" />
 
           <div className="relative mx-auto grid min-h-[620px] max-w-[1880px] gap-10 px-6 py-12 md:px-10 lg:grid-cols-[1fr_.9fr] lg:items-center">
@@ -104,8 +106,6 @@ export default function QuemSomosPage() {
                 <a href={whatsappUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-3 rounded-2xl border border-[#25D366]/30 bg-[#e9fff2] px-6 py-4 font-black text-[#128c4b] shadow-sm transition hover:-translate-y-1"><MessageCircle size={20} /> Falar no WhatsApp</a>
               </div>
             </div>
-
-            <ImagePlaceholder title="Imagem principal do Quem Somos" subtitle="Depois colocamos uma foto exclusiva inspirada na referência" className="min-h-[460px]" />
           </div>
         </section>
 
@@ -128,7 +128,7 @@ export default function QuemSomosPage() {
 
         <section className="px-5 py-16 md:px-8">
           <div className="mx-auto grid max-w-[1880px] gap-8 lg:grid-cols-[.95fr_1.05fr] lg:items-center">
-            <ImagePlaceholder title="Imagem da nossa essência" subtitle="Foto exclusiva de pet com toalha ou ambiente de cuidado" className="min-h-[520px]" />
+            <PhotoCard src={images.essence} alt="Nossa essência no SPA do Doguinho" className="min-h-[520px]" />
             <div>
               <span className="inline-flex items-center gap-2 rounded-full bg-[#e7f4ed] px-5 py-2 text-sm font-black text-[#0d6b54]"><Award size={18} /> Nossa essência</span>
               <h2 className="mt-6 text-4xl font-black leading-tight tracking-[-.04em] text-[#0d6b54] md:text-6xl">Acreditamos que cada pet é único.</h2>
@@ -194,24 +194,24 @@ export default function QuemSomosPage() {
                 </div>
               </div>
               <div className="grid gap-5 md:grid-cols-2">
-                {["Imagem ampla do ambiente", "Imagem da recepção", "Imagem do banho", "Imagem do espaço pet"].map((title, index) => (
-                  <div key={title} className={`home-card-animate ${index === 0 ? "md:col-span-2" : ""}`} style={{ animationDelay: `${index * 90}ms` }}>
-                    <ImagePlaceholder title={title} subtitle="Reservado para imagem exclusiva" className={index === 0 ? "min-h-[300px] bg-white/65" : "min-h-[250px] bg-white/65"} />
-                  </div>
-                ))}
+                <PhotoCard src={images.ambience01} alt="Ambiente amplo do SPA do Doguinho" className="min-h-[300px] md:col-span-2" />
+                <PhotoCard src={images.ambience02} alt="Atendimento no SPA do Doguinho" className="min-h-[250px]" />
+                <PhotoCard src={images.ambience03} alt="Espaço pet do SPA do Doguinho" className="min-h-[250px]" />
               </div>
             </div>
           </div>
         </section>
 
-        <section className="px-5 pb-16 md:px-8">
-          <div className="mx-auto grid max-w-[1880px] gap-8 overflow-hidden rounded-[44px] bg-[linear-gradient(135deg,#d9eee3,#fff8e6)] p-8 text-[#12382f] shadow-2xl ring-1 ring-[#d9eee3] md:p-12 lg:grid-cols-[1fr_auto] lg:items-center">
-            <div>
+        <section className="relative px-5 pb-16 md:px-8">
+          <div className="relative mx-auto grid min-h-[420px] max-w-[1880px] overflow-hidden rounded-[44px] bg-[linear-gradient(135deg,#d9eee3,#fff8e6)] p-8 text-[#12382f] shadow-2xl ring-1 ring-[#d9eee3] md:p-12 lg:grid-cols-[1fr_auto] lg:items-center">
+            <img src={images.cta} alt="Chamada final SPA do Doguinho" className="absolute inset-0 h-full w-full object-cover object-center opacity-35" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#fffdf7]/95 via-[#fffdf7]/78 to-transparent" />
+            <div className="relative">
               <span className="inline-flex items-center gap-2 rounded-full bg-white/70 px-5 py-2 text-sm font-black text-[#0d6b54]"><Star size={16} fill="currentColor" /> SPA do Doguinho</span>
               <h2 className="mt-6 max-w-4xl text-4xl font-black leading-tight tracking-[-.04em] text-[#0d6b54] md:text-6xl">Pronto para proporcionar momentos incríveis para seu doguinho?</h2>
               <p className="mt-5 max-w-2xl text-lg font-semibold leading-relaxed text-slate-700">Agende agora ou fale com a gente. Vamos cuidar do seu melhor amigo com todo amor que ele merece!</p>
             </div>
-            <div className="flex flex-col gap-3 sm:flex-row">
+            <div className="relative flex flex-col gap-3 sm:flex-row">
               <Link to="/cliente-login" className="inline-flex items-center justify-center gap-3 rounded-2xl bg-[#0d6b54] px-8 py-4 font-black text-white shadow-xl transition hover:-translate-y-1"><CalendarDays size={20} /> Agendar agora</Link>
               <a href={whatsappUrl} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-3 rounded-2xl border border-[#0d6b54]/20 bg-white/80 px-8 py-4 font-black text-[#0d6b54] backdrop-blur transition hover:-translate-y-1"><Phone size={20} /> Falar no WhatsApp</a>
             </div>
