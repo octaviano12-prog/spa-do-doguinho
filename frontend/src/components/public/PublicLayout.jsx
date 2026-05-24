@@ -22,44 +22,44 @@ export default function PublicLayout({ children }) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-[#f2eadc] text-[#10231a]">
+    <div className="min-h-screen overflow-x-hidden bg-[#edf6ed] text-[#102d27]">
       <header className="fixed left-0 right-0 top-0 z-50 px-3 py-3 md:px-6">
-        <div className="mx-auto max-w-[1680px] overflow-hidden rounded-[24px] border border-emerald-900/10 bg-[#eadfcd]/70 shadow-[0_12px_30px_rgba(15,35,26,.08)] backdrop-blur-xl">
-          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(15,122,59,.055),transparent_45%,rgba(194,142,48,.08))]" />
+        <div className="mx-auto max-w-[1680px] overflow-hidden rounded-[24px] border border-[#b7d7c2]/70 bg-[#dcefe3]/76 shadow-[0_12px_30px_rgba(25,83,78,.08)] backdrop-blur-xl">
+          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(25,83,78,.07),transparent_45%,rgba(255,244,220,.26))]" />
           <div className="relative flex min-h-[62px] items-center justify-between gap-3 px-4 2xl:px-5">
             <Link to="/" className="group flex w-[235px] min-w-0 shrink-0 items-center gap-3 xl:w-[245px] 2xl:w-[270px]" onClick={() => setMobileOpen(false)}>
               <BrandLogo />
               <div className="min-w-0 leading-none">
-                <div className="flex items-center gap-1"><span className="text-[20px] font-black tracking-tight text-[#10231a] 2xl:text-[23px]">SPA</span><span className="text-[15px] font-black text-emerald-700 2xl:text-[17px]">do</span></div>
-                <div className="text-[22px] font-black leading-[.82] tracking-tight text-[#10231a] 2xl:text-[25px]">Doguinho</div>
-                <div className="mt-2 whitespace-nowrap text-[9px] font-black text-emerald-700 2xl:text-[10px]">Banho • Tosa • Veterinária</div>
+                <div className="flex items-center gap-1"><span className="text-[20px] font-black tracking-tight text-[#102d27] 2xl:text-[23px]">SPA</span><span className="text-[15px] font-black text-[#0d8b67] 2xl:text-[17px]">do</span></div>
+                <div className="text-[22px] font-black leading-[.82] tracking-tight text-[#102d27] 2xl:text-[25px]">Doguinho</div>
+                <div className="mt-2 whitespace-nowrap text-[9px] font-black text-[#0d8b67] 2xl:text-[10px]">Banho • Tosa • Veterinária</div>
               </div>
             </Link>
 
             <nav className="hidden min-w-0 flex-1 items-center justify-center xl:flex">
-              <div className="flex items-center gap-1 rounded-[20px] border border-emerald-900/8 bg-white/54 px-2 py-1.5 shadow-inner backdrop-blur">
+              <div className="flex items-center gap-1 rounded-[20px] border border-[#b7d7c2]/75 bg-white/54 px-2 py-1.5 shadow-inner backdrop-blur">
                 {navLinks.map((item) => {
                   const Icon = item.icon;
-                  return <NavLink key={item.to} to={item.to} className={({ isActive }) => `relative flex items-center gap-2 whitespace-nowrap rounded-xl px-3 py-2 text-[12px] font-black transition 2xl:px-4 2xl:text-[13px] ${isActive ? "bg-emerald-100 text-emerald-900" : "text-slate-600 hover:bg-white hover:text-emerald-900"}`}>{({ isActive }) => <><Icon size={13} className={isActive ? "text-emerald-700" : "text-slate-400"} /><span>{item.label}</span>{isActive && <span className="absolute -bottom-1.5 left-4 right-4 h-[2px] rounded-full bg-emerald-500" />}</>}</NavLink>;
+                  return <NavLink key={item.to} to={item.to} className={({ isActive }) => `relative flex items-center gap-2 whitespace-nowrap rounded-xl px-3 py-2 text-[12px] font-black transition 2xl:px-4 2xl:text-[13px] ${isActive ? "bg-[#c8f1dc] text-[#19534e]" : "text-slate-600 hover:bg-white hover:text-[#19534e]"}`}>{({ isActive }) => <><Icon size={13} className={isActive ? "text-[#0d8b67]" : "text-slate-400"} /><span>{item.label}</span>{isActive && <span className="absolute -bottom-1.5 left-4 right-4 h-[2px] rounded-full bg-[#0d8b67]" />}</>}</NavLink>;
                 })}
               </div>
             </nav>
 
             <div className="hidden w-[300px] shrink-0 items-center justify-end gap-2 lg:flex xl:w-[315px] 2xl:w-[345px]">
-              <Link to="/agendamento" className="flex items-center gap-2 whitespace-nowrap rounded-xl border border-emerald-500/20 bg-[#0f7a3b] px-3.5 py-2.5 text-[13px] font-black text-white shadow-lg shadow-emerald-900/15 transition hover:-translate-y-0.5 hover:bg-[#0b6631]"><CalendarDays size={15} /> Agendar</Link>
-              <Link to="/cliente-login" className="flex items-center gap-2 whitespace-nowrap rounded-xl border border-emerald-900/10 bg-white/70 px-3.5 py-2.5 text-[13px] font-black text-[#10231a] shadow-sm transition hover:-translate-y-0.5 hover:border-emerald-600"><User size={15} /> Cliente</Link>
-              <Link to="/login" className="flex items-center gap-2 whitespace-nowrap rounded-xl border border-emerald-900/10 bg-white/70 px-3.5 py-2.5 text-[13px] font-black text-[#10231a] shadow-sm transition hover:-translate-y-0.5 hover:border-emerald-600"><ShieldCheck size={15} /> Admin</Link>
+              <Link to="/agendamento" className="flex items-center gap-2 whitespace-nowrap rounded-xl border border-[#0d8b67]/25 bg-[#19534e] px-3.5 py-2.5 text-[13px] font-black text-white shadow-lg shadow-emerald-900/15 transition hover:-translate-y-0.5 hover:bg-[#123f3b]"><CalendarDays size={15} /> Agendar</Link>
+              <Link to="/cliente-login" className="flex items-center gap-2 whitespace-nowrap rounded-xl border border-[#b7d7c2]/80 bg-white/70 px-3.5 py-2.5 text-[13px] font-black text-[#102d27] shadow-sm transition hover:-translate-y-0.5 hover:border-[#19534e]"><User size={15} /> Cliente</Link>
+              <Link to="/login" className="flex items-center gap-2 whitespace-nowrap rounded-xl border border-[#b7d7c2]/80 bg-white/70 px-3.5 py-2.5 text-[13px] font-black text-[#102d27] shadow-sm transition hover:-translate-y-0.5 hover:border-[#19534e]"><ShieldCheck size={15} /> Admin</Link>
             </div>
 
-            <button type="button" onClick={() => setMobileOpen((current) => !current)} className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-emerald-900/10 bg-white/72 p-3 text-[#10231a] shadow-sm lg:hidden">{mobileOpen ? <X /> : <Menu />}</button>
+            <button type="button" onClick={() => setMobileOpen((current) => !current)} className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-[#b7d7c2]/80 bg-white/72 p-3 text-[#102d27] shadow-sm lg:hidden">{mobileOpen ? <X /> : <Menu />}</button>
           </div>
         </div>
 
-        {mobileOpen && <div className="mx-auto mt-3 max-w-[1680px] rounded-[28px] border border-emerald-900/10 bg-[#eadfcd]/96 px-4 py-5 text-[#10231a] shadow-2xl backdrop-blur-2xl lg:hidden"><nav className="grid gap-2 font-bold">{navLinks.map((item) => <NavLink key={item.to} to={item.to} onClick={() => setMobileOpen(false)} className={({ isActive }) => `rounded-2xl px-5 py-4 transition ${isActive ? "bg-emerald-700 text-white" : "text-slate-700 hover:bg-white/70"}`}>{item.label}</NavLink>)}<Link to="/agendamento" onClick={() => setMobileOpen(false)} className="mt-2 flex items-center justify-center gap-2 rounded-2xl bg-emerald-700 px-5 py-4 font-black text-white shadow-lg transition hover:bg-emerald-800"><CalendarDays size={18} /> Agendar atendimento</Link><Link to="/cliente-login" onClick={() => setMobileOpen(false)} className="flex items-center justify-center gap-2 rounded-2xl border border-emerald-900/10 bg-white/70 px-5 py-4 font-black text-emerald-900 transition hover:bg-white"><User size={18} /> Área do Cliente</Link><Link to="/login" onClick={() => setMobileOpen(false)} className="flex items-center justify-center gap-2 rounded-2xl border border-emerald-900/10 bg-white/70 px-5 py-4 font-black text-emerald-900 transition hover:bg-white"><ShieldCheck size={18} /> Área Admin</Link></nav></div>}
+        {mobileOpen && <div className="mx-auto mt-3 max-w-[1680px] rounded-[28px] border border-[#b7d7c2]/80 bg-[#dcefe3]/96 px-4 py-5 text-[#102d27] shadow-2xl backdrop-blur-2xl lg:hidden"><nav className="grid gap-2 font-bold">{navLinks.map((item) => <NavLink key={item.to} to={item.to} onClick={() => setMobileOpen(false)} className={({ isActive }) => `rounded-2xl px-5 py-4 transition ${isActive ? "bg-[#19534e] text-white" : "text-slate-700 hover:bg-white/70"}`}>{item.label}</NavLink>)}<Link to="/agendamento" onClick={() => setMobileOpen(false)} className="mt-2 flex items-center justify-center gap-2 rounded-2xl bg-[#19534e] px-5 py-4 font-black text-white shadow-lg transition hover:bg-[#123f3b]"><CalendarDays size={18} /> Agendar atendimento</Link><Link to="/cliente-login" onClick={() => setMobileOpen(false)} className="flex items-center justify-center gap-2 rounded-2xl border border-[#b7d7c2]/80 bg-white/70 px-5 py-4 font-black text-[#19534e] transition hover:bg-white"><User size={18} /> Área do Cliente</Link><Link to="/login" onClick={() => setMobileOpen(false)} className="flex items-center justify-center gap-2 rounded-2xl border border-[#b7d7c2]/80 bg-white/70 px-5 py-4 font-black text-[#19534e] transition hover:bg-white"><ShieldCheck size={18} /> Área Admin</Link></nav></div>}
       </header>
 
       <main className="pt-[88px]">{children}</main>
-      <Link to="/agendamento" className="fixed bottom-5 right-5 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-600 text-white shadow-xl shadow-emerald-900/25 transition hover:scale-105 hover:bg-emerald-700 md:h-14 md:w-14" aria-label="Agendar atendimento"><CalendarDays size={24} /></Link>
+      <Link to="/agendamento" className="fixed bottom-5 right-5 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-[#0d8b67] text-white shadow-xl shadow-emerald-900/25 transition hover:scale-105 hover:bg-[#19534e] md:h-14 md:w-14" aria-label="Agendar atendimento"><CalendarDays size={24} /></Link>
 
       <footer className="relative overflow-hidden border-t border-emerald-900/10 bg-[#071b12] text-white">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(34,197,94,.16),transparent_30%),radial-gradient(circle_at_85%_80%,rgba(245,158,11,.12),transparent_30%)]" />
