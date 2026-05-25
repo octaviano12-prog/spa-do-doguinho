@@ -42,6 +42,17 @@ function CustomerRoute({ children }) {
   return token ? children : <Navigate to="/cliente-login" replace />;
 }
 
+function CustomerHomeRoute() {
+  const pendingMobileBooking = sessionStorage.getItem("spa_mobile_booking_intent") === "1";
+
+  if (pendingMobileBooking) {
+    sessionStorage.removeItem("spa_mobile_booking_intent");
+    return <Navigate to="/agendamento" replace />;
+  }
+
+  return <ClienteDashboardPage />;
+}
+
 function HomeRoute() {
   const [isMobile, setIsMobile] = useState(() => window.matchMedia("(max-width: 767px)").matches);
 
@@ -53,7 +64,7 @@ function HomeRoute() {
     return () => mediaQuery.removeEventListener("change", updateView);
   }, []);
 
-  return isMobile ? <MobileHomePage /> : <HomePage />;
+  return isMobile ? <Navigate to="/mobile" replace /> : <HomePage />;
 }
 
 export default function App() {
@@ -61,13 +72,14 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomeRoute />} />
+        <Route path="/mobile" element={<MobileHomePage />} />
         <Route path="/quem-somos" element={<QuemSomosPage />} />
         <Route path="/servicos" element={<ServicosPublicPage />} />
         <Route path="/galeria" element={<GaleriaPublicPage />} />
         <Route path="/contato" element={<ContatoPage />} />
         <Route path="/agendamento" element={<CustomerRoute><AgendamentoPage /></CustomerRoute>} />
         <Route path="/cliente-login" element={<ClienteLoginPage />} />
-        <Route path="/cliente" element={<CustomerRoute><ClienteDashboardPage /></CustomerRoute>} />
+        <Route path="/cliente" element={<CustomerRoute><CustomerHomeRoute /></CustomerRoute>} />
 
         <Route path="/login" element={<LoginPage />} />
 
