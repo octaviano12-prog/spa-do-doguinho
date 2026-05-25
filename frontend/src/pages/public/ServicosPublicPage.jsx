@@ -17,6 +17,7 @@ import PublicLayout from "../../components/public/PublicLayout";
 import { getPublicServicePhoto } from "../../data/publicPhotos";
 
 const API_PUBLIC = "https://spadodoguinho.com.br/api/public";
+const heroImage = "/images/servicos-hero.webp";
 
 function formatCurrency(value) {
   return Number(value || 0).toLocaleString("pt-BR", {
@@ -67,7 +68,7 @@ export default function ServicosPublicPage() {
     <PublicLayout>
       <main className="overflow-hidden bg-[#fffdf7] text-[#12382f]">
         <section className="relative h-[calc(100vh-96px)] min-h-[620px] overflow-hidden bg-[#e7f4ed]">
-          <img src="/images/banho-pet-home.webp" alt="Banho e tosa premium" className="absolute inset-0 h-full w-full object-cover object-center" />
+          <img src={heroImage} alt="Serviços premium do SPA do Doguinho" className="absolute inset-0 h-full w-full object-cover object-center" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#e7f4ed]/96 via-[#e7f4ed]/76 to-transparent" />
           <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-[#fffdf7] to-transparent" />
 
