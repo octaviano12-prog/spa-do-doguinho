@@ -100,71 +100,69 @@ export default function ClienteDashboardPage() {
 
   return (
     <PublicLayout>
-      <main className="relative overflow-hidden bg-[#06150d] min-h-[calc(100vh-80px)] px-6 py-20">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,#22c55e44,transparent_30%),radial-gradient(circle_at_85%_10%,#f59e0b22,transparent_30%)]" />
-
-        <div className="relative max-w-7xl mx-auto space-y-8">
-          <div className="grid lg:grid-cols-[1fr_420px] gap-8 items-center">
-            <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-6">
-              <div>
-                <span className="inline-flex items-center gap-2 bg-white/10 border border-white/15 rounded-full px-5 py-2 text-green-100 font-black">
-                  <User size={18} />
-                  Área do cliente
-                </span>
-                <h1 className="text-5xl md:text-6xl font-black text-white mt-5">
-                  Olá, {customer?.name || "cliente"}!
-                </h1>
-                <p className="text-white/70 mt-3 text-lg max-w-3xl">
-                  Acompanhe seus pets, agendamentos, pagamentos e histórico de atendimento.
-                </p>
-              </div>
+      <main className="min-h-[calc(100vh-80px)] overflow-hidden bg-[#fffdf7] text-[#12382f]">
+        <section className="bg-[#e7f4ed] px-5 py-12 md:px-8">
+          <div className="mx-auto grid max-w-[1680px] gap-8 lg:grid-cols-[1fr_420px] lg:items-center">
+            <div>
+              <span className="inline-flex items-center gap-2 rounded-full border border-emerald-900/10 bg-white px-5 py-2 font-black text-emerald-900 shadow-sm">
+                <User size={18} />
+                Área do cliente
+              </span>
+              <h1 className="mt-5 text-5xl font-black md:text-6xl">
+                Olá, {customer?.name || "cliente"}!
+              </h1>
+              <p className="mt-3 max-w-3xl text-lg text-slate-600">
+                Acompanhe seus pets, agendamentos, pagamentos e histórico de atendimento.
+              </p>
             </div>
 
-            <div className="bg-white/10 border border-white/10 rounded-[34px] p-5 shadow-2xl hidden lg:block">
-              <img src="/images/cliente-premium.svg" alt="Área do cliente" className="rounded-[28px] w-full" />
+            <div className="hidden overflow-hidden rounded-[32px] bg-white p-3 shadow-xl ring-1 ring-black/5 lg:block">
+              <img src="/images/sobre-hero.webp" alt="Área do cliente" className="h-64 w-full rounded-[24px] object-cover" />
             </div>
           </div>
+        </section>
 
+        <section className="mx-auto max-w-[1680px] space-y-8 px-5 py-10 md:px-8">
           <div className="flex flex-wrap gap-3">
-            <button onClick={loadData} className="bg-white/10 hover:bg-white/20 border border-white/10 text-white px-6 py-4 rounded-2xl font-black flex items-center gap-2 transition">
+            <button onClick={loadData} className="flex items-center gap-2 rounded-2xl border border-[#e2eadf] bg-white px-6 py-4 font-black text-[#12382f] shadow-sm transition hover:border-[#0d6b54]">
               <RefreshCw size={20} />
               Atualizar
             </button>
-            <button onClick={logout} className="bg-red-500/20 hover:bg-red-500/30 border border-red-300/20 text-white px-6 py-4 rounded-2xl font-black flex items-center gap-2 transition">
+            <button onClick={logout} className="flex items-center gap-2 rounded-2xl border border-red-200 bg-red-50 px-6 py-4 font-black text-red-700 transition hover:bg-red-100">
               <LogOut size={20} />
               Sair
             </button>
           </div>
 
           {error && (
-            <div className="bg-red-500/15 border border-red-400/30 text-red-100 rounded-3xl p-5 font-bold">
+            <div className="rounded-3xl border border-red-200 bg-red-50 p-5 font-bold text-red-700">
               {error}
             </div>
           )}
 
-          <div className="grid md:grid-cols-4 gap-6">
+          <div className="grid gap-6 md:grid-cols-4">
             {[
               ["Meus pets", pets.length, PawPrint],
               ["Agendamentos", appointments.length, CalendarDays],
               ["Pagamentos", payments.length, CreditCard],
               ["Status", "Ativo", ShieldCheck]
             ].map(([label, value, Icon]) => (
-              <div key={label} className="bg-white rounded-[30px] p-6 border border-green-100 shadow-2xl">
-                <Icon className="text-green-700 mb-4" size={34} />
-                <div className="text-slate-500 font-bold">{label}</div>
-                <div className="text-3xl font-black text-slate-900 mt-2">{loading ? "..." : value}</div>
+              <div key={label} className="rounded-[28px] bg-white p-6 shadow-xl ring-1 ring-black/5">
+                <Icon className="mb-4 text-[#0d6b54]" size={34} />
+                <div className="font-bold text-slate-500">{label}</div>
+                <div className="mt-2 text-3xl font-black">{loading ? "..." : value}</div>
               </div>
             ))}
           </div>
 
-          <div className="grid xl:grid-cols-3 gap-6">
-            <div className="xl:col-span-2 bg-white rounded-[34px] p-8 shadow-2xl border border-green-100">
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+          <div className="grid gap-6 xl:grid-cols-3">
+            <div className="rounded-[34px] bg-white p-8 shadow-xl ring-1 ring-black/5 xl:col-span-2">
+              <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div>
-                  <h2 className="text-3xl font-black text-slate-900">Meus agendamentos</h2>
-                  <p className="text-slate-500 mt-1">Histórico e próximos atendimentos.</p>
+                  <h2 className="text-3xl font-black">Meus agendamentos</h2>
+                  <p className="mt-1 text-slate-500">Histórico e próximos atendimentos.</p>
                 </div>
-                <Link to="/agendamento" className="bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-2xl font-black flex items-center justify-center gap-2 transition">
+                <Link to="/agendamento" className="flex items-center justify-center gap-2 rounded-2xl bg-[#0d6b54] px-5 py-3 font-black text-white transition hover:bg-[#095642]">
                   <Plus size={18} />
                   Agendar
                 </Link>
@@ -173,26 +171,17 @@ export default function ClienteDashboardPage() {
               <div className="space-y-4">
                 {loading && <div className="text-slate-500">Carregando...</div>}
                 {!loading && nextAppointments.length === 0 && (
-                  <div className="bg-slate-50 rounded-2xl p-8 text-center text-slate-500 border">
+                  <div className="rounded-2xl border border-slate-100 bg-slate-50 p-8 text-center text-slate-500">
                     Nenhum agendamento encontrado.
                   </div>
                 )}
                 {!loading && nextAppointments.map((item) => (
-                  <div key={item.id} className="bg-slate-50 rounded-2xl p-5 border border-slate-100 grid md:grid-cols-4 gap-4 items-center">
-                    <div>
-                      <div className="text-xs text-slate-400 font-black uppercase">Pet</div>
-                      <div className="font-black text-slate-900">{item.pet_name || `Pet #${item.pet_id || "-"}`}</div>
-                    </div>
-                    <div>
-                      <div className="text-xs text-slate-400 font-black uppercase">Serviço</div>
-                      <div className="font-black text-slate-900">{item.service_name || `Serviço #${item.service_id || "-"}`}</div>
-                    </div>
-                    <div>
-                      <div className="text-xs text-slate-400 font-black uppercase">Data</div>
-                      <div className="font-black text-slate-900">{formatDate(item.scheduled_at || item.date)}</div>
-                    </div>
+                  <div key={item.id} className="grid gap-4 rounded-2xl border border-slate-100 bg-slate-50 p-5 md:grid-cols-4 md:items-center">
+                    <Info label="Pet" value={item.pet_name || `Pet #${item.pet_id || "-"}`} />
+                    <Info label="Serviço" value={item.service_name || `Serviço #${item.service_id || "-"}`} />
+                    <Info label="Data" value={formatDate(item.scheduled_at || item.date)} />
                     <div className="md:text-right">
-                      <span className="inline-flex bg-green-100 text-green-700 px-4 py-2 rounded-full font-black">
+                      <span className="inline-flex rounded-full bg-emerald-100 px-4 py-2 font-black text-emerald-700">
                         {item.status || "Pendente"}
                       </span>
                     </div>
@@ -201,37 +190,46 @@ export default function ClienteDashboardPage() {
               </div>
             </div>
 
-            <div className="bg-white rounded-[34px] p-8 shadow-2xl border border-green-100">
-              <h2 className="text-3xl font-black text-slate-900 mb-6">Meus pets</h2>
+            <div className="rounded-[34px] bg-white p-8 shadow-xl ring-1 ring-black/5">
+              <h2 className="mb-6 text-3xl font-black">Meus pets</h2>
               <div className="space-y-4">
                 {loading && <div className="text-slate-500">Carregando...</div>}
                 {!loading && pets.length === 0 && (
-                  <div className="bg-slate-50 rounded-2xl p-6 text-center text-slate-500 border">
+                  <div className="rounded-2xl border border-slate-100 bg-slate-50 p-6 text-center text-slate-500">
                     Nenhum pet cadastrado ainda.
                   </div>
                 )}
                 {!loading && pets.map((pet) => (
-                  <div key={pet.id} className="bg-slate-50 rounded-2xl p-5 border border-slate-100 flex gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-green-100 text-green-700 flex items-center justify-center">
+                  <div key={pet.id} className="flex gap-4 rounded-2xl border border-slate-100 bg-slate-50 p-5">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-800">
                       <Heart size={24} />
                     </div>
                     <div>
-                      <div className="font-black text-slate-900">{pet.name}</div>
-                      <div className="text-slate-500 text-sm">{pet.species || "Pet"} {pet.breed ? `• ${pet.breed}` : ""}</div>
+                      <div className="font-black">{pet.name}</div>
+                      <div className="text-sm text-slate-500">{pet.species || "Pet"} {pet.breed ? `• ${pet.breed}` : ""}</div>
                     </div>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-8 bg-green-50 rounded-3xl p-6 border border-green-100">
-                <Clock className="text-green-700 mb-3" />
-                <h3 className="font-black text-slate-900">Em breve</h3>
-                <p className="text-slate-500 mt-2">Carteirinha, vacinas, pagamentos e histórico completo por pet.</p>
+              <div className="mt-8 rounded-3xl border border-emerald-100 bg-emerald-50 p-6">
+                <Clock className="mb-3 text-[#0d6b54]" />
+                <h3 className="font-black">Em breve</h3>
+                <p className="mt-2 text-slate-600">Carteirinha, vacinas, pagamentos e histórico completo por pet.</p>
               </div>
             </div>
           </div>
-        </div>
+        </section>
       </main>
     </PublicLayout>
+  );
+}
+
+function Info({ label, value }) {
+  return (
+    <div>
+      <div className="text-xs font-black uppercase text-slate-400">{label}</div>
+      <div className="font-black">{value}</div>
+    </div>
   );
 }
