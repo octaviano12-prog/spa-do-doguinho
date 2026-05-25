@@ -73,33 +73,33 @@ export default function HomePage() {
   return (
     <PublicLayout>
       <main className="overflow-hidden bg-[#fffdf7] text-[#12382f]">
-        <section className="relative min-h-[calc(100vh-128px)] overflow-hidden bg-[#e9f6ee] xl:min-h-[620px]">
+        <section className="relative h-[calc(100vh-128px)] min-h-[620px] overflow-hidden bg-[#e9f6ee]">
           <img src={heroImage} alt="SPA do Doguinho" className="home-hero-image absolute inset-0 h-full w-full object-cover object-center" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#edf8f1]/96 via-[#edf8f1]/70 to-transparent" />
-          <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#fffdf7] to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-[#fffdf7] to-transparent" />
 
-          <div className="relative mx-auto flex min-h-[calc(100vh-128px)] max-w-[1880px] items-center px-6 py-8 md:px-10 xl:min-h-[620px]">
-            <div className="max-w-3xl -translate-y-4 xl:-translate-y-2">
-              <h1 className="home-animate-fade text-4xl font-black leading-[.95] tracking-[-.05em] text-[#12382f] sm:text-5xl md:text-6xl xl:text-7xl 2xl:text-[5.6rem]">
+          <div className="relative mx-auto flex h-full max-w-[1880px] items-center px-6 py-5 md:px-10">
+            <div className="max-w-3xl -translate-y-1">
+              <h1 className="home-animate-fade text-4xl font-black leading-[.92] tracking-[-.05em] text-[#12382f] sm:text-5xl md:text-6xl xl:text-[4.7rem] 2xl:text-[5.25rem]">
                 Mais que um banho,
                 <span className="home-shimmer-text block font-serif italic">um momento de amor!</span>
               </h1>
 
-              <p className="home-animate-fade-delay-1 mt-5 max-w-xl text-base leading-relaxed text-slate-700 md:text-lg">
+              <p className="home-animate-fade-delay-1 mt-4 max-w-xl text-sm leading-relaxed text-slate-700 md:text-base lg:text-lg">
                 No SPA do Doguinho, seu pet recebe cuidado especial, com carinho,
                 segurança e muito amor. Porque aqui, ele se sente em casa!
               </p>
 
-              <div className="home-animate-fade-delay-2 mt-6 flex flex-wrap gap-4">
-                <Link to="/cliente-login" className="home-pulse-glow inline-flex items-center gap-3 rounded-2xl bg-[#0d6b54] px-6 py-3.5 font-black text-white shadow-xl transition hover:-translate-y-1 hover:bg-[#095642]">
+              <div className="home-animate-fade-delay-2 mt-6 flex flex-wrap gap-3">
+                <Link to="/cliente-login" className="home-pulse-glow inline-flex items-center gap-3 rounded-2xl bg-[#0d6b54] px-6 py-3 font-black text-white shadow-xl transition hover:-translate-y-1 hover:bg-[#095642]">
                   <CalendarDays size={20} /> Entrar para agendar
                 </Link>
-                <Link to="/servicos" className="inline-flex items-center gap-3 rounded-2xl border border-[#0d6b54]/35 bg-white/85 px-6 py-3.5 font-black text-[#0d6b54] shadow-sm backdrop-blur transition hover:-translate-y-1">
+                <Link to="/servicos" className="inline-flex items-center gap-3 rounded-2xl border border-[#0d6b54]/35 bg-white/85 px-6 py-3 font-black text-[#0d6b54] shadow-sm backdrop-blur transition hover:-translate-y-1">
                   <Heart size={20} /> Nossos serviços
                 </Link>
               </div>
 
-              <div className="home-animate-fade-delay-3 mt-6 flex flex-wrap items-center gap-4">
+              <div className="home-animate-fade-delay-3 mt-5 flex flex-wrap items-center gap-4">
                 <div className="flex gap-1 text-[#f4b942]">
                   {[1, 2, 3, 4, 5].map((i) => <Star key={i} size={18} fill="currentColor" />)}
                 </div>
@@ -108,7 +108,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="home-float absolute bottom-10 right-8 hidden max-w-[280px] rounded-[26px] bg-[#0d6b54] p-5 text-white shadow-2xl xl:block">
+          <div className="home-float absolute bottom-8 right-8 hidden max-w-[280px] rounded-[26px] bg-[#0d6b54] p-5 text-white shadow-2xl xl:block">
             <div className="flex items-center gap-4">
               <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15"><PawPrint size={30} /></div>
               <div>
@@ -119,7 +119,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="relative -mt-8 px-5 md:px-8">
+        <section className="relative px-5 pt-8 pb-16 md:px-8">
           <div className="mx-auto max-w-[1880px]">
             <h2 className="home-animate-fade mb-7 text-center text-3xl font-black text-[#0d6b54] md:text-4xl">Nossos serviços</h2>
             <div className="grid gap-5 md:grid-cols-4">
