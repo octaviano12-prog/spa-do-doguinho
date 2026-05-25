@@ -15,11 +15,7 @@ import {
   Sparkles,
   Syringe,
   Truck,
-  UserPlus,
-  Weight,
-  Clock,
-  Phone,
-  Dog
+  UserPlus
 } from "lucide-react";
 import PublicLayout from "../../components/public/PublicLayout";
 
