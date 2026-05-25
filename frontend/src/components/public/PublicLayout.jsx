@@ -129,7 +129,7 @@ export default function PublicLayout({ children }) {
 
       <footer className="relative overflow-hidden border-t border-[#d7eadf] bg-[#0b352b] text-white">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(34,197,94,.14),transparent_30%),radial-gradient(circle_at_85%_80%,rgba(244,200,106,.16),transparent_30%)]" />
-        <div className="relative mx-auto grid max-w-7xl gap-10 px-6 py-14 lg:grid-cols-4">
+        <div className="relative mx-auto grid w-full max-w-[1880px] gap-12 px-6 py-16 md:px-10 lg:grid-cols-4 xl:px-14 2xl:px-16">
           <div>
             <div className="flex items-center gap-3"><BrandLogo small /><div><h2 className="text-2xl font-black">SPA do Doguinho</h2><p className="text-xs text-emerald-200">Banho, tosa e spa pet</p></div></div>
             <p className="mt-5 leading-relaxed text-white/65">Banho, tosa, estética animal, vacinação e bem-estar com carinho, segurança, tecnologia e experiência premium.</p>
@@ -146,7 +146,7 @@ export default function PublicLayout({ children }) {
 
           <div><h3 className="mb-5 text-lg font-black">Diferenciais</h3><div className="grid gap-3">{[[ShieldCheck, "Ambiente seguro"], [Sparkles, "Estética premium"], [Heart, "Cuidado com amor"], [CalendarDays, "Agendamento fácil"]].map(([Icon, text]) => <div key={text} className="flex items-center gap-3 rounded-2xl bg-white/8 p-4 font-bold text-white/82"><Icon className="text-[#f4c86a]" size={20} /> {text}</div>)}</div></div>
         </div>
-        <div className="relative border-t border-white/10"><div className="mx-auto flex max-w-7xl flex-col gap-3 px-6 py-6 text-sm text-white/45 md:flex-row md:items-center md:justify-between"><div>© 2026 SPA do Doguinho. Todos os direitos reservados.</div><div>Desenvolvido com carinho para uma gestão pet moderna.</div></div></div>
+        <div className="relative border-t border-white/10"><div className="mx-auto flex w-full max-w-[1880px] flex-col gap-3 px-6 py-6 text-sm text-white/45 md:flex-row md:items-center md:justify-between md:px-10 xl:px-14 2xl:px-16"><div>© 2026 SPA do Doguinho. Todos os direitos reservados.</div><div>Desenvolvido com carinho para uma gestão pet moderna.</div></div></div>
       </footer>
     </div>
   );
