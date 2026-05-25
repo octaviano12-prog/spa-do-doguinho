@@ -66,49 +66,37 @@ export default function ServicosPublicPage() {
   return (
     <PublicLayout>
       <main className="overflow-hidden bg-[#fffdf7] text-[#12382f]">
-        <section className="relative bg-[#e7f4ed] px-5 py-16 md:px-8">
-          <div className="mx-auto grid max-w-[1680px] gap-10 xl:grid-cols-[.9fr_1.1fr] xl:items-center">
-            <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}>
-              <span className="inline-flex items-center gap-2 rounded-full border border-emerald-900/10 bg-white px-5 py-2 text-sm font-black text-emerald-900 shadow-sm">
+        <section className="relative h-[calc(100vh-96px)] min-h-[620px] overflow-hidden bg-[#e7f4ed]">
+          <img src="/images/banho-pet-home.webp" alt="Banho e tosa premium" className="absolute inset-0 h-full w-full object-cover object-center" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#e7f4ed]/96 via-[#e7f4ed]/76 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-[#fffdf7] to-transparent" />
+
+          <div className="relative mx-auto grid h-full max-w-[1880px] gap-10 px-6 py-5 md:px-10 xl:grid-cols-[.9fr_1.1fr] xl:items-center">
+            <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} className="max-w-4xl -translate-y-1">
+              <span className="inline-flex items-center gap-2 rounded-full border border-emerald-900/10 bg-white/85 px-5 py-2 text-sm font-black text-emerald-900 shadow-sm backdrop-blur">
                 <Sparkles size={18} />
                 Serviços boutique
               </span>
 
-              <h1 className="mt-7 max-w-4xl text-5xl font-black leading-[.96] md:text-7xl">
+              <h1 className="mt-6 max-w-4xl text-4xl font-black leading-[.92] tracking-[-.05em] text-[#12382f] sm:text-5xl md:text-6xl xl:text-[4.45rem] 2xl:text-[4.85rem]">
                 Banho, tosa e bem-estar com acabamento premium.
               </h1>
 
-              <p className="mt-6 max-w-2xl text-lg leading-relaxed text-slate-600 md:text-xl">
+              <p className="mt-5 max-w-2xl text-sm leading-relaxed text-slate-700 md:text-base lg:text-lg">
                 Escolha o cuidado ideal para o seu pet com valores claros, atendimento organizado e uma experiência calma do início ao fim.
               </p>
 
-              <div className="mt-9 flex flex-wrap gap-4">
-                <Link to="/agendamento" className="flex items-center gap-3 rounded-2xl bg-[#0d6b54] px-8 py-4 font-black text-white shadow-[0_20px_45px_rgba(13,107,84,.22)] transition hover:bg-[#095642]">
+              <div className="mt-7 flex flex-wrap gap-3">
+                <Link to="/agendamento" className="flex items-center gap-3 rounded-2xl bg-[#0d6b54] px-6 py-3 font-black text-white shadow-[0_20px_45px_rgba(13,107,84,.22)] transition hover:bg-[#095642]">
                   <CalendarDays size={20} />
                   Agendar agora
                   <ArrowRight size={18} />
                 </Link>
 
-                <a href="https://wa.me/5518997493722" target="_blank" rel="noreferrer" className="flex items-center gap-3 rounded-2xl border border-[#e2eadf] bg-white px-8 py-4 font-black text-[#12382f] shadow-sm transition hover:border-[#0d6b54]">
+                <a href="https://wa.me/5518997493722" target="_blank" rel="noreferrer" className="flex items-center gap-3 rounded-2xl border border-[#e2eadf] bg-white/90 px-6 py-3 font-black text-[#12382f] shadow-sm backdrop-blur transition hover:border-[#0d6b54]">
                   <MessageCircle size={20} />
                   Tirar dúvidas
                 </a>
-              </div>
-            </motion.div>
-
-            <motion.div initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} className="relative min-h-[560px]">
-              <img src="/images/banho-pet-home.webp" alt="Banho e tosa premium" className="absolute right-0 top-0 h-[440px] w-[82%] rounded-[42px] object-cover shadow-2xl" />
-              <img src="/images/galeria-pet-02.webp" alt="Tosa boutique" className="absolute bottom-0 left-0 hidden h-72 w-[44%] rounded-[32px] border-[10px] border-[#e7f4ed] object-cover shadow-2xl md:block" />
-              <div className="absolute bottom-8 right-10 max-w-sm rounded-[28px] bg-white/90 p-5 shadow-2xl backdrop-blur">
-                <div className="flex items-center gap-4">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-800">
-                    <CheckCircle size={28} />
-                  </div>
-                  <div>
-                    <div className="font-black">Catálogo completo</div>
-                    <p className="mt-1 text-sm text-slate-500">Preços, tempo médio e agendamento em poucos cliques.</p>
-                  </div>
-                </div>
               </div>
             </motion.div>
           </div>
