@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   BrowserRouter,
@@ -10,6 +10,7 @@ import {
 import LoginPage from "./pages/LoginPage";
 
 import HomePage from "./pages/public/HomePage";
+import MobileHomePage from "./pages/public/MobileHomePage";
 import QuemSomosPage from "./pages/public/QuemSomosPage";
 import ServicosPublicPage from "./pages/public/ServicosPublicPage";
 import GaleriaPublicPage from "./pages/public/GaleriaPublicPage";
@@ -41,11 +42,25 @@ function CustomerRoute({ children }) {
   return token ? children : <Navigate to="/cliente-login" replace />;
 }
 
+function HomeRoute() {
+  const [isMobile, setIsMobile] = useState(() => window.matchMedia("(max-width: 767px)").matches);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 767px)");
+    const updateView = (event) => setIsMobile(event.matches);
+
+    mediaQuery.addEventListener("change", updateView);
+    return () => mediaQuery.removeEventListener("change", updateView);
+  }, []);
+
+  return isMobile ? <MobileHomePage /> : <HomePage />;
+}
+
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<HomeRoute />} />
         <Route path="/quem-somos" element={<QuemSomosPage />} />
         <Route path="/servicos" element={<ServicosPublicPage />} />
         <Route path="/galeria" element={<GaleriaPublicPage />} />
