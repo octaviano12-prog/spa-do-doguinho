@@ -50,7 +50,7 @@ export default function App() {
         <Route path="/servicos" element={<ServicosPublicPage />} />
         <Route path="/galeria" element={<GaleriaPublicPage />} />
         <Route path="/contato" element={<ContatoPage />} />
-        <Route path="/agendamento" element={<CustomerRoute loginPath="/cliente-login?next=/agendamento"><AgendamentoPage /></CustomerRoute>} />
+        <Route path="/agendamento" element={<CustomerRoute><AgendamentoPage /></CustomerRoute>} />
         <Route path="/cliente-login" element={<ClienteLoginPage />} />
         <Route path="/cliente" element={<CustomerRoute><ClienteDashboardPage /></CustomerRoute>} />
 
