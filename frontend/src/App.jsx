@@ -36,9 +36,9 @@ function PrivateRoute({ children }) {
   return token ? children : <Navigate to="/login" replace />;
 }
 
-function CustomerRoute({ children, loginPath = "/cliente-login" }) {
+function CustomerRoute({ children }) {
   const token = localStorage.getItem("spa_customer_token");
-  return token ? children : <Navigate to={loginPath} replace />;
+  return token ? children : <Navigate to="/cliente-login" replace />;
 }
 
 export default function App() {
