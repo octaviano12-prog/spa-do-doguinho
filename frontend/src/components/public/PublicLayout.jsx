@@ -47,20 +47,6 @@ export default function PublicLayout({ children }) {
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#fbf8ef] text-[#14382f]">
       <header className="fixed left-0 right-0 top-0 z-50">
-        <div className="hidden bg-[#0b352b] px-6 py-2 text-white lg:block">
-          <div className="mx-auto flex max-w-[1760px] items-center justify-between text-xs font-bold tracking-wide text-white/82">
-            <div className="flex items-center gap-2">
-              <Heart size={14} className="text-[#f4c86a]" fill="currentColor" />
-              Cuidado, carinho e bem-estar para o seu melhor amigo!
-            </div>
-            <div className="flex items-center gap-5">
-              <span className="flex items-center gap-2"><Phone size={14} /> +55 18 99749-3722</span>
-              <span className="flex items-center gap-2"><MapPin size={14} /> Sud Mennucci/SP</span>
-              <a href={whatsappUrl} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-[#f4c86a] hover:text-white"><MessageCircle size={14} /> WhatsApp</a>
-            </div>
-          </div>
-        </div>
-
         <div className="px-3 py-3 md:px-6">
           <div className="mx-auto max-w-[1760px] overflow-hidden rounded-[30px] border border-white/75 bg-white/84 shadow-[0_20px_55px_rgba(20,56,47,.12)] backdrop-blur-2xl">
             <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(13,107,84,.08),transparent_44%,rgba(244,200,106,.18))]" />
@@ -128,7 +114,7 @@ export default function PublicLayout({ children }) {
         </div>
       </header>
 
-      <main className="pt-[96px] lg:pt-[128px]">{children}</main>
+      <main className="pt-[96px]">{children}</main>
 
       <div className="fixed bottom-6 right-5 z-50 flex flex-col items-end gap-3 md:right-6">
         <a href={whatsappUrl} target="_blank" rel="noreferrer" className="group hidden items-center gap-3 rounded-full bg-[#25D366] px-5 py-3 text-sm font-black text-white shadow-[0_18px_40px_rgba(37,211,102,.35)] ring-4 ring-white/70 transition hover:-translate-y-1 hover:scale-[1.03] hover:bg-[#1ebe5d] md:flex">
