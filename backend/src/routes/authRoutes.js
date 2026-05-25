@@ -7,7 +7,8 @@ const bcrypt = require("bcryptjs");
 const db = require("../config/db");
 
 const JWT_SECRET = process.env.JWT_SECRET || "spadodoguinho123";
-const GOOGLE_CLIENT_IDS = String(process.env.GOOGLE_CLIENT_ID || "")
+const DEFAULT_GOOGLE_CLIENT_ID = "453503592700-lu67c7lqje2cnla2mdj6111qrkluq2gu.apps.googleusercontent.com";
+const GOOGLE_CLIENT_IDS = String(process.env.GOOGLE_CLIENT_ID || DEFAULT_GOOGLE_CLIENT_ID)
   .split(",")
   .map((value) => value.trim())
   .filter(Boolean);
