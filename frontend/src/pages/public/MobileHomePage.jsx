@@ -17,6 +17,8 @@ import {
 
 const whatsappUrl =
   "https://wa.me/5518997493722?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20um%20atendimento%20no%20SPA%20do%20Doguinho.";
+const heroImageFallback =
+  "https://raw.githubusercontent.com/octaviano12-prog/spa-do-doguinho/main/frontend/public/images/hero-doguinho-card.webp";
 
 const quickServices = [
   [Bath, "Banho Premium", "A partir de R$ 70"],
@@ -57,6 +59,11 @@ export default function MobileHomePage() {
               src="/images/hero-doguinho-card.webp"
               alt="Pet pronto para banho no SPA do Doguinho"
               className="h-full w-full object-cover object-center"
+              onError={(event) => {
+                if (event.currentTarget.src !== heroImageFallback) {
+                  event.currentTarget.src = heroImageFallback;
+                }
+              }}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#102f29]/65 via-transparent to-transparent" />
             <span className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-black text-[#0d6b54] shadow">
