@@ -28,14 +28,8 @@ const quickServices = [
 
 export default function MobileHomePage() {
   const isLoggedIn = Boolean(localStorage.getItem("spa_customer_token"));
-  const bookingUrl = isLoggedIn ? "/agendamento" : "/cliente-login?next=/agendamento";
+  const bookingUrl = isLoggedIn ? "/mobile/agendar" : "/mobile/login?next=/mobile/agendar";
   const bookingLabel = isLoggedIn ? "Agendar agora" : "Entrar para agendar";
-
-  function startBooking() {
-    if (!isLoggedIn) {
-      sessionStorage.setItem("spa_mobile_booking_intent", "1");
-    }
-  }
 
   return (
     <main className="min-h-screen bg-[#fffdf7] pb-28 text-[#12382f]">
@@ -50,7 +44,7 @@ export default function MobileHomePage() {
           </span>
         </Link>
         <Link
-          to="/cliente-login"
+          to={isLoggedIn ? "/mobile/conta" : "/mobile/login"}
           aria-label="Minha conta"
           className="flex h-12 w-12 items-center justify-center rounded-2xl border border-[#e2eadf] bg-white text-[#0d6b54]"
         >
@@ -92,7 +86,6 @@ export default function MobileHomePage() {
 
             <Link
               to={bookingUrl}
-              onClick={startBooking}
               className="mt-5 flex min-h-[58px] w-full items-center justify-center gap-3 rounded-2xl bg-[#0d6b54] px-5 py-4 text-base font-black text-white shadow-lg shadow-emerald-900/15 transition active:scale-[.98]"
             >
               {isLoggedIn ? <CalendarDays size={21} /> : <LogIn size={21} />}
@@ -116,13 +109,12 @@ export default function MobileHomePage() {
             <span className="text-xs font-black uppercase text-[#0d6b54]">Escolha rápida</span>
             <h2 className="mt-1 text-2xl font-black">Serviços</h2>
           </div>
-          <Link to="/servicos" className="text-sm font-black text-[#0d6b54]">Ver todos</Link>
+          <Link to="/mobile/agendar" className="text-sm font-black text-[#0d6b54]">Agendar</Link>
         </div>
         <div className="grid gap-3">
           {quickServices.map(([Icon, title, price]) => (
             <Link
               to={bookingUrl}
-              onClick={startBooking}
               key={title}
               className="flex min-h-[76px] items-center justify-between rounded-2xl bg-white p-4 shadow-sm ring-1 ring-[#e2eadf]"
             >
@@ -172,7 +164,6 @@ export default function MobileHomePage() {
       <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-[#e2eadf] bg-white px-5 pb-[max(14px,env(safe-area-inset-bottom))] pt-3">
         <Link
           to={bookingUrl}
-          onClick={startBooking}
           className="flex min-h-[58px] items-center justify-center gap-3 rounded-2xl bg-[#0d6b54] px-5 py-4 font-black text-white shadow-xl"
         >
           <CalendarDays size={21} />
