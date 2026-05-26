@@ -83,7 +83,7 @@ export default function App() {
         <Route path="/servicos" element={<ServicosPublicPage />} />
         <Route path="/galeria" element={<GaleriaPublicPage />} />
         <Route path="/contato" element={<ContatoPage />} />
-        <Route path="/agendamento" element={<PhoneRoute mobileTo="/mobile/agendar"><CustomerRoute><AgendamentoPage /></CustomerRoute></PhoneRoute>} />
+        <Route path="/agendamento" element={<PhoneRoute mobileTo="/mobile/agendar"><AgendamentoPage /></PhoneRoute>} />
         <Route path="/cliente-login" element={<PhoneRoute mobileTo="/mobile/login"><ClienteLoginPage /></PhoneRoute>} />
         <Route path="/cliente" element={<PhoneRoute mobileTo="/mobile/conta"><CustomerRoute><ClienteDashboardPage /></CustomerRoute></PhoneRoute>} />
 
