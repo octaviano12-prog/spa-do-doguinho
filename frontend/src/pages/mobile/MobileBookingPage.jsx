@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { CalendarDays, Check, ChevronRight, Clock, CreditCard, PawPrint, Sparkles, Wallet } from "lucide-react";
+import { CalendarDays, Check, ChevronRight, Clock, Copy, CreditCard, ExternalLink, PawPrint, QrCode, Sparkles, Wallet } from "lucide-react";
 import { Link } from "react-router-dom";
 import MobileShell from "../../components/mobile/MobileShell";
 
@@ -13,6 +13,19 @@ function isoDate(date) {
 
 function price(value) {
   return Number(value || 0).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+}
+
+function pixImageSrc(payment) {
+  const base64 = payment?.qr_code_base64 || "";
+  if (!base64) return "";
+  return base64.startsWith("data:") ? base64 : `data:image/png;base64,${base64}`;
+}
+
+function paymentStatusLabel(status) {
+  const value = String(status || "pending").toLowerCase();
+  if (["approved", "paid", "pago"].includes(value)) return "Pago";
+  if (["rejected", "cancelled", "canceled"].includes(value)) return "Não aprovado";
+  return "Aguardando pagamento";
 }
 
 function petSize(pet) {
@@ -55,7 +68,7 @@ export default function MobileBookingPage() {
   const [slotsLoading, setSlotsLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
-  const [done, setDone] = useState(false);
+  const [done, setDone] = useState(null);
   const [form, setForm] = useState({ petId: "", petName: "", serviceId: "", date: "", time: "", paymentMethod: "pix", notes: "" });
   const days = useMemo(() => Array.from({ length: 7 }, (_, index) => {
     const date = new Date();
@@ -93,7 +106,7 @@ export default function MobileBookingPage() {
   }, [token]);
 
   const paymentOptions = [
-    Number(paymentSettings.pix_enabled ?? 1) ? ["pix", CreditCard, "PIX"] : null,
+    Number(paymentSettings.pix_enabled ?? 1) ? ["pix", QrCode, "PIX"] : null,
     Number(paymentSettings.card_enabled ?? 1) ? ["card", CreditCard, "Cartão"] : null,
     Number(paymentSettings.cash_enabled ?? 1) ? ["presencial", Wallet, "Na loja"] : null
   ].filter(Boolean);
@@ -140,6 +153,7 @@ export default function MobileBookingPage() {
     setError("");
     try {
       let petId = form.petId;
+      let finalPetName = pet?.name || form.petName;
       if (!petId) {
         const petResponse = await fetch(`${API_URL}/customer/pets`, {
           method: "POST",
@@ -149,13 +163,14 @@ export default function MobileBookingPage() {
         const petData = await petResponse.json();
         if (!petResponse.ok) throw new Error(petData.error || "Erro ao salvar seu pet.");
         petId = petData.id;
+        finalPetName = petData.name;
       }
       const response = await fetch(`${API_URL}/customer/appointments`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({
           pet_id: petId,
-          pet_name: pet?.name || form.petName,
+          pet_name: finalPetName,
           service_id: form.serviceId,
           date: form.date,
           time: form.time,
@@ -168,7 +183,7 @@ export default function MobileBookingPage() {
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || "Erro ao confirmar agendamento.");
-      setDone(true);
+      setDone({ ...data, pet_name: finalPetName, service_name: service?.name, booked_date: form.date, booked_time: form.time });
     } catch (err) {
       setError(err.message || "Erro ao confirmar agendamento.");
     } finally {
@@ -177,17 +192,20 @@ export default function MobileBookingPage() {
   }
 
   if (done) {
+    const pixPayment = done.payment?.method === "pix" ? done.payment : null;
+
     return (
       <MobileShell title="Agendamento">
-        <section className="px-5 py-10 text-center">
+        <section className="px-5 py-8 text-center">
           <span className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-[#0d6b54] text-white"><Check size={42} /></span>
           <h1 className="mt-5 text-3xl font-black">Agendado!</h1>
           <p className="mt-2 text-slate-500">Seu horário foi reservado com sucesso.</p>
           <div className="mt-7 rounded-2xl bg-white p-5 text-left ring-1 ring-[#e2eadf]">
-            <Info label="Pet" value={pet?.name || form.petName} />
-            <Info label="Serviço" value={service?.name || "Serviço"} />
-            <Info label="Horário" value={`${form.date} às ${form.time}`} />
+            <Info label="Pet" value={done.pet_name || pet?.name || form.petName} />
+            <Info label="Serviço" value={done.service_name || service?.name || "Serviço"} />
+            <Info label="Horário" value={`${done.booked_date || form.date} às ${done.booked_time || form.time}`} />
           </div>
+          {pixPayment && <PixMobileCard payment={pixPayment} />}
           <Link to="/mobile/conta" className="mt-6 flex min-h-[56px] items-center justify-center rounded-xl bg-[#0d6b54] font-black text-white">Ver meus agendamentos</Link>
         </section>
       </MobileShell>
@@ -271,7 +289,50 @@ function ReviewStep({ form, pet, service, amount, paymentOptions, choose }) {
       <div className="grid grid-cols-2 gap-2">
         {paymentOptions.map(([method, Icon, text]) => <button key={method} onClick={() => choose("paymentMethod", method)} className={`flex min-h-[56px] items-center justify-center gap-2 rounded-xl font-black ${form.paymentMethod === method ? "bg-[#0d6b54] text-white" : "bg-[#e7f4ed] text-[#0d6b54]"}`}><Icon size={18} />{text}</button>)}
       </div>
+      {form.paymentMethod === "pix" && <p className="mt-3 rounded-xl bg-[#f4fbf6] p-3 text-sm font-bold text-[#0d6b54]">O QR Code PIX aparece após confirmar.</p>}
       <textarea value={form.notes} onChange={(event) => choose("notes", event.target.value)} rows={3} placeholder="Observações (opcional)" className="mt-4 w-full rounded-xl border border-[#e2eadf] p-3 outline-none" />
+    </div>
+  );
+}
+
+function PixMobileCard({ payment }) {
+  const [copied, setCopied] = useState(false);
+  const imageSrc = pixImageSrc(payment);
+  const pixCode = payment?.qr_code || "";
+
+  async function copyPixCode() {
+    if (!pixCode) return;
+    try {
+      await navigator.clipboard.writeText(pixCode);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2200);
+    } catch {
+      setCopied(false);
+    }
+  }
+
+  return (
+    <div className="mt-5 rounded-2xl bg-[#12382f] p-5 text-left text-white">
+      <div className="flex items-center gap-3">
+        <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-white text-[#0d6b54]"><QrCode size={24} /></span>
+        <div>
+          <h2 className="text-xl font-black">PIX gerado</h2>
+          <p className="text-sm font-semibold text-white/65">{paymentStatusLabel(payment?.status)}</p>
+        </div>
+      </div>
+      <div className="mt-4 rounded-xl bg-white p-4 text-center text-[#12382f]">
+        <div className="mb-3 text-left text-xs font-black uppercase tracking-[.12em] text-slate-400">Valor {price(payment?.amount)}</div>
+        {imageSrc ? <img src={imageSrc} alt="QR Code PIX" className="mx-auto h-56 w-56 rounded-xl bg-white object-contain p-2" /> : <p className="py-6 text-sm font-bold text-slate-500">QR Code ainda não recebido.</p>}
+        {pixCode && (
+          <>
+            <textarea readOnly value={pixCode} className="mt-4 h-20 w-full resize-none rounded-xl border border-[#e2eadf] bg-[#f8fbf9] p-3 text-xs font-semibold text-slate-600 outline-none" />
+            <button type="button" onClick={copyPixCode} className="mt-3 flex min-h-[50px] w-full items-center justify-center gap-2 rounded-xl bg-[#0d6b54] font-black text-white">
+              <Copy size={17} /> {copied ? "Copiado" : "Copiar PIX"}
+            </button>
+          </>
+        )}
+        {payment?.ticket_url && <a href={payment.ticket_url} target="_blank" rel="noreferrer" className="mt-3 flex min-h-[50px] items-center justify-center gap-2 rounded-xl border border-[#e2eadf] bg-white font-black text-[#0d6b54]"><ExternalLink size={17} /> Abrir pagamento</a>}
+      </div>
     </div>
   );
 }
