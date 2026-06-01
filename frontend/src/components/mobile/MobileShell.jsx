@@ -28,7 +28,7 @@ export default function MobileShell({
   }
 
   return (
-    <main className="mx-auto min-h-[100dvh] w-full max-w-[500px] overflow-hidden bg-[#eef2f5] pb-28 text-[#183153] shadow-2xl">
+    <main className="min-h-[100dvh] w-full overflow-x-hidden bg-[#eef2f5] pb-28 text-[#183153]">
       <header className="sticky top-0 z-50 w-full px-3 pt-3">
         <div className="flex items-center justify-between rounded-[28px] border border-black/5 bg-white/95 px-3 py-3 shadow-lg backdrop-blur-xl">
           <div className="flex min-w-0 items-center gap-3">
@@ -90,7 +90,7 @@ export default function MobileShell({
 
 function MobileBottomNav({ active }) {
   return (
-    <nav className="fixed bottom-0 left-1/2 z-50 w-full max-w-[500px] -translate-x-1/2 px-4 pb-[max(16px,env(safe-area-inset-bottom))]">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 w-full px-4 pb-[max(16px,env(safe-area-inset-bottom))]">
       <div className="grid grid-cols-5 gap-1 rounded-[30px] border border-black/5 bg-white/95 px-3 py-3 shadow-2xl backdrop-blur-xl">
         <NavItem to="/mobile/conta" icon={Home} text="Inicio" active={active === "home"} />
         <NavItem to="/mobile/agendamentos" icon={CalendarDays} text="Agenda" active={active === "agenda"} />
