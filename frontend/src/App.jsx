@@ -21,6 +21,9 @@ import ClienteDashboardPage from "./pages/public/ClienteDashboardPage";
 import MobileLoginPage from "./pages/mobile/MobileLoginPage";
 import MobileBookingPage from "./pages/mobile/MobileBookingPage";
 import MobileAccountPage from "./pages/mobile/MobileAccountPage";
+import MobileAppointmentsPage from "./pages/mobile/MobileAppointmentsPage";
+import MobilePetsPage from "./pages/mobile/MobilePetsPage";
+import MobileProfilePage from "./pages/mobile/MobileProfilePage";
 
 import DashboardPage from "./pages/admin/DashboardPage";
 import ClientesPage from "./pages/admin/ClientesPage";
@@ -72,7 +75,11 @@ export default function App() {
         <Route path="/mobile" element={<MobileHomePage />} />
         <Route path="/mobile/login" element={<MobileLoginPage />} />
         <Route path="/mobile/agendar" element={<MobileCustomerRoute next="/mobile/agendar"><MobileBookingPage /></MobileCustomerRoute>} />
+        <Route path="/agendamento-mobile" element={<MobileCustomerRoute next="/mobile/agendar"><MobileBookingPage /></MobileCustomerRoute>} />
         <Route path="/mobile/conta" element={<MobileCustomerRoute><MobileAccountPage /></MobileCustomerRoute>} />
+        <Route path="/mobile/agendamentos" element={<MobileCustomerRoute next="/mobile/agendamentos"><MobileAppointmentsPage /></MobileCustomerRoute>} />
+        <Route path="/mobile/pets" element={<MobileCustomerRoute next="/mobile/pets"><MobilePetsPage /></MobileCustomerRoute>} />
+        <Route path="/mobile/perfil" element={<MobileCustomerRoute next="/mobile/perfil"><MobileProfilePage /></MobileCustomerRoute>} />
         <Route path="/quem-somos" element={<QuemSomosPage />} />
         <Route path="/servicos" element={<ServicosPublicPage />} />
         <Route path="/galeria" element={<GaleriaPublicPage />} />
