@@ -2,19 +2,22 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   AlertCircle,
+  BadgeCheck,
   CalendarDays,
   Check,
   CheckCircle2,
   ChevronRight,
   Clock,
+  Copy,
   CreditCard,
+  ExternalLink,
   Heart,
   PawPrint,
+  QrCode,
   RefreshCw,
   Scissors,
   ShieldCheck,
   Sparkles,
-  User,
   Wallet
 } from "lucide-react";
 import PublicLayout from "../../components/public/PublicLayout";
@@ -93,6 +96,19 @@ function serviceDuration(service, pet) {
   return Number(service?.[`duration_${size}`] || service?.duration_minutes || pet?.estimated_bath_time || 60);
 }
 
+function pixImageSrc(payment) {
+  const base64 = payment?.qr_code_base64 || "";
+  if (!base64) return "";
+  return base64.startsWith("data:") ? base64 : `data:image/png;base64,${base64}`;
+}
+
+function paymentStatusLabel(status) {
+  const value = String(status || "pending").toLowerCase();
+  if (["approved", "paid", "pago"].includes(value)) return "Pago";
+  if (["rejected", "cancelled", "canceled"].includes(value)) return "Não aprovado";
+  return "Aguardando pagamento";
+}
+
 async function readJson(response) {
   const data = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(data.error || data.message || "Não foi possível concluir a operação.");
@@ -132,9 +148,10 @@ export default function ClienteAgendamentoPage() {
   const draftPet = selectedPet || { weight: form.newPetWeight, name: form.newPetName, species: form.newPetSpecies, breed: form.newPetBreed };
   const selectedPrice = servicePrice(selectedService, draftPet);
   const selectedDuration = serviceDuration(selectedService, draftPet);
+  const progressPercent = ((step + 1) / steps.length) * 100;
 
   const paymentOptions = useMemo(() => [
-    Number(paymentSettings.pix_enabled ?? 1) ? ["pix", CreditCard, "PIX", "Pagamento instantâneo"] : null,
+    Number(paymentSettings.pix_enabled ?? 1) ? ["pix", QrCode, "PIX", "Gera QR Code ao confirmar"] : null,
     Number(paymentSettings.card_enabled ?? 1) ? ["card", CreditCard, "Cartão", "Crédito ou débito"] : null,
     Number(paymentSettings.cash_enabled ?? 1) ? ["presencial", Wallet, "Na loja", "Pague no atendimento"] : null
   ].filter(Boolean), [paymentSettings]);
@@ -173,7 +190,7 @@ export default function ClienteAgendamentoPage() {
     if (paymentOptions.length && !paymentOptions.some(([method]) => method === form.paymentMethod)) {
       updateForm("paymentMethod", paymentOptions[0][0]);
     }
-  }, [paymentOptions]);
+  }, [paymentOptions, form.paymentMethod]);
 
   useEffect(() => {
     async function loadSlots() {
@@ -269,7 +286,14 @@ export default function ClienteAgendamentoPage() {
       });
 
       const data = await readJson(response);
-      setDone({ ...data, pet_name: finalPetName, service_name: selectedService?.name });
+      setDone({
+        ...data,
+        pet_name: finalPetName,
+        service_name: selectedService?.name,
+        booked_date: form.date,
+        booked_time: form.time,
+        booked_amount: selectedPrice
+      });
     } catch (err) {
       setError(err.message || "Não foi possível confirmar o agendamento.");
     } finally {
@@ -278,26 +302,60 @@ export default function ClienteAgendamentoPage() {
   }
 
   if (done) {
+    const pixPayment = done.payment?.method === "pix" ? done.payment : null;
+
     return (
       <PublicLayout>
-        <main className="bg-[#fffdf7] px-5 py-14 text-[#12382f] md:px-8">
-          <section className="mx-auto max-w-5xl rounded-[34px] bg-white p-8 text-center shadow-2xl ring-1 ring-[#e2eadf] md:p-12">
-            <span className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-[#0d6b54] text-white shadow-xl">
-              <Check size={52} />
-            </span>
-            <h1 className="mt-7 text-4xl font-black md:text-5xl">Agendamento confirmado!</h1>
-            <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-600">
-              Seu horário foi salvo no sistema e já aparece na área do cliente e no painel administrativo.
-            </p>
-            <div className="mx-auto mt-8 grid max-w-3xl gap-4 rounded-[28px] bg-[#f4f8f5] p-5 text-left md:grid-cols-3">
-              <Info label="Pet" value={done.pet_name || draftPet.name} />
-              <Info label="Serviço" value={done.service_name || selectedService?.name} />
-              <Info label="Quando" value={`${fullDate(form.date)} às ${form.time}`} />
+        <main className="bg-[#fffdf7] px-5 py-12 text-[#12382f] md:px-8">
+          <section className="mx-auto grid max-w-[1280px] gap-6 lg:grid-cols-[1fr_460px] lg:items-start">
+            <div className="rounded-[34px] bg-white p-7 shadow-2xl ring-1 ring-[#e2eadf] md:p-10">
+              <span className="flex h-20 w-20 items-center justify-center rounded-[28px] bg-[#0d6b54] text-white shadow-xl">
+                <BadgeCheck size={46} />
+              </span>
+              <p className="mt-7 inline-flex rounded-full bg-[#e7f4ed] px-4 py-2 text-sm font-black uppercase tracking-[.12em] text-[#0d6b54]">
+                Agendamento salvo
+              </p>
+              <h1 className="mt-4 max-w-3xl text-4xl font-black leading-tight md:text-5xl">
+                Seu atendimento está reservado.
+              </h1>
+              <p className="mt-4 max-w-2xl text-lg leading-relaxed text-slate-600">
+                O horário já entrou na agenda do SPA do Doguinho. Se você escolheu PIX, finalize pelo QR Code ao lado para deixar o pagamento adiantado.
+              </p>
+
+              <div className="mt-8 grid gap-4 md:grid-cols-2">
+                <Info label="Pet" value={done.pet_name || draftPet.name} />
+                <Info label="Serviço" value={done.service_name || selectedService?.name} />
+                <Info label="Data" value={fullDate(done.booked_date || form.date)} />
+                <Info label="Horário" value={`${done.booked_time || form.time}`} />
+                <Info label="Valor" value={money(done.payment?.amount || done.booked_amount || done.price)} />
+                <Info label="Status" value={paymentStatusLabel(done.payment?.status)} />
+              </div>
+
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Link to="/cliente" className="inline-flex min-h-[56px] items-center justify-center rounded-2xl bg-[#0d6b54] px-7 font-black text-white shadow-lg transition hover:bg-[#095642]">
+                  Ver minha área
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => { setDone(null); setForm(emptyForm); setStep(0); loadData(); }}
+                  className="min-h-[56px] rounded-2xl border border-[#d7eadf] bg-white px-7 font-black text-[#0d6b54] shadow-sm transition hover:border-[#0d6b54]"
+                >
+                  Novo agendamento
+                </button>
+              </div>
             </div>
-            <div className="mt-8 flex flex-wrap justify-center gap-3">
-              <Link to="/cliente" className="rounded-2xl bg-[#0d6b54] px-7 py-4 font-black text-white shadow-lg hover:bg-[#095642]">Ver minha área</Link>
-              <button onClick={() => { setDone(null); setForm(emptyForm); setStep(0); loadData(); }} className="rounded-2xl border border-[#d7eadf] bg-white px-7 py-4 font-black text-[#0d6b54] shadow-sm">Novo agendamento</button>
-            </div>
+
+            {pixPayment ? (
+              <PixPaymentCard payment={pixPayment} />
+            ) : (
+              <div className="rounded-[34px] bg-[#0d6b54] p-7 text-white shadow-2xl md:p-8">
+                <Wallet size={42} />
+                <h2 className="mt-5 text-3xl font-black">Pagamento combinado</h2>
+                <p className="mt-3 leading-relaxed text-white/78">
+                  O pagamento escolhido será tratado no atendimento. Você pode acompanhar esse agendamento pela área do cliente.
+                </p>
+              </div>
+            )}
           </section>
         </main>
       </PublicLayout>
@@ -307,48 +365,53 @@ export default function ClienteAgendamentoPage() {
   return (
     <PublicLayout>
       <main className="overflow-hidden bg-[#fffdf7] text-[#12382f]">
-        <section className="relative overflow-hidden bg-[#e7f4ed] px-5 py-12 md:px-8">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(13,107,84,.16),transparent_32%),radial-gradient(circle_at_85%_10%,rgba(244,200,106,.20),transparent_28%)]" />
-          <div className="relative mx-auto grid max-w-[1680px] gap-8 lg:grid-cols-[1fr_430px] lg:items-center">
-            <div>
-              <span className="inline-flex items-center gap-2 rounded-full bg-white/80 px-5 py-2 text-sm font-black uppercase tracking-[.12em] text-[#0d6b54] shadow-sm">
+        <section className="bg-[#f3faf6] px-5 py-10 md:px-8">
+          <div className="mx-auto grid max-w-[1680px] gap-8 lg:grid-cols-[1fr_460px] lg:items-stretch">
+            <div className="flex flex-col justify-center rounded-[34px] bg-white p-7 shadow-xl ring-1 ring-[#e2eadf] md:p-10">
+              <span className="inline-flex w-fit items-center gap-2 rounded-full bg-[#e7f4ed] px-5 py-2 text-sm font-black uppercase tracking-[.12em] text-[#0d6b54]">
                 <CalendarDays size={16} /> Agendamento online
               </span>
-              <h1 className="mt-6 max-w-4xl text-4xl font-black leading-[.95] tracking-[-.04em] md:text-6xl">
-                Escolha o cuidado ideal para o seu doguinho.
+              <h1 className="mt-6 max-w-4xl text-4xl font-black leading-tight md:text-6xl">
+                Vamos cuidar do seu doguinho com hora marcada.
               </h1>
               <p className="mt-5 max-w-2xl text-lg leading-relaxed text-slate-600">
-                Olá{savedCustomer?.name ? `, ${savedCustomer.name.split(" ")[0]}` : ""}! Em poucos passos você escolhe serviço, pet, data, horário e confirma tudo com segurança.
+                Olá{savedCustomer?.name ? `, ${savedCustomer.name.split(" ")[0]}` : ""}! Escolha o serviço, selecione o pet, veja os horários livres e confirme o atendimento em poucos passos.
               </p>
               <div className="mt-8 grid gap-3 sm:grid-cols-3">
                 {[
-                  [ShieldCheck, "Dados protegidos"],
-                  [PawPrint, "Pet vinculado"],
-                  [CheckCircle2, "Agenda integrada"]
-                ].map(([Icon, label]) => (
-                  <div key={label} className="flex items-center gap-3 rounded-2xl bg-white/75 p-4 font-black text-[#0d6b54] shadow-sm ring-1 ring-white/80">
-                    <Icon size={22} /> {label}
+                  [ShieldCheck, "Seguro", "seus dados protegidos"],
+                  [PawPrint, "Pet certo", "vínculo automático"],
+                  [QrCode, "PIX", "QR Code ao finalizar"]
+                ].map(([Icon, title, text]) => (
+                  <div key={title} className="rounded-2xl bg-[#f6faf7] p-4 ring-1 ring-[#e2eadf]">
+                    <Icon className="text-[#0d6b54]" size={24} />
+                    <b className="mt-3 block text-lg">{title}</b>
+                    <p className="mt-1 text-sm font-semibold text-slate-500">{text}</p>
                   </div>
                 ))}
               </div>
             </div>
-            <div className="rounded-[34px] bg-white/86 p-6 shadow-2xl ring-1 ring-white/80 backdrop-blur">
-              <div className="flex items-center gap-4">
-                <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#0d6b54] text-white"><Sparkles size={32} /></span>
-                <div>
-                  <div className="text-sm font-black uppercase tracking-[.12em] text-slate-400">Resumo</div>
-                  <h2 className="text-2xl font-black">Seu atendimento</h2>
+
+            <div className="overflow-hidden rounded-[34px] bg-[#12382f] text-white shadow-2xl">
+              <img src="/images/sobre-hero.webp" alt="Atendimento SPA do Doguinho" className="h-52 w-full object-cover" />
+              <div className="p-6">
+                <div className="flex items-center gap-4">
+                  <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/12 text-white"><Sparkles size={28} /></span>
+                  <div>
+                    <div className="text-sm font-black uppercase tracking-[.12em] text-white/60">Resumo</div>
+                    <h2 className="text-2xl font-black">Seu atendimento</h2>
+                  </div>
                 </div>
-              </div>
-              <div className="mt-6 grid gap-3">
-                <Info label="Serviço" value={selectedService?.name || "Escolha o serviço"} />
-                <Info label="Pet" value={selectedPet?.name || form.newPetName || "Escolha o pet"} />
-                <Info label="Data" value={form.date ? fullDate(form.date) : "Escolha a data"} />
-                <Info label="Horário" value={form.time || "Escolha o horário"} />
-                <div className="rounded-2xl bg-[#0d6b54] p-5 text-white">
-                  <div className="text-sm font-bold text-white/70">Valor estimado</div>
-                  <div className="mt-1 text-3xl font-black">{money(selectedPrice)}</div>
-                  <div className="mt-1 text-sm text-white/70">Duração: {selectedDuration || 0} min</div>
+                <div className="mt-6 grid gap-3">
+                  <InfoDark label="Serviço" value={selectedService?.name || "Escolha o serviço"} />
+                  <InfoDark label="Pet" value={selectedPet?.name || form.newPetName || "Escolha o pet"} />
+                  <InfoDark label="Data" value={form.date ? fullDate(form.date) : "Escolha a data"} />
+                  <InfoDark label="Horário" value={form.time || "Escolha o horário"} />
+                  <div className="rounded-2xl bg-white p-5 text-[#12382f]">
+                    <div className="text-sm font-bold text-slate-500">Valor estimado</div>
+                    <div className="mt-1 text-3xl font-black">{money(selectedPrice)}</div>
+                    <div className="mt-1 text-sm font-bold text-slate-500">Duração: {selectedDuration || 0} min</div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -356,17 +419,22 @@ export default function ClienteAgendamentoPage() {
         </section>
 
         <section className="mx-auto max-w-[1680px] px-5 py-10 md:px-8">
-          <div className="mb-8 grid gap-3 md:grid-cols-4">
-            {steps.map((item, index) => (
-              <button key={item.title} type="button" onClick={() => index < step && setStep(index)} className={`rounded-[24px] p-5 text-left shadow-sm ring-1 transition ${index <= step ? "bg-[#0d6b54] text-white ring-[#0d6b54]" : "bg-white text-slate-500 ring-[#e2eadf]"}`}>
-                <div className="flex items-center justify-between gap-3">
-                  <span className={`flex h-10 w-10 items-center justify-center rounded-2xl font-black ${index <= step ? "bg-white/16" : "bg-[#e7f4ed] text-[#0d6b54]"}`}>{index + 1}</span>
-                  {index < step && <Check size={22} />}
-                </div>
-                <h3 className="mt-4 text-xl font-black">{item.title}</h3>
-                <p className={`mt-1 text-sm font-semibold ${index <= step ? "text-white/70" : "text-slate-400"}`}>{item.text}</p>
-              </button>
-            ))}
+          <div className="mb-6 rounded-[28px] bg-white p-5 shadow-sm ring-1 ring-[#e2eadf]">
+            <div className="mb-4 h-3 overflow-hidden rounded-full bg-[#e7f4ed]">
+              <div className="h-full rounded-full bg-[#0d6b54] transition-all duration-300" style={{ width: `${progressPercent}%` }} />
+            </div>
+            <div className="grid gap-3 md:grid-cols-4">
+              {steps.map((item, index) => (
+                <button key={item.title} type="button" onClick={() => index < step && setStep(index)} className={`rounded-[22px] p-4 text-left transition ${index <= step ? "bg-[#0d6b54] text-white shadow-md" : "bg-[#f6faf7] text-slate-500"}`}>
+                  <div className="flex items-center justify-between gap-3">
+                    <span className={`flex h-9 w-9 items-center justify-center rounded-2xl font-black ${index <= step ? "bg-white/16" : "bg-white text-[#0d6b54]"}`}>{index + 1}</span>
+                    {index < step && <Check size={21} />}
+                  </div>
+                  <h3 className="mt-3 text-lg font-black">{item.title}</h3>
+                  <p className={`mt-1 text-sm font-semibold ${index <= step ? "text-white/72" : "text-slate-400"}`}>{item.text}</p>
+                </button>
+              ))}
+            </div>
           </div>
 
           {error && (
@@ -428,6 +496,11 @@ function ServiceStep({ services, selected, onChoose, pet }) {
           </button>
         ))}
       </div>
+      {!services.length && (
+        <div className="mt-7 rounded-[28px] border border-dashed border-[#d7eadf] bg-[#f6faf7] p-8 text-center text-slate-500">
+          Nenhum serviço ativo encontrado. Confira o cadastro de serviços no painel administrativo.
+        </div>
+      )}
     </div>
   );
 }
@@ -510,6 +583,8 @@ function TimeStep({ days, form, onChange, slots, slotsLoading }) {
 }
 
 function ReviewStep({ form, pet, service, amount, duration, paymentOptions, onChange }) {
+  const isPix = form.paymentMethod === "pix";
+
   return (
     <div>
       <SectionHeading icon={CheckCircle2} title="Revise e confirme" text="Confira os dados antes de salvar o agendamento." />
@@ -533,6 +608,11 @@ function ReviewStep({ form, pet, service, amount, duration, paymentOptions, onCh
               </button>
             ))}
           </div>
+          {isPix && (
+            <div className="mt-4 rounded-2xl border border-[#cfe8d9] bg-[#f4fbf6] p-4 text-sm font-bold text-[#0d6b54]">
+              O QR Code PIX aparece automaticamente depois que você clicar em confirmar.
+            </div>
+          )}
           <label className="mt-5 grid gap-2 font-bold text-slate-600">
             Observações
             <textarea value={form.notes} onChange={(event) => onChange("notes", event.target.value)} rows={4} placeholder="Alguma alergia, comportamento ou recado especial?" className="rounded-2xl border border-[#d7eadf] bg-white p-4 outline-none" />
@@ -540,6 +620,82 @@ function ReviewStep({ form, pet, service, amount, duration, paymentOptions, onCh
         </div>
       </div>
     </div>
+  );
+}
+
+function PixPaymentCard({ payment }) {
+  const [copied, setCopied] = useState(false);
+  const imageSrc = pixImageSrc(payment);
+  const pixCode = payment?.qr_code || "";
+  const hasPaymentData = imageSrc || pixCode || payment?.ticket_url;
+
+  async function copyPixCode() {
+    if (!pixCode) return;
+    try {
+      await navigator.clipboard.writeText(pixCode);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2200);
+    } catch {
+      setCopied(false);
+    }
+  }
+
+  return (
+    <aside className="rounded-[34px] bg-[#12382f] p-6 text-white shadow-2xl md:p-8">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="inline-flex rounded-full bg-white/10 px-4 py-2 text-xs font-black uppercase tracking-[.12em] text-white/70">PIX</p>
+          <h2 className="mt-4 text-3xl font-black">Pague pelo QR Code</h2>
+          <p className="mt-2 text-white/72">Escaneie no app do banco ou copie o código PIX.</p>
+        </div>
+        <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-[#0d6b54]"><QrCode size={30} /></span>
+      </div>
+
+      <div className="mt-6 rounded-[28px] bg-white p-5 text-[#12382f]">
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <div>
+            <div className="text-xs font-black uppercase tracking-[.12em] text-slate-400">Valor PIX</div>
+            <div className="text-3xl font-black">{money(payment?.amount)}</div>
+          </div>
+          <span className="rounded-full bg-[#e7f4ed] px-4 py-2 text-sm font-black text-[#0d6b54]">{paymentStatusLabel(payment?.status)}</span>
+        </div>
+
+        {imageSrc ? (
+          <div className="rounded-[24px] bg-[#f4f8f5] p-4 text-center ring-1 ring-[#e2eadf]">
+            <img src={imageSrc} alt="QR Code PIX para pagamento do agendamento" className="mx-auto h-64 w-64 max-w-full rounded-2xl bg-white object-contain p-3 shadow-sm" />
+          </div>
+        ) : (
+          <div className="flex min-h-[240px] items-center justify-center rounded-[24px] bg-[#f4f8f5] p-6 text-center text-slate-500 ring-1 ring-[#e2eadf]">
+            <div>
+              <QrCode className="mx-auto mb-3 text-[#0d6b54]" size={42} />
+              <p className="font-bold">QR Code ainda não foi recebido.</p>
+            </div>
+          </div>
+        )}
+
+        {pixCode && (
+          <div className="mt-5">
+            <label className="text-xs font-black uppercase tracking-[.12em] text-slate-400">PIX copia e cola</label>
+            <textarea readOnly value={pixCode} className="mt-2 h-24 w-full resize-none rounded-2xl border border-[#d7eadf] bg-[#f8fbf9] p-3 text-xs font-semibold text-slate-600 outline-none" />
+            <button type="button" onClick={copyPixCode} className="mt-3 inline-flex min-h-[52px] w-full items-center justify-center gap-2 rounded-2xl bg-[#0d6b54] px-5 font-black text-white transition hover:bg-[#095642]">
+              <Copy size={18} /> {copied ? "Código copiado" : "Copiar código PIX"}
+            </button>
+          </div>
+        )}
+
+        {payment?.ticket_url && (
+          <a href={payment.ticket_url} target="_blank" rel="noreferrer" className="mt-3 inline-flex min-h-[52px] w-full items-center justify-center gap-2 rounded-2xl border border-[#d7eadf] bg-white px-5 font-black text-[#0d6b54] transition hover:border-[#0d6b54]">
+            <ExternalLink size={18} /> Abrir pagamento
+          </a>
+        )}
+
+        {!hasPaymentData && (
+          <div className="mt-5 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm font-bold text-amber-800">
+            O agendamento foi salvo, mas o provedor ainda não retornou o PIX. Confira se o token do Mercado Pago está ativo nas configurações de pagamento.
+          </div>
+        )}
+      </div>
+    </aside>
   );
 }
 
@@ -560,6 +716,15 @@ function Info({ label, value }) {
     <div className="rounded-2xl bg-white p-4 ring-1 ring-[#e2eadf]">
       <div className="text-xs font-black uppercase tracking-[.12em] text-slate-400">{label}</div>
       <div className="mt-1 break-words text-lg font-black text-[#12382f]">{value || "-"}</div>
+    </div>
+  );
+}
+
+function InfoDark({ label, value }) {
+  return (
+    <div className="rounded-2xl bg-white/10 p-4 ring-1 ring-white/10">
+      <div className="text-xs font-black uppercase tracking-[.12em] text-white/48">{label}</div>
+      <div className="mt-1 break-words text-base font-black text-white">{value}</div>
     </div>
   );
 }
