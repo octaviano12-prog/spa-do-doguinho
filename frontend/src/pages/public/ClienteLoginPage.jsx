@@ -19,6 +19,12 @@ const API_URL = "https://spadodoguinho.com.br/api";
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || "";
 const GOOGLE_SCRIPT_ID = "google-identity-services";
 
+function getSafeNextPage() {
+  const next = new URLSearchParams(window.location.search).get("next");
+  if (next && next.startsWith("/") && !next.startsWith("//") && !next.startsWith("/mobile")) return next;
+  return "/cliente";
+}
+
 export default function ClienteLoginPage() {
   const [mode, setMode] = useState("login");
   const [showPassword, setShowPassword] = useState(false);
@@ -40,7 +46,7 @@ export default function ClienteLoginPage() {
   async function finishCustomerLogin(data) {
     localStorage.setItem("spa_customer_token", data.token);
     localStorage.setItem("spa_customer", JSON.stringify(data.customer));
-    window.location.href = "/cliente";
+    window.location.href = getSafeNextPage();
   }
 
   async function handleGoogleCredential(response) {
