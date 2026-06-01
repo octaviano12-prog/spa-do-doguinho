@@ -9,6 +9,7 @@ import {
   Mail,
   PawPrint,
   Phone,
+  RefreshCw,
   ShieldCheck,
   Sparkles,
   User
@@ -28,6 +29,7 @@ function getSafeNextPage() {
 export default function ClienteLoginPage() {
   const [mode, setMode] = useState("login");
   const [showPassword, setShowPassword] = useState(false);
+  const [checkingSession, setCheckingSession] = useState(true);
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState("");
@@ -46,8 +48,48 @@ export default function ClienteLoginPage() {
   async function finishCustomerLogin(data) {
     localStorage.setItem("spa_customer_token", data.token);
     localStorage.setItem("spa_customer", JSON.stringify(data.customer));
-    window.location.href = getSafeNextPage();
+    window.location.replace(getSafeNextPage());
   }
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function checkExistingSession() {
+      const token = localStorage.getItem("spa_customer_token");
+
+      if (!token) {
+        setCheckingSession(false);
+        return;
+      }
+
+      try {
+        const response = await fetch(`${API_URL}/customer/me`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = await response.json().catch(() => null);
+
+        if (!response.ok || !data?.id) {
+          throw new Error("Sessão inválida");
+        }
+
+        localStorage.setItem("spa_customer", JSON.stringify(data));
+        if (!cancelled) window.location.replace(getSafeNextPage());
+      } catch {
+        localStorage.removeItem("spa_customer_token");
+        localStorage.removeItem("spa_customer");
+        if (!cancelled) {
+          setError("Sua sessão expirou. Entre novamente para continuar.");
+          setCheckingSession(false);
+        }
+      }
+    }
+
+    checkExistingSession();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   async function handleGoogleCredential(response) {
     const credential = response?.credential;
@@ -81,7 +123,7 @@ export default function ClienteLoginPage() {
   }
 
   useEffect(() => {
-    if (!GOOGLE_CLIENT_ID || !googleButtonRef.current) return;
+    if (checkingSession || !GOOGLE_CLIENT_ID || !googleButtonRef.current) return;
 
     let cancelled = false;
 
@@ -128,7 +170,7 @@ export default function ClienteLoginPage() {
       cancelled = true;
       existingScript?.removeEventListener("load", renderGoogleButton);
     };
-  }, [mode]);
+  }, [mode, checkingSession]);
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -160,6 +202,22 @@ export default function ClienteLoginPage() {
     } finally {
       setLoading(false);
     }
+  }
+
+  if (checkingSession) {
+    return (
+      <PublicLayout>
+        <main className="min-h-[70vh] bg-[#fffdf7] px-5 py-16 text-[#12382f] md:px-8">
+          <section className="mx-auto flex max-w-3xl flex-col items-center rounded-[34px] bg-white p-10 text-center shadow-xl ring-1 ring-[#e2eadf]">
+            <span className="flex h-20 w-20 items-center justify-center rounded-[28px] bg-[#e7f4ed] text-[#0d6b54]">
+              <RefreshCw className="animate-spin" size={38} />
+            </span>
+            <h1 className="mt-6 text-3xl font-black md:text-4xl">Verificando sua sessão</h1>
+            <p className="mt-3 text-slate-500">Se você já estiver logado, vamos te levar direto para sua área.</p>
+          </section>
+        </main>
+      </PublicLayout>
+    );
   }
 
   return (
