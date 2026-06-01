@@ -6,11 +6,13 @@ import MobileShell from "../../components/mobile/MobileShell";
 const API_URL = "https://spadodoguinho.com.br/api";
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || "";
 const GOOGLE_SCRIPT_ID = "google-identity-services";
+const safeNextPages = ["/mobile/agendar", "/mobile/conta", "/mobile/agendamentos", "/mobile/pets", "/mobile/perfil"];
 
 export default function MobileLoginPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const nextPage = searchParams.get("next") === "/mobile/agendar" ? "/mobile/agendar" : "/mobile/conta";
+  const requestedNextPage = searchParams.get("next");
+  const nextPage = safeNextPages.includes(requestedNextPage) ? requestedNextPage : "/mobile/conta";
   const [mode, setMode] = useState("login");
   const [showPassword, setShowPassword] = useState(false);
   const [checkingSession, setCheckingSession] = useState(true);
