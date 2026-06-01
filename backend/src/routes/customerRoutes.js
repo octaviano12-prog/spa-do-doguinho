@@ -45,6 +45,31 @@ function calculatePaymentAmount(price, settings) {
   return fullPrice;
 }
 
+function placeholders(items) {
+  return items.map(() => "?").join(",");
+}
+
+function groupBy(items, key) {
+  return items.reduce((map, item) => {
+    const value = item[key];
+    if (value === undefined || value === null) return map;
+    const id = Number(value);
+    if (!map.has(id)) map.set(id, []);
+    map.get(id).push(item);
+    return map;
+  }, new Map());
+}
+
+async function optionalQuery(sql, params, label) {
+  try {
+    const [rows] = await db.query(sql, params);
+    return rows;
+  } catch (error) {
+    console.warn(`Nao foi possivel carregar ${label}:`, error.message);
+    return [];
+  }
+}
+
 router.use(customerAuth);
 
 router.get("/me", async (req, res) => {
@@ -222,6 +247,108 @@ router.post("/appointments", async (req, res) => {
     return res.status(500).json({ error: error.message });
   } finally {
     connection.release();
+  }
+});
+
+router.get("/pet-records", async (req, res) => {
+  try {
+    const [pets] = await db.query("SELECT * FROM pets WHERE customer_id = ? ORDER BY id DESC", [req.customer.id]);
+    if (!pets.length) return res.json([]);
+
+    const petIds = pets.map((pet) => pet.id);
+    const petPlaceholders = placeholders(petIds);
+
+    const appointments = await optionalQuery(
+      `SELECT a.*, COALESCE(s.name, a.service_name) AS service_name
+       FROM appointments a
+       LEFT JOIN services s ON s.id = a.service_id
+       WHERE a.customer_id = ? AND a.pet_id IN (${petPlaceholders})
+       ORDER BY a.scheduled_at DESC, a.date DESC, a.time DESC, a.id DESC`,
+      [req.customer.id, ...petIds],
+      "agendamentos por pet"
+    );
+
+    const appointmentIds = appointments.map((item) => item.id).filter(Boolean);
+    let payments = [];
+
+    if (appointmentIds.length) {
+      payments = await optionalQuery(
+        `SELECT pay.*, a.pet_id, COALESCE(s.name, a.service_name) AS service_name, a.date, a.time, a.scheduled_at
+         FROM payments pay
+         LEFT JOIN appointments a ON a.id = pay.appointment_id
+         LEFT JOIN services s ON s.id = a.service_id
+         WHERE pay.customer_id = ? AND pay.appointment_id IN (${placeholders(appointmentIds)})
+         ORDER BY pay.id DESC`,
+        [req.customer.id, ...appointmentIds],
+        "pagamentos por pet"
+      );
+    }
+
+    const vaccinationRows = await optionalQuery(
+      `SELECT v.id, v.pet_id, v.vaccine_name, v.date, v.next_dose_date, v.notes, v.created_at, 'vaccinations' AS source_table
+       FROM vaccinations v
+       INNER JOIN pets p ON p.id = v.pet_id
+       WHERE p.customer_id = ? AND v.pet_id IN (${petPlaceholders})
+       ORDER BY v.next_dose_date ASC, v.date DESC, v.id DESC`,
+      [req.customer.id, ...petIds],
+      "vacinas por pet"
+    );
+
+    const legacyVaccines = await optionalQuery(
+      `SELECT v.id, v.pet_id, v.name AS vaccine_name, v.applied_at AS date, v.next_due AS next_dose_date, v.notes, v.created_at, 'vaccines' AS source_table
+       FROM vaccines v
+       INNER JOIN pets p ON p.id = v.pet_id
+       WHERE p.customer_id = ? AND v.pet_id IN (${petPlaceholders})
+       ORDER BY v.next_due ASC, v.applied_at DESC, v.id DESC`,
+      [req.customer.id, ...petIds],
+      "vacinas legadas por pet"
+    );
+
+    const serviceHistory = await optionalQuery(
+      `SELECT h.*, COALESCE(s.name, a.service_name) AS service_name
+       FROM service_history h
+       INNER JOIN pets p ON p.id = h.pet_id
+       LEFT JOIN services s ON s.id = h.service_id
+       LEFT JOIN appointments a ON a.id = h.appointment_id
+       WHERE p.customer_id = ? AND h.pet_id IN (${petPlaceholders})
+       ORDER BY h.date DESC, h.id DESC`,
+      [req.customer.id, ...petIds],
+      "historico por pet"
+    );
+
+    const appointmentsByPet = groupBy(appointments, "pet_id");
+    const paymentsByPet = groupBy(payments, "pet_id");
+    const vaccinationsByPet = groupBy([...vaccinationRows, ...legacyVaccines], "pet_id");
+    const historyByPet = groupBy(serviceHistory, "pet_id");
+
+    const records = pets.map((pet) => {
+      const petId = Number(pet.id);
+      const petAppointments = appointmentsByPet.get(petId) || [];
+      const savedHistory = historyByPet.get(petId) || [];
+      const fallbackHistory = petAppointments.map((appointment) => ({
+        id: `appointment-${appointment.id}`,
+        pet_id: appointment.pet_id,
+        service_id: appointment.service_id,
+        appointment_id: appointment.id,
+        date: appointment.scheduled_at || appointment.date,
+        professional: "SPA do Doguinho",
+        service_name: appointment.service_name,
+        notes: appointment.notes || "Registro gerado pelo agendamento.",
+        status: appointment.status
+      }));
+
+      return {
+        ...pet,
+        appointments: petAppointments,
+        payments: paymentsByPet.get(petId) || [],
+        vaccinations: vaccinationsByPet.get(petId) || [],
+        service_history: savedHistory.length ? savedHistory : fallbackHistory
+      };
+    });
+
+    return res.json(records);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
   }
 });
 
