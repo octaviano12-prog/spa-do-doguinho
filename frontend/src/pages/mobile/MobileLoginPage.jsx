@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Eye, EyeOff, Lock, Mail, PawPrint, Phone, ShieldCheck, User } from "lucide-react";
+import { Eye, EyeOff, Lock, Mail, PawPrint, Phone, RefreshCw, ShieldCheck, User } from "lucide-react";
 import MobileShell from "../../components/mobile/MobileShell";
 
 const API_URL = "https://spadodoguinho.com.br/api";
@@ -13,6 +13,7 @@ export default function MobileLoginPage() {
   const nextPage = searchParams.get("next") === "/mobile/agendar" ? "/mobile/agendar" : "/mobile/conta";
   const [mode, setMode] = useState("login");
   const [showPassword, setShowPassword] = useState(false);
+  const [checkingSession, setCheckingSession] = useState(true);
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState("");
@@ -28,6 +29,46 @@ export default function MobileLoginPage() {
     localStorage.setItem("spa_customer", JSON.stringify(data.customer));
     navigate(nextPage, { replace: true });
   }
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function checkExistingSession() {
+      const token = localStorage.getItem("spa_customer_token");
+
+      if (!token) {
+        setCheckingSession(false);
+        return;
+      }
+
+      try {
+        const response = await fetch(`${API_URL}/customer/me`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = await response.json().catch(() => null);
+
+        if (!response.ok || !data?.id) {
+          throw new Error("Sessão inválida");
+        }
+
+        localStorage.setItem("spa_customer", JSON.stringify(data));
+        if (!cancelled) navigate(nextPage, { replace: true });
+      } catch {
+        localStorage.removeItem("spa_customer_token");
+        localStorage.removeItem("spa_customer");
+        if (!cancelled) {
+          setError("Sua sessão expirou. Entre novamente para continuar.");
+          setCheckingSession(false);
+        }
+      }
+    }
+
+    checkExistingSession();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [navigate, nextPage]);
 
   async function handleGoogleCredential(response) {
     if (!response?.credential) return setError("Não foi possível receber o login do Google.");
@@ -50,7 +91,7 @@ export default function MobileLoginPage() {
   }
 
   useEffect(() => {
-    if (!GOOGLE_CLIENT_ID || !googleButtonRef.current) return;
+    if (checkingSession || !GOOGLE_CLIENT_ID || !googleButtonRef.current) return;
     let cancelled = false;
     function renderButton() {
       if (cancelled || !window.google?.accounts?.id || !googleButtonRef.current) return;
@@ -80,7 +121,7 @@ export default function MobileLoginPage() {
       cancelled = true;
       scriptFound?.removeEventListener("load", renderButton);
     };
-  }, [mode]);
+  }, [mode, checkingSession]);
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -102,6 +143,18 @@ export default function MobileLoginPage() {
     } finally {
       setLoading(false);
     }
+  }
+
+  if (checkingSession) {
+    return (
+      <MobileShell title="Sua conta" hideNav>
+        <section className="flex min-h-[60vh] flex-col items-center justify-center px-5 py-10 text-center">
+          <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#e7f4ed] text-[#0d6b54]"><RefreshCw className="animate-spin" size={32} /></span>
+          <h1 className="mt-5 text-2xl font-black">Verificando sua sessão</h1>
+          <p className="mt-2 text-sm font-semibold text-slate-500">Se você já estiver logado, vamos continuar automaticamente.</p>
+        </section>
+      </MobileShell>
+    );
   }
 
   return (
