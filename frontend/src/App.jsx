@@ -15,7 +15,7 @@ import QuemSomosPage from "./pages/public/QuemSomosPage";
 import ServicosPublicPage from "./pages/public/ServicosPublicPage";
 import GaleriaPublicPage from "./pages/public/GaleriaPublicPage";
 import ContatoPage from "./pages/public/ContatoPage";
-import AgendamentoPage from "./pages/public/AgendamentoPage";
+import ClienteAgendamentoPage from "./pages/public/ClienteAgendamentoPage";
 import ClienteLoginPage from "./pages/public/ClienteLoginPage";
 import ClienteDashboardPage from "./pages/public/ClienteDashboardPage";
 import MobileLoginPage from "./pages/mobile/MobileLoginPage";
@@ -40,20 +40,14 @@ function PrivateRoute({ children }) {
   return token ? children : <Navigate to="/login" replace />;
 }
 
-function CustomerRoute({ children }) {
+function CustomerRoute({ children, redirectTo = "/cliente-login" }) {
   const token = localStorage.getItem("spa_customer_token");
-  return token ? children : <Navigate to="/cliente-login" replace />;
+  return token ? children : <Navigate to={redirectTo} replace />;
 }
 
 function MobileCustomerRoute({ children, next = "/mobile/conta" }) {
   const token = localStorage.getItem("spa_customer_token");
   return token ? children : <Navigate to={`/mobile/login?next=${next}`} replace />;
-}
-
-function PhoneRoute({ mobileTo, children }) {
-  const isMobile = window.matchMedia("(max-width: 767px)").matches;
-
-  return isMobile ? <Navigate to={mobileTo} replace /> : children;
 }
 
 function HomeRoute() {
@@ -83,10 +77,10 @@ export default function App() {
         <Route path="/servicos" element={<ServicosPublicPage />} />
         <Route path="/galeria" element={<GaleriaPublicPage />} />
         <Route path="/contato" element={<ContatoPage />} />
-        <Route path="/agendamento" element={<PhoneRoute mobileTo="/mobile/agendar"><CustomerRoute><MobileBookingPage /></CustomerRoute></PhoneRoute>} />
-        <Route path="/cliente-login" element={<PhoneRoute mobileTo="/mobile/login"><ClienteLoginPage /></PhoneRoute>} />
-        <Route path="/cliente" element={<PhoneRoute mobileTo="/mobile/conta"><CustomerRoute><ClienteDashboardPage /></CustomerRoute></PhoneRoute>} />
-        <Route path="/cliente/agendar" element={<PhoneRoute mobileTo="/mobile/agendar"><CustomerRoute><MobileBookingPage /></CustomerRoute></PhoneRoute>} />
+        <Route path="/agendamento" element={<CustomerRoute redirectTo="/cliente-login?next=/agendamento"><ClienteAgendamentoPage /></CustomerRoute>} />
+        <Route path="/cliente-login" element={<ClienteLoginPage />} />
+        <Route path="/cliente" element={<CustomerRoute><ClienteDashboardPage /></CustomerRoute>} />
+        <Route path="/cliente/agendar" element={<CustomerRoute redirectTo="/cliente-login?next=/cliente/agendar"><ClienteAgendamentoPage /></CustomerRoute>} />
 
         <Route path="/login" element={<LoginPage />} />
 
