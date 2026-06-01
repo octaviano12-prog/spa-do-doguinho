@@ -43,6 +43,9 @@ function BrandLogo({ small = false }) {
 
 export default function PublicLayout({ children }) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const customerLogged = typeof window !== "undefined" && localStorage.getItem("spa_customer_token");
+  const customerLink = customerLogged ? "/cliente" : "/cliente-login";
+  const customerLabel = customerLogged ? "Minha área" : "Cliente";
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#fbf8ef] text-[#14382f]">
@@ -84,7 +87,7 @@ export default function PublicLayout({ children }) {
 
               <div className="hidden w-[330px] shrink-0 items-center justify-end gap-2 lg:flex 2xl:w-[380px]">
                 <Link to="/agendamento" className="flex items-center gap-2 whitespace-nowrap rounded-full bg-[#0d6b54] px-5 py-3 text-[13px] font-black text-white shadow-lg shadow-emerald-900/15 transition hover:-translate-y-0.5 hover:bg-[#095642]"><CalendarDays size={16} /> Agende agora</Link>
-                <Link to="/cliente-login" className="flex items-center gap-2 whitespace-nowrap rounded-full border border-[#d7eadf] bg-white/75 px-4 py-3 text-[13px] font-black text-[#12382f] shadow-sm transition hover:-translate-y-0.5 hover:border-[#0d6b54] hover:bg-white"><User size={16} /> Cliente</Link>
+                <Link to={customerLink} className="flex items-center gap-2 whitespace-nowrap rounded-full border border-[#d7eadf] bg-white/75 px-4 py-3 text-[13px] font-black text-[#12382f] shadow-sm transition hover:-translate-y-0.5 hover:border-[#0d6b54] hover:bg-white"><User size={16} /> {customerLabel}</Link>
                 <Link to="/login" className="flex items-center gap-2 whitespace-nowrap rounded-full border border-[#d7eadf] bg-white/75 px-4 py-3 text-[13px] font-black text-[#12382f] shadow-sm transition hover:-translate-y-0.5 hover:border-[#0d6b54] hover:bg-white"><ShieldCheck size={16} /> Admin</Link>
               </div>
 
@@ -106,7 +109,7 @@ export default function PublicLayout({ children }) {
                   );
                 })}
                 <Link to="/agendamento" onClick={() => setMobileOpen(false)} className="mt-2 flex items-center justify-center gap-2 rounded-2xl bg-[#0d6b54] px-5 py-4 font-black text-white shadow-lg transition hover:bg-[#095642]"><CalendarDays size={18} /> Agendar atendimento</Link>
-                <Link to="/cliente-login" onClick={() => setMobileOpen(false)} className="flex items-center justify-center gap-2 rounded-2xl border border-[#d7eadf] bg-[#fbf8ef] px-5 py-4 font-black text-[#0d6b54] transition hover:bg-white"><User size={18} /> Área do Cliente</Link>
+                <Link to={customerLink} onClick={() => setMobileOpen(false)} className="flex items-center justify-center gap-2 rounded-2xl border border-[#d7eadf] bg-[#fbf8ef] px-5 py-4 font-black text-[#0d6b54] transition hover:bg-white"><User size={18} /> {customerLogged ? "Minha área" : "Área do Cliente"}</Link>
                 <Link to="/login" onClick={() => setMobileOpen(false)} className="flex items-center justify-center gap-2 rounded-2xl border border-[#d7eadf] bg-[#fbf8ef] px-5 py-4 font-black text-[#0d6b54] transition hover:bg-white"><ShieldCheck size={18} /> Área Admin</Link>
               </nav>
             </div>
@@ -140,7 +143,7 @@ export default function PublicLayout({ children }) {
             </div>
           </div>
 
-          <div><h3 className="mb-5 text-lg font-black">Navegação</h3><div className="grid gap-3 font-semibold text-white/65">{navLinks.map((item) => <Link key={item.to} to={item.to} className="transition hover:text-[#f4c86a]">{item.label}</Link>)}<Link to="/cliente-login" className="transition hover:text-[#f4c86a]">Área do Cliente</Link></div></div>
+          <div><h3 className="mb-5 text-lg font-black">Navegação</h3><div className="grid gap-3 font-semibold text-white/65">{navLinks.map((item) => <Link key={item.to} to={item.to} className="transition hover:text-[#f4c86a]">{item.label}</Link>)}<Link to={customerLink} className="transition hover:text-[#f4c86a]">{customerLogged ? "Minha área" : "Área do Cliente"}</Link></div></div>
 
           <div><h3 className="mb-5 text-lg font-black">Contato</h3><div className="grid gap-4 text-white/70"><p className="flex items-start gap-3"><Phone size={18} className="mt-1 text-[#f4c86a]" /> +55 18 99749-3722</p><p className="flex items-start gap-3"><Mail size={18} className="mt-1 text-[#f4c86a]" /> contato@spadodoguinho.com.br</p><p className="flex items-start gap-3"><MapPin size={18} className="mt-1 text-[#f4c86a]" /> Rua Marco Antonio M.J Franco Nº 606 - Sud Mennucci/SP</p></div></div>
 
