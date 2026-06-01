@@ -1,49 +1,120 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { ArrowLeft, CalendarDays, House, PawPrint, UserRound } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { CalendarDays, CalendarPlus, ChevronLeft, Home, LogOut, PawPrint, UserRound } from "lucide-react";
 
-export default function MobileShell({ children, title, backTo = "/mobile", hideNav = false }) {
+const primaryColor = "#0d6b54";
+
+export default function MobileShell({
+  children,
+  title,
+  backTo = "/mobile",
+  hideNav = false,
+  showBack,
+  active = "home"
+}) {
+  const navigate = useNavigate();
+  const isLoggedIn = Boolean(localStorage.getItem("spa_customer_token"));
+  const shouldShowBack = showBack ?? Boolean(title);
+
+  function logout() {
+    localStorage.removeItem("spa_customer_token");
+    localStorage.removeItem("spa_customer");
+    navigate("/mobile/login", { replace: true });
+  }
+
+  function goBack() {
+    if (backTo) navigate(backTo);
+    else navigate(-1);
+  }
+
   return (
-    <main className="min-h-screen bg-[#fffdf7] pb-24 text-[#12382f]">
-      <header className="sticky top-0 z-40 border-b border-[#e2eadf] bg-[#fffdf7]/95 backdrop-blur">
-        <div className="flex h-[68px] items-center justify-between px-5">
-          {title ? (
-            <>
-              <Link to={backTo} aria-label="Voltar" className="flex h-11 w-11 items-center justify-center rounded-xl bg-white ring-1 ring-[#e2eadf]">
-                <ArrowLeft size={21} />
-              </Link>
-              <strong className="text-base font-black">{title}</strong>
-            </>
-          ) : (
-            <Link to="/mobile" className="flex items-center gap-3">
-              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#e7f4ed] text-[#0d6b54]">
+    <main className="mx-auto min-h-[100dvh] w-full max-w-[500px] overflow-hidden bg-[#eef2f5] pb-28 text-[#183153] shadow-2xl">
+      <header className="sticky top-0 z-50 w-full px-3 pt-3">
+        <div className="flex items-center justify-between rounded-[28px] border border-black/5 bg-white/95 px-3 py-3 shadow-lg backdrop-blur-xl">
+          <div className="flex min-w-0 items-center gap-3">
+            {shouldShowBack ? (
+              <button
+                type="button"
+                onClick={goBack}
+                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-slate-100 text-[#183153] transition active:scale-95"
+                aria-label="Voltar"
+              >
+                <ChevronLeft size={25} />
+              </button>
+            ) : (
+              <Link
+                to="/mobile"
+                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl text-white shadow-md"
+                style={{ backgroundColor: primaryColor }}
+                aria-label="Inicio"
+              >
                 <PawPrint size={25} />
-              </span>
-              <strong className="text-lg font-black">SPA do Doguinho</strong>
+              </Link>
+            )}
+
+            <div className="min-w-0">
+              <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-400">SPA do Doguinho</p>
+              <h1 className="max-w-[230px] truncate text-lg font-black leading-tight text-[#183153]">
+                {title || "Mobile"}
+              </h1>
+            </div>
+          </div>
+
+          {isLoggedIn ? (
+            <button
+              type="button"
+              onClick={logout}
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-red-50 text-red-600 transition active:scale-95"
+              aria-label="Sair"
+            >
+              <LogOut size={20} />
+            </button>
+          ) : (
+            <Link
+              to="/mobile/login"
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-slate-50 text-[#0d6b54] ring-1 ring-slate-100"
+              aria-label="Entrar"
+            >
+              <UserRound size={20} />
             </Link>
           )}
-          <Link to="/mobile/conta" aria-label="Minha conta" className="flex h-11 w-11 items-center justify-center rounded-xl bg-white text-[#0d6b54] ring-1 ring-[#e2eadf]">
-            <UserRound size={21} />
-          </Link>
         </div>
       </header>
+
       {children}
-      {!hideNav && (
-        <nav className="fixed inset-x-0 bottom-0 z-50 grid grid-cols-3 border-t border-[#e2eadf] bg-white pb-[max(8px,env(safe-area-inset-bottom))] pt-2">
-          <NavItem to="/mobile" icon={House} text="Início" />
-          <NavItem to="/mobile/agendar" icon={CalendarDays} text="Agendar" />
-          <NavItem to="/mobile/conta" icon={UserRound} text="Conta" />
-        </nav>
-      )}
+
+      {!hideNav && <MobileBottomNav active={active} />}
     </main>
   );
 }
 
-function NavItem({ to, icon: Icon, text }) {
+function MobileBottomNav({ active }) {
   return (
-    <Link to={to} className="flex min-h-[56px] flex-col items-center justify-center gap-1 text-xs font-black text-[#0d6b54]">
-      <Icon size={22} />
-      {text}
+    <nav className="fixed bottom-0 left-1/2 z-50 w-full max-w-[500px] -translate-x-1/2 px-4 pb-[max(16px,env(safe-area-inset-bottom))]">
+      <div className="grid grid-cols-5 gap-1 rounded-[30px] border border-black/5 bg-white/95 px-3 py-3 shadow-2xl backdrop-blur-xl">
+        <NavItem to="/mobile/conta" icon={Home} text="Inicio" active={active === "home"} />
+        <NavItem to="/mobile/agendamentos" icon={CalendarDays} text="Agenda" active={active === "agenda"} />
+        <Link to="/mobile/agendar" className="flex flex-col items-center gap-1">
+          <div
+            className="-mt-7 flex h-12 w-12 items-center justify-center rounded-full border-4 border-white text-white shadow-xl transition active:scale-95"
+            style={{ backgroundColor: primaryColor }}
+          >
+            <CalendarPlus size={24} />
+          </div>
+          <span className={`text-xs font-bold ${active === "novo" ? "text-green-700" : "text-slate-400"}`}>Novo</span>
+        </Link>
+        <NavItem to="/mobile/pets" icon={PawPrint} text="Pets" active={active === "pets"} />
+        <NavItem to="/mobile/perfil" icon={UserRound} text="Perfil" active={active === "perfil"} />
+      </div>
+    </nav>
+  );
+}
+
+function NavItem({ to, icon: Icon, text, active }) {
+  return (
+    <Link to={to} className={`flex flex-col items-center gap-1 font-bold transition ${active ? "text-green-700" : "text-slate-400"}`}>
+      <Icon size={24} />
+      <span className="text-xs">{text}</span>
     </Link>
   );
 }
