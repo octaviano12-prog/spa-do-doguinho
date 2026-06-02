@@ -261,15 +261,15 @@ export default function ClienteLoginPage() {
       <main className="overflow-hidden bg-[#fffdf7] text-[#12382f]">
         <section className="relative min-h-[calc(100vh-128px)] overflow-hidden bg-[#e9f6ee]">
           <img src={heroImage} alt="Área do cliente SPA do Doguinho" className="home-hero-image absolute inset-0 h-full w-full object-cover object-center" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#edf8f1]/98 via-[#edf8f1]/88 to-[#fffdf7]/72 xl:to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#edf8f1]/98 via-[#edf8f1]/92 to-[#fffdf7]/88 xl:to-[#fffdf7]/32" />
           <div className="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-[#fffdf7] to-transparent" />
 
-          <div className="relative mx-auto grid min-h-[calc(100vh-128px)] max-w-[1880px] items-center gap-9 px-6 py-10 md:px-10 lg:grid-cols-[minmax(0,1fr)_minmax(420px,520px)] xl:pr-[170px] 2xl:pr-[190px]">
+          <div className="relative mx-auto grid min-h-[calc(100vh-128px)] max-w-[1880px] items-center gap-9 px-6 py-10 md:px-10 lg:grid-cols-[minmax(0,1fr)_minmax(420px,520px)] xl:pr-[240px] 2xl:pr-[270px]">
             <div className="max-w-4xl py-4">
               <div className="home-animate-fade flex flex-wrap items-center gap-3">
                 <Link
                   to="/"
-                  className="inline-flex min-h-[48px] items-center gap-2 rounded-full border border-white/80 bg-white/85 px-5 py-3 font-black text-emerald-950 shadow-sm backdrop-blur transition hover:border-emerald-700 hover:text-emerald-700"
+                  className="inline-flex min-h-[48px] items-center gap-2 rounded-full border border-white/80 bg-white/88 px-5 py-3 font-black text-emerald-950 shadow-sm backdrop-blur transition hover:border-emerald-700 hover:text-emerald-700"
                 >
                   <ArrowLeft size={18} />
                   Voltar ao site
@@ -280,12 +280,12 @@ export default function ClienteLoginPage() {
                 </span>
               </div>
 
-              <span className="home-animate-fade-delay-1 mt-10 inline-flex items-center gap-2 rounded-full bg-white/88 px-5 py-2 text-sm font-black uppercase tracking-[.12em] text-[#0d6b54] shadow-sm backdrop-blur">
+              <span className="home-animate-fade-delay-1 mt-10 inline-flex items-center gap-2 rounded-full bg-white/90 px-5 py-2 text-sm font-black uppercase tracking-[.12em] text-[#0d6b54] shadow-sm backdrop-blur">
                 <KeyRound size={17} />
                 Cliente SPA do Doguinho
               </span>
 
-              <h1 className="home-animate-fade-delay-1 mt-5 max-w-4xl text-4xl font-black leading-[.92] tracking-[-.05em] text-[#12382f] sm:text-5xl md:text-6xl xl:text-[4.5rem] 2xl:text-[5rem]">
+              <h1 className="home-animate-fade-delay-1 mt-5 max-w-4xl text-4xl font-black leading-[.92] tracking-[-.05em] text-[#12382f] sm:text-5xl md:text-6xl xl:text-[4.35rem] 2xl:text-[4.85rem]">
                 Entre, agende e acompanhe
                 <span className="home-shimmer-text block font-serif italic tracking-normal">o cuidado do seu pet.</span>
               </h1>
@@ -305,7 +305,7 @@ export default function ClienteLoginPage() {
                 <button
                   type="button"
                   onClick={() => setMode("register")}
-                  className="inline-flex items-center gap-3 rounded-2xl border border-[#0d6b54]/25 bg-white/85 px-6 py-3 font-black text-[#0d6b54] shadow-sm backdrop-blur transition hover:-translate-y-1"
+                  className="inline-flex items-center gap-3 rounded-2xl border border-[#0d6b54]/25 bg-white/88 px-6 py-3 font-black text-[#0d6b54] shadow-sm backdrop-blur transition hover:-translate-y-1"
                 >
                   <Sparkles size={20} /> Criar cadastro
                 </button>
@@ -313,7 +313,7 @@ export default function ClienteLoginPage() {
 
               <div className="home-animate-fade-delay-3 mt-7 grid max-w-3xl gap-3 sm:grid-cols-3">
                 {accessHighlights.map(({ icon: Icon, title, text }, index) => (
-                  <div key={title} className="home-card-animate rounded-[24px] border border-white/80 bg-white/82 p-5 shadow-lg backdrop-blur" style={{ animationDelay: `${index * 80}ms` }}>
+                  <div key={title} className="home-card-animate rounded-[24px] border border-white/85 bg-white/88 p-5 shadow-lg backdrop-blur" style={{ animationDelay: `${index * 80}ms` }}>
                     <Icon className="mb-3 text-[#0d6b54]" size={25} />
                     <h3 className="text-base font-black text-[#12382f]">{title}</h3>
                     <p className="mt-1 text-sm leading-relaxed text-slate-600">{text}</p>
@@ -322,133 +322,136 @@ export default function ClienteLoginPage() {
               </div>
             </div>
 
-            <div className="home-animate-fade-delay-2 w-full rounded-[38px] border border-white/80 bg-white/92 p-5 shadow-[0_28px_80px_rgba(20,56,47,.18)] backdrop-blur-xl md:p-7">
-              <div className="mb-6 flex items-start gap-4">
-                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-[22px] bg-[#d1f5df] text-[#0d6b54] shadow-sm">
-                  <PawPrint size={34} />
+            <div className="home-animate-fade-delay-2 relative w-full overflow-hidden rounded-[38px] border border-[#e2eadf] bg-white p-5 shadow-[0_28px_80px_rgba(20,56,47,.18)] md:p-7">
+              <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,#ffffff_0%,#ffffff_58%,#eef8f1_100%)]" />
+              <div className="relative">
+                <div className="mb-6 flex items-start gap-4">
+                  <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-[22px] bg-[#d1f5df] text-[#0d6b54] shadow-sm">
+                    <PawPrint size={34} />
+                  </div>
+                  <div>
+                    <span className="text-xs font-black uppercase tracking-[.14em] text-[#0d6b54]">Área do cliente</span>
+                    <h2 className="mt-1 text-3xl font-black leading-tight md:text-4xl">
+                      {mode === "login" ? "Entrar" : "Criar conta"}
+                    </h2>
+                    <p className="mt-1 text-sm leading-relaxed text-slate-500">Acesse o painel do tutor com segurança.</p>
+                  </div>
                 </div>
-                <div>
-                  <span className="text-xs font-black uppercase tracking-[.14em] text-[#0d6b54]">Área do cliente</span>
-                  <h2 className="mt-1 text-3xl font-black leading-tight md:text-4xl">
-                    {mode === "login" ? "Entrar" : "Criar conta"}
-                  </h2>
-                  <p className="mt-1 text-sm leading-relaxed text-slate-500">Acesse o painel do tutor com segurança.</p>
+
+                <div className="mb-5 grid grid-cols-2 gap-2 rounded-[24px] bg-[#eaf7ef] p-2 shadow-inner">
+                  <button
+                    type="button"
+                    onClick={() => setMode("login")}
+                    className={`min-h-[52px] rounded-[18px] px-4 font-black transition ${
+                      mode === "login" ? "bg-[#0d6b54] text-white shadow-lg" : "text-slate-600 hover:bg-white"
+                    }`}
+                  >
+                    Login
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setMode("register")}
+                    className={`min-h-[52px] rounded-[18px] px-4 font-black transition ${
+                      mode === "register" ? "bg-[#0d6b54] text-white shadow-lg" : "text-slate-600 hover:bg-white"
+                    }`}
+                  >
+                    Cadastro
+                  </button>
                 </div>
-              </div>
 
-              <div className="mb-5 grid grid-cols-2 gap-2 rounded-[24px] bg-[#eaf7ef] p-2 shadow-inner">
-                <button
-                  type="button"
-                  onClick={() => setMode("login")}
-                  className={`min-h-[52px] rounded-[18px] px-4 font-black transition ${
-                    mode === "login" ? "bg-[#0d6b54] text-white shadow-lg" : "text-slate-600 hover:bg-white"
-                  }`}
-                >
-                  Login
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setMode("register")}
-                  className={`min-h-[52px] rounded-[18px] px-4 font-black transition ${
-                    mode === "register" ? "bg-[#0d6b54] text-white shadow-lg" : "text-slate-600 hover:bg-white"
-                  }`}
-                >
-                  Cadastro
-                </button>
-              </div>
+                <div className="mb-5 rounded-[22px] border border-[#d7eadf] bg-white p-2 shadow-sm">
+                  <div
+                    className={`flex min-h-[44px] items-center justify-center ${googleLoading ? "opacity-60" : ""}`}
+                    ref={googleButtonRef}
+                  />
+                </div>
 
-              <div className="mb-5 rounded-[22px] border border-[#d7eadf] bg-white p-2 shadow-sm">
-                <div
-                  className={`flex min-h-[44px] items-center justify-center ${googleLoading ? "opacity-60" : ""}`}
-                  ref={googleButtonRef}
-                />
-              </div>
+                <div className="mb-5 flex items-center gap-3 text-xs font-black uppercase tracking-[.08em] text-slate-400">
+                  <span className="h-px flex-1 bg-[#e2eadf]" />
+                  ou use e-mail
+                  <span className="h-px flex-1 bg-[#e2eadf]" />
+                </div>
 
-              <div className="mb-5 flex items-center gap-3 text-xs font-black uppercase tracking-[.08em] text-slate-400">
-                <span className="h-px flex-1 bg-[#e2eadf]" />
-                ou use e-mail
-                <span className="h-px flex-1 bg-[#e2eadf]" />
-              </div>
+                <form onSubmit={handleSubmit} className="grid gap-3.5">
+                  {mode === "register" && (
+                    <div className={inputWrapClass}>
+                      <User className="mr-3 shrink-0 text-slate-400" />
+                      <input
+                        value={form.name}
+                        onChange={(event) => updateField("name", event.target.value)}
+                        placeholder="Nome completo"
+                        required
+                        className={inputClass}
+                      />
+                    </div>
+                  )}
 
-              <form onSubmit={handleSubmit} className="grid gap-3.5">
-                {mode === "register" && (
                   <div className={inputWrapClass}>
-                    <User className="mr-3 shrink-0 text-slate-400" />
+                    <Mail className="mr-3 shrink-0 text-slate-400" />
                     <input
-                      value={form.name}
-                      onChange={(event) => updateField("name", event.target.value)}
-                      placeholder="Nome completo"
+                      type="email"
+                      value={form.email}
+                      onChange={(event) => updateField("email", event.target.value)}
+                      placeholder="E-mail"
                       required
                       className={inputClass}
                     />
                   </div>
-                )}
 
-                <div className={inputWrapClass}>
-                  <Mail className="mr-3 shrink-0 text-slate-400" />
-                  <input
-                    type="email"
-                    value={form.email}
-                    onChange={(event) => updateField("email", event.target.value)}
-                    placeholder="E-mail"
-                    required
-                    className={inputClass}
-                  />
-                </div>
+                  {mode === "register" && (
+                    <div className={inputWrapClass}>
+                      <Phone className="mr-3 shrink-0 text-slate-400" />
+                      <input
+                        value={form.phone}
+                        onChange={(event) => updateField("phone", event.target.value)}
+                        placeholder="Telefone / WhatsApp"
+                        className={inputClass}
+                      />
+                    </div>
+                  )}
 
-                {mode === "register" && (
                   <div className={inputWrapClass}>
-                    <Phone className="mr-3 shrink-0 text-slate-400" />
+                    <Lock className="mr-3 shrink-0 text-slate-400" />
                     <input
-                      value={form.phone}
-                      onChange={(event) => updateField("phone", event.target.value)}
-                      placeholder="Telefone / WhatsApp"
+                      type={showPassword ? "text" : "password"}
+                      value={form.password}
+                      onChange={(event) => updateField("password", event.target.value)}
+                      placeholder="Senha"
+                      required
                       className={inputClass}
                     />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((current) => !current)}
+                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-slate-400 transition hover:bg-emerald-50 hover:text-emerald-800"
+                      aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
+                    >
+                      {showPassword ? <EyeOff size={21} /> : <Eye size={21} />}
+                    </button>
                   </div>
-                )}
 
-                <div className={inputWrapClass}>
-                  <Lock className="mr-3 shrink-0 text-slate-400" />
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    value={form.password}
-                    onChange={(event) => updateField("password", event.target.value)}
-                    placeholder="Senha"
-                    required
-                    className={inputClass}
-                  />
+                  {error && (
+                    <div className="rounded-[20px] border border-red-200 bg-red-50 p-4 text-sm font-bold text-red-700">
+                      {error}
+                    </div>
+                  )}
+
                   <button
-                    type="button"
-                    onClick={() => setShowPassword((current) => !current)}
-                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-slate-400 transition hover:bg-emerald-50 hover:text-emerald-800"
-                    aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
+                    disabled={loading || googleLoading}
+                    className="min-h-[60px] rounded-[22px] bg-[#0d6b54] px-6 text-lg font-black text-white shadow-xl shadow-emerald-900/18 transition hover:-translate-y-0.5 hover:bg-[#095642] disabled:translate-y-0 disabled:opacity-60"
                   >
-                    {showPassword ? <EyeOff size={21} /> : <Eye size={21} />}
+                    {loading ? "Processando..." : mode === "login" ? "Entrar na minha conta" : "Criar minha conta"}
                   </button>
+                </form>
+
+                <div className="mt-5 grid gap-2 sm:grid-cols-3">
+                  {trustHighlights.map(([Icon, title]) => (
+                    <div key={title} className="flex items-center justify-center gap-2 rounded-2xl bg-[#f4fbf6] px-3 py-3 text-center text-xs font-black text-[#0d6b54] ring-1 ring-[#d7eadf]">
+                      <Icon size={16} />
+                      <span>{title}</span>
+                    </div>
+                  ))}
                 </div>
-
-                {error && (
-                  <div className="rounded-[20px] border border-red-200 bg-red-50 p-4 text-sm font-bold text-red-700">
-                    {error}
-                  </div>
-                )}
-
-                <button
-                  disabled={loading || googleLoading}
-                  className="min-h-[60px] rounded-[22px] bg-[#0d6b54] px-6 text-lg font-black text-white shadow-xl shadow-emerald-900/18 transition hover:-translate-y-0.5 hover:bg-[#095642] disabled:translate-y-0 disabled:opacity-60"
-                >
-                  {loading ? "Processando..." : mode === "login" ? "Entrar na minha conta" : "Criar minha conta"}
-                </button>
-              </form>
-
-              <div className="mt-5 grid gap-2 sm:grid-cols-3">
-                {trustHighlights.map(([Icon, title]) => (
-                  <div key={title} className="flex items-center justify-center gap-2 rounded-2xl bg-[#f4fbf6] px-3 py-3 text-center text-xs font-black text-[#0d6b54] ring-1 ring-[#d7eadf]">
-                    <Icon size={16} />
-                    <span>{title}</span>
-                  </div>
-                ))}
               </div>
             </div>
           </div>
