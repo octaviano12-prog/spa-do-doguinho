@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { Camera, CalendarDays, CheckCircle2, Heart, Image as ImageIcon, MessageCircle, PawPrint, ShieldCheck, Sparkles, Star } from "lucide-react";
 import { motion } from "framer-motion";
 import PublicLayout from "../../components/public/PublicLayout";
-import { fallbackGallery } from "../../data/publicPhotos";
 
 const API_PUBLIC = "https://spadodoguinho.com.br/api/public";
 const whatsappUrl = "https://wa.me/5518997493722?text=Olá! Gostaria de conhecer a galeria e agendar um atendimento no SPA do Doguinho.";
@@ -45,6 +44,7 @@ function GalleryImage({ item, index, className = "" }) {
 export default function GaleriaPublicPage() {
   const [gallery, setGallery] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
 
   useEffect(() => {
     async function loadGallery() {
@@ -54,11 +54,13 @@ export default function GaleriaPublicPage() {
 
         if (Array.isArray(data)) {
           const activeItems = data.filter((item) => Number(item.active ?? 1) === 1);
-          setGallery(activeItems.length ? activeItems : fallbackGallery);
+          setGallery(activeItems);
+          setLoadError(false);
         }
       } catch (error) {
         console.error("Erro ao carregar galeria:", error);
-        setGallery(fallbackGallery);
+        setGallery([]);
+        setLoadError(true);
       } finally {
         setIsLoading(false);
       }
@@ -67,7 +69,7 @@ export default function GaleriaPublicPage() {
     loadGallery();
   }, []);
 
-  const totalItems = gallery.length || fallbackGallery.length;
+  const totalItems = gallery.length;
 
   return (
     <PublicLayout>
@@ -141,6 +143,16 @@ export default function GaleriaPublicPage() {
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
             {isLoading && [1, 2, 3, 4, 5, 6].map((item) => <div key={item} className="h-[420px] animate-pulse rounded-[30px] bg-white shadow-sm" />)}
+
+            {!isLoading && gallery.length === 0 && (
+              <div className="md:col-span-2 xl:col-span-3 rounded-[34px] border border-[#e2eadf] bg-white p-10 text-center shadow-xl">
+                <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-[28px] bg-[#e7f4ed] text-[#0d6b54]"><ImageIcon size={42} /></div>
+                <h3 className="mt-6 text-3xl font-black text-[#0d6b54]">Nenhuma foto cadastrada ainda.</h3>
+                <p className="mx-auto mt-3 max-w-xl text-slate-600">
+                  {loadError ? "Não foi possível carregar a galeria agora." : "As imagens adicionadas no painel administrativo aparecerão aqui automaticamente."}
+                </p>
+              </div>
+            )}
 
             {!isLoading && gallery.map((item, index) => (
               <motion.article key={item.id || index} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.04 }} className="home-card-animate group overflow-hidden rounded-[30px] bg-white shadow-xl ring-1 ring-black/5 transition hover:-translate-y-1" style={{ animationDelay: `${index * 70}ms` }}>
