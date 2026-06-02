@@ -79,9 +79,9 @@ export default function LoginPage() {
       <div className="absolute inset-x-0 bottom-0 h-56 bg-gradient-to-t from-black/35 to-transparent" />
 
       <div className="relative mx-auto flex min-h-screen w-full max-w-[1680px] flex-col px-5 py-5 sm:px-8 lg:px-10">
-        <header className="flex flex-wrap items-center justify-between gap-4 rounded-[28px] border border-white/10 bg-white/8 px-4 py-3 shadow-2xl shadow-black/20 backdrop-blur-xl sm:px-5">
+        <header className="flex flex-wrap items-center justify-between gap-4 rounded-[28px] border border-white/10 bg-white/10 px-4 py-3 shadow-2xl shadow-black/20 backdrop-blur-xl sm:px-5">
           <Link to="/" className="group flex items-center gap-3 sm:gap-4">
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-white to-green-200 text-emerald-900 shadow-xl shadow-black/20 transition group-hover:scale-105 sm:h-18 sm:w-18">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-white to-green-200 text-emerald-900 shadow-xl shadow-black/20 transition group-hover:scale-105 sm:h-[72px] sm:w-[72px]">
               <PawPrint size={36} />
             </div>
             <div>
@@ -107,40 +107,41 @@ export default function LoginPage() {
             <img
               src={heroImage}
               alt="SPA do Doguinho"
-              className="absolute inset-0 h-full w-full object-cover object-center opacity-82"
+              className="absolute inset-0 h-full w-full object-cover object-center opacity-90"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#03140c]/96 via-[#032015]/84 to-[#032015]/35" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#03140c]/88 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#02120c] via-[#02120c]/86 to-[#02120c]/8" />
+            <div className="absolute inset-y-0 left-0 w-[66%] bg-gradient-to-r from-[#02120c]/98 via-[#02120c]/82 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#02120c]/90 via-transparent to-transparent" />
 
             <div className="relative flex min-h-[620px] flex-col justify-between p-6 sm:p-8 lg:p-10">
-              <div>
-                <div className="inline-flex items-center gap-2 rounded-full border border-white/16 bg-white/12 px-4 py-2 text-xs font-black uppercase tracking-wide text-green-50 shadow-lg shadow-black/20 backdrop-blur-xl sm:text-sm">
+              <div className="max-w-[610px]">
+                <div className="inline-flex items-center gap-2 rounded-full border border-white/18 bg-[#02120c]/44 px-4 py-2 text-xs font-black uppercase tracking-wide text-green-50 shadow-lg shadow-black/20 backdrop-blur-xl sm:text-sm">
                   <ShieldCheck size={16} className="text-green-300" />
                   Área administrativa
                 </div>
 
-                <h1 className="mt-7 max-w-3xl text-5xl font-black leading-[1.03] text-white drop-shadow-2xl sm:text-6xl xl:text-7xl">
+                <h1 className="mt-7 max-w-[590px] text-4xl font-black leading-[1.04] text-white drop-shadow-2xl sm:text-5xl xl:text-6xl">
                   Gestão premium para o SPA do{" "}
                   <span className="text-green-300">Doguinho.</span>
                 </h1>
 
-                <p className="mt-6 max-w-2xl text-lg leading-relaxed text-green-50/92 sm:text-xl xl:text-2xl">
+                <p className="mt-6 max-w-[560px] text-base leading-relaxed text-green-50/92 sm:text-lg xl:text-xl">
                   Controle clientes, pets, agendamentos, serviços, pagamentos,
                   estoque, vacinas e disponibilidade em um painel moderno.
                 </p>
               </div>
 
-              <div className="mt-10 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+              <div className="mt-10 grid max-w-[660px] gap-3 sm:grid-cols-2">
                 {featureCards.map(([title, description]) => (
                   <div
                     key={title}
-                    className="rounded-3xl border border-white/16 bg-white/10 p-5 shadow-xl shadow-black/20 backdrop-blur-xl"
+                    className="rounded-3xl border border-green-100/18 bg-[#02120c]/62 p-5 shadow-xl shadow-black/24 backdrop-blur-xl"
                   >
-                    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-green-300/14 text-green-200 ring-1 ring-green-200/20">
-                      <CheckCircle size={24} />
+                    <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-green-300/12 text-green-200 ring-1 ring-green-200/20">
+                      <CheckCircle size={23} />
                     </div>
                     <h2 className="text-lg font-black text-white">{title}</h2>
-                    <p className="mt-2 text-sm leading-relaxed text-green-50/78">
+                    <p className="mt-2 text-sm leading-relaxed text-green-50/82">
                       {description}
                     </p>
                   </div>
