@@ -28,12 +28,12 @@ const accessHighlights = [
   {
     icon: PawPrint,
     title: "Pets",
-    text: "Cadastro e dados sempre a mao."
+    text: "Cadastro e dados sempre à mão."
   },
   {
     icon: CalendarDays,
     title: "Agenda",
-    text: "Proximos horarios e historico."
+    text: "Próximos horários e histórico."
   },
   {
     icon: Sparkles,
@@ -46,11 +46,11 @@ const trustHighlights = [
   {
     icon: ShieldCheck,
     title: "Acesso seguro",
-    text: "Sua area fica protegida por login."
+    text: "Sua área fica protegida por login."
   },
   {
     icon: MessageCircle,
-    title: "Atendimento facil",
+    title: "Atendimento fácil",
     text: "Fale com a equipe quando precisar."
   }
 ];
@@ -104,7 +104,7 @@ export default function ClienteLoginPage() {
         const data = await response.json().catch(() => null);
 
         if (!response.ok || !data?.id) {
-          throw new Error("Sessao invalida");
+          throw new Error("Sessão inválida");
         }
 
         localStorage.setItem("spa_customer", JSON.stringify(data));
@@ -113,7 +113,7 @@ export default function ClienteLoginPage() {
         localStorage.removeItem("spa_customer_token");
         localStorage.removeItem("spa_customer");
         if (!cancelled) {
-          setError("Sua sessao expirou. Entre novamente para continuar.");
+          setError("Sua sessão expirou. Entre novamente para continuar.");
           setCheckingSession(false);
         }
       }
@@ -130,7 +130,7 @@ export default function ClienteLoginPage() {
     const credential = response?.credential;
 
     if (!credential) {
-      setError("Nao foi possivel receber o login do Google.");
+      setError("Não foi possível receber o login do Google.");
       return;
     }
 
@@ -197,7 +197,7 @@ export default function ClienteLoginPage() {
       script.async = true;
       script.defer = true;
       script.onload = renderGoogleButton;
-      script.onerror = () => setError("Nao foi possivel carregar o login do Google.");
+      script.onerror = () => setError("Não foi possível carregar o login do Google.");
       document.head.appendChild(script);
     }
 
@@ -228,12 +228,12 @@ export default function ClienteLoginPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Erro ao acessar area do cliente.");
+        throw new Error(data.error || "Erro ao acessar área do cliente.");
       }
 
       await finishCustomerLogin(data);
     } catch (err) {
-      setError(err.message || "Erro ao acessar area do cliente.");
+      setError(err.message || "Erro ao acessar área do cliente.");
     } finally {
       setLoading(false);
     }
@@ -247,8 +247,8 @@ export default function ClienteLoginPage() {
             <span className="flex h-20 w-20 items-center justify-center rounded-[28px] bg-[#e7f4ed] text-[#0d6b54]">
               <RefreshCw className="animate-spin" size={38} />
             </span>
-            <h1 className="mt-6 text-3xl font-black md:text-4xl">Verificando sua sessao</h1>
-            <p className="mt-3 text-slate-500">Se voce ja estiver logado, vamos te levar direto para sua area.</p>
+            <h1 className="mt-6 text-3xl font-black md:text-4xl">Verificando sua sessão</h1>
+            <p className="mt-3 text-slate-500">Se você já estiver logado, vamos te levar direto para sua área.</p>
           </section>
         </main>
       </PublicLayout>
@@ -275,7 +275,7 @@ export default function ClienteLoginPage() {
                 </Link>
                 <span className="inline-flex min-h-[48px] items-center gap-2 rounded-full bg-emerald-100 px-5 py-3 text-sm font-black text-emerald-900">
                   <ShieldCheck size={18} />
-                  Area exclusiva para tutores
+                  Área exclusiva para tutores
                 </span>
               </div>
 
@@ -289,7 +289,7 @@ export default function ClienteLoginPage() {
               </h1>
 
               <p className="mt-6 max-w-2xl text-lg leading-relaxed text-slate-600 md:text-xl">
-                Entre para acompanhar seus pets, agendamentos, pagamentos e proximos atendimentos em uma experiencia simples e bonita.
+                Entre para acompanhar seus pets, agendamentos, pagamentos e próximos atendimentos em uma experiência simples e bonita.
               </p>
 
               <div className="mt-9 grid max-w-3xl gap-4 sm:grid-cols-3">
@@ -321,7 +321,7 @@ export default function ClienteLoginPage() {
               <div className="relative hidden min-h-[640px] overflow-hidden rounded-[42px] bg-white shadow-2xl ring-1 ring-[#dbeade] xl:block">
                 <img
                   src="/images/sobre-hero.webp"
-                  alt="Area do cliente SPA do Doguinho"
+                  alt="Área do cliente SPA do Doguinho"
                   className="h-full w-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/55 via-transparent to-transparent" />
@@ -333,7 +333,7 @@ export default function ClienteLoginPage() {
                     <div>
                       <b className="text-lg text-[#12382f]">Atendimento acompanhado</b>
                       <p className="mt-1 text-sm leading-relaxed text-slate-600">
-                        Tudo que voce precisa para agendar e acompanhar o cuidado do seu pet.
+                        Tudo que você precisa para agendar e acompanhar o cuidado do seu pet.
                       </p>
                     </div>
                   </div>
@@ -346,7 +346,7 @@ export default function ClienteLoginPage() {
                     <PawPrint size={34} />
                   </div>
                   <div>
-                    <span className="text-sm font-black uppercase text-[#0d6b54]">Area do cliente</span>
+                    <span className="text-sm font-black uppercase text-[#0d6b54]">Área do cliente</span>
                     <h2 className="mt-1 text-3xl font-black leading-tight md:text-4xl">
                       {mode === "login" ? "Entrar" : "Criar conta"}
                     </h2>
@@ -464,8 +464,8 @@ export default function ClienteLoginPage() {
                   <ShieldCheck className="mt-0.5 shrink-0 text-[#0d6b54]" size={20} />
                   <p>
                     {mode === "login"
-                      ? "Use o mesmo e-mail do cadastro para continuar direto para sua area do cliente."
-                      : "Depois do cadastro voce ja entra logado e pode agendar o primeiro atendimento."}
+                      ? "Use o mesmo e-mail do cadastro para continuar direto para sua área do cliente."
+                      : "Depois do cadastro você já entra logado e pode agendar o primeiro atendimento."}
                   </p>
                 </div>
               </div>
