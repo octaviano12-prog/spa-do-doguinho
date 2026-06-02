@@ -4,6 +4,9 @@ import {
   ArrowLeft,
   BadgeCheck,
   CalendarDays,
+  Camera,
+  CheckCircle2,
+  CreditCard,
   Eye,
   EyeOff,
   KeyRound,
@@ -15,6 +18,7 @@ import {
   RefreshCw,
   ShieldCheck,
   Sparkles,
+  Star,
   User
 } from "lucide-react";
 import PublicLayout from "../../components/public/PublicLayout";
@@ -25,6 +29,24 @@ const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || DEFAULT_GOOGLE
 const GOOGLE_SCRIPT_ID = "google-identity-services";
 const heroImage = "/images/hero-doguinho-card.webp";
 
+const heroStats = [
+  {
+    icon: Star,
+    value: "+1.200",
+    label: "pets atendidos"
+  },
+  {
+    icon: Star,
+    value: "4,9/5",
+    label: "avaliacao dos tutores"
+  },
+  {
+    icon: BadgeCheck,
+    value: "Cuidado",
+    label: "personalizado"
+  }
+];
+
 const accessHighlights = [
   {
     icon: PawPrint,
@@ -33,26 +55,31 @@ const accessHighlights = [
   },
   {
     icon: CalendarDays,
-    title: "Agenda online",
-    text: "Horários e histórico em um só lugar."
+    title: "Agenda inteligente",
+    text: "Horarios e historico em um so lugar."
   },
   {
-    icon: Sparkles,
-    title: "Cuidado premium",
-    text: "Acompanhamento com carinho."
+    icon: CreditCard,
+    title: "Pagamentos online",
+    text: "Acompanhe valores e confirmacoes."
+  },
+  {
+    icon: Camera,
+    title: "Historico com fotos",
+    text: "Registros do cuidado sempre a mao."
   }
 ];
 
 const trustHighlights = [
   [ShieldCheck, "Acesso seguro"],
   [MessageCircle, "WhatsApp integrado"],
-  [BadgeCheck, "Atendimento acompanhado"]
+  [CheckCircle2, "Atendimento acompanhado"]
 ];
 
 const inputClass =
   "w-full bg-transparent text-[#12382f] outline-none placeholder:text-slate-400";
 const inputWrapClass =
-  "flex min-h-[58px] items-center rounded-[22px] border-2 border-[#d7eadf] bg-[#fbfffc] px-5 shadow-sm transition focus-within:border-[#0d6b54] focus-within:bg-white focus-within:ring-4 focus-within:ring-[#0d6b54]/10";
+  "flex min-h-[62px] items-center rounded-[24px] border-2 border-[#d7eadf] bg-[#fbfffc] px-5 shadow-sm transition focus-within:border-[#0d6b54] focus-within:bg-white focus-within:ring-4 focus-within:ring-[#0d6b54]/10";
 
 function getSafeNextPage() {
   const next = new URLSearchParams(window.location.search).get("next");
@@ -103,7 +130,7 @@ export default function ClienteLoginPage() {
         const data = await response.json().catch(() => null);
 
         if (!response.ok || !data?.id) {
-          throw new Error("Sessão inválida");
+          throw new Error("Sessao invalida");
         }
 
         localStorage.setItem("spa_customer", JSON.stringify(data));
@@ -112,7 +139,7 @@ export default function ClienteLoginPage() {
         localStorage.removeItem("spa_customer_token");
         localStorage.removeItem("spa_customer");
         if (!cancelled) {
-          setError("Sua sessão expirou. Entre novamente para continuar.");
+          setError("Sua sessao expirou. Entre novamente para continuar.");
           setCheckingSession(false);
         }
       }
@@ -129,7 +156,7 @@ export default function ClienteLoginPage() {
     const credential = response?.credential;
 
     if (!credential) {
-      setError("Não foi possível receber o login do Google.");
+      setError("Nao foi possivel receber o login do Google.");
       return;
     }
 
@@ -179,7 +206,7 @@ export default function ClienteLoginPage() {
         shape: "pill",
         text: mode === "login" ? "signin_with" : "signup_with",
         logo_alignment: "left",
-        width: Math.min(380, googleButtonRef.current.clientWidth || 340)
+        width: Math.min(410, googleButtonRef.current.clientWidth || 360)
       });
     }
 
@@ -196,7 +223,7 @@ export default function ClienteLoginPage() {
       script.async = true;
       script.defer = true;
       script.onload = renderGoogleButton;
-      script.onerror = () => setError("Não foi possível carregar o login do Google.");
+      script.onerror = () => setError("Nao foi possivel carregar o login do Google.");
       document.head.appendChild(script);
     }
 
@@ -227,12 +254,12 @@ export default function ClienteLoginPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Erro ao acessar área do cliente.");
+        throw new Error(data.error || "Erro ao acessar area do cliente.");
       }
 
       await finishCustomerLogin(data);
     } catch (err) {
-      setError(err.message || "Erro ao acessar área do cliente.");
+      setError(err.message || "Erro ao acessar area do cliente.");
     } finally {
       setLoading(false);
     }
@@ -248,8 +275,8 @@ export default function ClienteLoginPage() {
             <span className="flex h-20 w-20 items-center justify-center rounded-[28px] bg-[#e7f4ed] text-[#0d6b54]">
               <RefreshCw className="animate-spin" size={38} />
             </span>
-            <h1 className="mt-6 text-3xl font-black md:text-4xl">Verificando sua sessão</h1>
-            <p className="mt-3 text-slate-500">Se você já estiver logado, vamos te levar direto para sua área.</p>
+            <h1 className="mt-6 text-3xl font-black md:text-4xl">Verificando sua sessao</h1>
+            <p className="mt-3 text-slate-500">Se voce ja estiver logado, vamos te levar direto para sua area.</p>
           </section>
         </main>
       </PublicLayout>
@@ -260,8 +287,8 @@ export default function ClienteLoginPage() {
     <PublicLayout>
       <main className="overflow-hidden bg-[#fffdf7] text-[#12382f]">
         <section className="relative min-h-[calc(100vh-128px)] overflow-hidden bg-[#e9f6ee]">
-          <img src={heroImage} alt="Área do cliente SPA do Doguinho" className="home-hero-image absolute inset-0 h-full w-full object-cover object-center" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#edf8f1]/98 via-[#edf8f1]/92 to-[#fffdf7]/88 xl:to-[#fffdf7]/32" />
+          <img src={heroImage} alt="Area de agendamento SPA do Doguinho" className="home-hero-image absolute inset-0 h-full w-full object-cover object-center opacity-90" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#edf8f1]/98 via-[#edf8f1]/88 to-[#fffdf7]/82 xl:to-[#fffdf7]/30" />
           <div className="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-[#fffdf7] to-transparent" />
 
           <div className="relative mx-auto grid min-h-[calc(100vh-128px)] max-w-[1880px] items-center gap-9 px-6 py-10 md:px-10 lg:grid-cols-[minmax(0,1fr)_minmax(420px,520px)] xl:pr-[240px] 2xl:pr-[270px]">
@@ -276,13 +303,13 @@ export default function ClienteLoginPage() {
                 </Link>
                 <span className="inline-flex min-h-[48px] items-center gap-2 rounded-full bg-[#d1f5df] px-5 py-3 text-sm font-black text-emerald-900 shadow-sm">
                   <ShieldCheck size={18} />
-                  Área exclusiva para tutores
+                  Area exclusiva para tutores
                 </span>
               </div>
 
               <span className="home-animate-fade-delay-1 mt-10 inline-flex items-center gap-2 rounded-full bg-white/90 px-5 py-2 text-sm font-black uppercase tracking-[.12em] text-[#0d6b54] shadow-sm backdrop-blur">
                 <KeyRound size={17} />
-                Cliente SPA do Doguinho
+                Agendamento SPA do Doguinho
               </span>
 
               <h1 className="home-animate-fade-delay-1 mt-5 max-w-4xl text-4xl font-black leading-[.92] tracking-[-.05em] text-[#12382f] sm:text-5xl md:text-6xl xl:text-[4.35rem] 2xl:text-[4.85rem]">
@@ -291,8 +318,18 @@ export default function ClienteLoginPage() {
               </h1>
 
               <p className="home-animate-fade-delay-2 mt-5 max-w-2xl text-sm leading-relaxed text-slate-700 md:text-base lg:text-lg">
-                Sua área exclusiva reúne pets, horários, pagamentos e histórico em uma experiência simples, bonita e segura.
+                Bem-vindo de volta! Acompanhe seus agendamentos, pets e historico em uma experiencia simples, bonita e segura.
               </p>
+
+              <div className="home-animate-fade-delay-2 mt-6 grid max-w-3xl gap-3 sm:grid-cols-3">
+                {heroStats.map(({ icon: Icon, value, label }, index) => (
+                  <div key={label} className="rounded-[24px] border border-white/80 bg-white/72 p-4 shadow-lg backdrop-blur-xl" style={{ animationDelay: `${index * 80}ms` }}>
+                    <Icon className="mb-2 text-[#d6a62d]" size={24} fill="currentColor" />
+                    <strong className="block text-2xl font-black text-[#12382f]">{value}</strong>
+                    <span className="text-sm font-bold text-slate-600">{label}</span>
+                  </div>
+                ))}
+              </div>
 
               <div className="home-animate-fade-delay-3 mt-7 flex flex-wrap gap-3">
                 <button
@@ -300,7 +337,7 @@ export default function ClienteLoginPage() {
                   onClick={() => setMode("login")}
                   className="home-pulse-glow inline-flex items-center gap-3 rounded-2xl bg-[#0d6b54] px-6 py-3 font-black text-white shadow-xl transition hover:-translate-y-1 hover:bg-[#095642]"
                 >
-                  <User size={20} /> Já sou cliente
+                  <User size={20} /> Ja sou cliente
                 </button>
                 <button
                   type="button"
@@ -311,10 +348,12 @@ export default function ClienteLoginPage() {
                 </button>
               </div>
 
-              <div className="home-animate-fade-delay-3 mt-7 grid max-w-3xl gap-3 sm:grid-cols-3">
+              <div className="home-animate-fade-delay-3 mt-7 grid max-w-4xl gap-3 sm:grid-cols-2 xl:grid-cols-4">
                 {accessHighlights.map(({ icon: Icon, title, text }, index) => (
-                  <div key={title} className="home-card-animate rounded-[24px] border border-white/85 bg-white/88 p-5 shadow-lg backdrop-blur" style={{ animationDelay: `${index * 80}ms` }}>
-                    <Icon className="mb-3 text-[#0d6b54]" size={25} />
+                  <div key={title} className="home-card-animate rounded-[24px] border border-white/85 bg-white/82 p-5 shadow-lg backdrop-blur-xl" style={{ animationDelay: `${index * 80}ms` }}>
+                    <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#d1f5df] text-[#0d6b54]">
+                      <Icon size={27} />
+                    </div>
                     <h3 className="text-base font-black text-[#12382f]">{title}</h3>
                     <p className="mt-1 text-sm leading-relaxed text-slate-600">{text}</p>
                   </div>
@@ -322,19 +361,22 @@ export default function ClienteLoginPage() {
               </div>
             </div>
 
-            <div className="home-animate-fade-delay-2 relative w-full overflow-hidden rounded-[38px] border border-[#e2eadf] bg-white p-5 shadow-[0_28px_80px_rgba(20,56,47,.18)] md:p-7">
+            <div className="home-animate-fade-delay-2 relative w-full overflow-hidden rounded-[38px] border border-[#e2eadf] bg-white p-5 shadow-[0_30px_90px_rgba(20,56,47,.22)] md:p-7">
               <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,#ffffff_0%,#ffffff_58%,#eef8f1_100%)]" />
+              <div className="pointer-events-none absolute -right-20 -top-24 h-48 w-48 rounded-full bg-[#f7df9b]/35 blur-3xl" />
               <div className="relative">
                 <div className="mb-6 flex items-start gap-4">
-                  <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-[22px] bg-[#d1f5df] text-[#0d6b54] shadow-sm">
-                    <PawPrint size={34} />
+                  <div className="flex h-18 w-18 shrink-0 items-center justify-center rounded-[24px] bg-[#d1f5df] p-4 text-[#0d6b54] shadow-sm">
+                    <PawPrint size={38} />
                   </div>
                   <div>
-                    <span className="text-xs font-black uppercase tracking-[.14em] text-[#0d6b54]">Área do cliente</span>
+                    <span className="text-xs font-black uppercase tracking-[.14em] text-[#0d6b54]">Area do cliente</span>
                     <h2 className="mt-1 text-3xl font-black leading-tight md:text-4xl">
                       {mode === "login" ? "Entrar" : "Criar conta"}
                     </h2>
-                    <p className="mt-1 text-sm leading-relaxed text-slate-500">Acesse o painel do tutor com segurança.</p>
+                    <p className="mt-2 text-sm leading-relaxed text-slate-500">
+                      Bem-vindo de volta! Acompanhe seus agendamentos, pets e historico.
+                    </p>
                   </div>
                 </div>
 
@@ -342,7 +384,7 @@ export default function ClienteLoginPage() {
                   <button
                     type="button"
                     onClick={() => setMode("login")}
-                    className={`min-h-[52px] rounded-[18px] px-4 font-black transition ${
+                    className={`min-h-[54px] rounded-[18px] px-4 font-black transition ${
                       mode === "login" ? "bg-[#0d6b54] text-white shadow-lg" : "text-slate-600 hover:bg-white"
                     }`}
                   >
@@ -351,7 +393,7 @@ export default function ClienteLoginPage() {
                   <button
                     type="button"
                     onClick={() => setMode("register")}
-                    className={`min-h-[52px] rounded-[18px] px-4 font-black transition ${
+                    className={`min-h-[54px] rounded-[18px] px-4 font-black transition ${
                       mode === "register" ? "bg-[#0d6b54] text-white shadow-lg" : "text-slate-600 hover:bg-white"
                     }`}
                   >
@@ -359,9 +401,13 @@ export default function ClienteLoginPage() {
                   </button>
                 </div>
 
-                <div className="mb-5 rounded-[22px] border border-[#d7eadf] bg-white p-2 shadow-sm">
+                <div className="mb-5 rounded-[26px] border-2 border-[#d7eadf] bg-gradient-to-r from-white to-[#f2fff6] p-3 shadow-lg shadow-emerald-900/5">
+                  <div className="mb-2 flex items-center gap-2 px-2 text-xs font-black uppercase tracking-[.1em] text-[#0d6b54]">
+                    <BadgeCheck size={16} />
+                    Login rapido com Google
+                  </div>
                   <div
-                    className={`flex min-h-[44px] items-center justify-center ${googleLoading ? "opacity-60" : ""}`}
+                    className={`flex min-h-[48px] items-center justify-center rounded-[20px] bg-white ${googleLoading ? "opacity-60" : ""}`}
                     ref={googleButtonRef}
                   />
                 </div>
@@ -375,7 +421,7 @@ export default function ClienteLoginPage() {
                 <form onSubmit={handleSubmit} className="grid gap-3.5">
                   {mode === "register" && (
                     <div className={inputWrapClass}>
-                      <User className="mr-3 shrink-0 text-slate-400" />
+                      <User className="mr-3 shrink-0 text-slate-400" size={24} />
                       <input
                         value={form.name}
                         onChange={(event) => updateField("name", event.target.value)}
@@ -387,7 +433,7 @@ export default function ClienteLoginPage() {
                   )}
 
                   <div className={inputWrapClass}>
-                    <Mail className="mr-3 shrink-0 text-slate-400" />
+                    <Mail className="mr-3 shrink-0 text-slate-400" size={24} />
                     <input
                       type="email"
                       value={form.email}
@@ -400,7 +446,7 @@ export default function ClienteLoginPage() {
 
                   {mode === "register" && (
                     <div className={inputWrapClass}>
-                      <Phone className="mr-3 shrink-0 text-slate-400" />
+                      <Phone className="mr-3 shrink-0 text-slate-400" size={24} />
                       <input
                         value={form.phone}
                         onChange={(event) => updateField("phone", event.target.value)}
@@ -411,7 +457,7 @@ export default function ClienteLoginPage() {
                   )}
 
                   <div className={inputWrapClass}>
-                    <Lock className="mr-3 shrink-0 text-slate-400" />
+                    <Lock className="mr-3 shrink-0 text-slate-400" size={24} />
                     <input
                       type={showPassword ? "text" : "password"}
                       value={form.password}
@@ -426,7 +472,7 @@ export default function ClienteLoginPage() {
                       className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-slate-400 transition hover:bg-emerald-50 hover:text-emerald-800"
                       aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
                     >
-                      {showPassword ? <EyeOff size={21} /> : <Eye size={21} />}
+                      {showPassword ? <EyeOff size={22} /> : <Eye size={22} />}
                     </button>
                   </div>
 
@@ -438,7 +484,7 @@ export default function ClienteLoginPage() {
 
                   <button
                     disabled={loading || googleLoading}
-                    className="min-h-[60px] rounded-[22px] bg-[#0d6b54] px-6 text-lg font-black text-white shadow-xl shadow-emerald-900/18 transition hover:-translate-y-0.5 hover:bg-[#095642] disabled:translate-y-0 disabled:opacity-60"
+                    className="min-h-[62px] rounded-[22px] bg-[#0d6b54] px-6 text-lg font-black text-white shadow-xl shadow-emerald-900/18 transition hover:-translate-y-0.5 hover:bg-[#095642] disabled:translate-y-0 disabled:opacity-60"
                   >
                     {loading ? "Processando..." : mode === "login" ? "Entrar na minha conta" : "Criar minha conta"}
                   </button>
@@ -447,29 +493,13 @@ export default function ClienteLoginPage() {
                 <div className="mt-5 grid gap-2 sm:grid-cols-3">
                   {trustHighlights.map(([Icon, title]) => (
                     <div key={title} className="flex items-center justify-center gap-2 rounded-2xl bg-[#f4fbf6] px-3 py-3 text-center text-xs font-black text-[#0d6b54] ring-1 ring-[#d7eadf]">
-                      <Icon size={16} />
+                      <Icon size={17} />
                       <span>{title}</span>
                     </div>
                   ))}
                 </div>
               </div>
             </div>
-          </div>
-        </section>
-
-        <section className="px-5 py-10 md:px-8">
-          <div className="mx-auto grid max-w-[1760px] gap-5 rounded-[34px] bg-white p-5 shadow-xl ring-1 ring-[#e2eadf] md:grid-cols-3 md:p-6">
-            {accessHighlights.map(({ icon: Icon, title, text }, index) => (
-              <div key={title} className="home-card-animate flex items-center gap-4 rounded-[26px] bg-[#fffdf7] p-6 ring-1 ring-[#e2eadf]" style={{ animationDelay: `${index * 90}ms` }}>
-                <div className="home-icon-pop flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-[#d9eee3] text-[#0d6b54] ring-1 ring-[#c8e5d6]">
-                  <Icon size={32} />
-                </div>
-                <div>
-                  <h3 className="text-lg font-black text-[#0d6b54]">{title}</h3>
-                  <p className="mt-1 text-sm leading-relaxed text-slate-600">{text}</p>
-                </div>
-              </div>
-            ))}
           </div>
         </section>
       </main>
