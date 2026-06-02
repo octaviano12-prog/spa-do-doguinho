@@ -2,7 +2,7 @@ const path = require("path");
 const fs = require("fs/promises");
 
 const uploadRoot = path.resolve(
-  process.env.UPLOAD_DIR || path.join(__dirname, "../../public_html/uploads")
+  process.env.UPLOAD_DIR || path.join(__dirname, "../../../public_html/uploads")
 );
 
 const MAX_FILE_SIZE = Number(process.env.UPLOAD_MAX_SIZE || 8 * 1024 * 1024);
