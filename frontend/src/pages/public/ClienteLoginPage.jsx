@@ -23,37 +23,36 @@ const API_URL = "https://spadodoguinho.com.br/api";
 const DEFAULT_GOOGLE_CLIENT_ID = "453503592700-lu67c7lqje2cnla2mdj6111qrkluq2gu.apps.googleusercontent.com";
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || DEFAULT_GOOGLE_CLIENT_ID;
 const GOOGLE_SCRIPT_ID = "google-identity-services";
+const heroImage = "/images/hero-doguinho-card.webp";
 
 const accessHighlights = [
   {
     icon: PawPrint,
-    title: "Pets",
-    text: "Cadastro e dados sempre à mão."
+    title: "Pets cadastrados",
+    text: "Dados do pet sempre organizados."
   },
   {
     icon: CalendarDays,
-    title: "Agenda",
-    text: "Próximos horários e histórico."
+    title: "Agenda online",
+    text: "Horários e histórico em um só lugar."
   },
   {
     icon: Sparkles,
-    title: "Cuidado",
-    text: "Pagamentos e acompanhamento."
+    title: "Cuidado premium",
+    text: "Acompanhamento com carinho."
   }
 ];
 
 const trustHighlights = [
-  {
-    icon: ShieldCheck,
-    title: "Acesso seguro",
-    text: "Sua área fica protegida por login."
-  },
-  {
-    icon: MessageCircle,
-    title: "Atendimento fácil",
-    text: "Fale com a equipe quando precisar."
-  }
+  [ShieldCheck, "Acesso seguro"],
+  [MessageCircle, "WhatsApp integrado"],
+  [BadgeCheck, "Atendimento acompanhado"]
 ];
+
+const inputClass =
+  "w-full bg-transparent text-[#12382f] outline-none placeholder:text-slate-400";
+const inputWrapClass =
+  "flex min-h-[58px] items-center rounded-[22px] border-2 border-[#d7eadf] bg-[#fbfffc] px-5 shadow-sm transition focus-within:border-[#0d6b54] focus-within:bg-white focus-within:ring-4 focus-within:ring-[#0d6b54]/10";
 
 function getSafeNextPage() {
   const next = new URLSearchParams(window.location.search).get("next");
@@ -242,8 +241,10 @@ export default function ClienteLoginPage() {
   if (checkingSession) {
     return (
       <PublicLayout>
-        <main className="min-h-[70vh] bg-[#f0faf4] px-5 py-16 text-[#12382f] md:px-8">
-          <section className="mx-auto flex max-w-3xl flex-col items-center rounded-[38px] border border-[#dbeade] bg-white p-10 text-center shadow-2xl">
+        <main className="relative min-h-[70vh] overflow-hidden bg-[#e9f6ee] px-5 py-16 text-[#12382f] md:px-8">
+          <img src={heroImage} alt="SPA do Doguinho" className="absolute inset-0 h-full w-full object-cover opacity-30" />
+          <div className="absolute inset-0 bg-[#edf8f1]/88" />
+          <section className="relative mx-auto flex max-w-3xl flex-col items-center rounded-[38px] border border-white/80 bg-white/90 p-10 text-center shadow-2xl backdrop-blur">
             <span className="flex h-20 w-20 items-center justify-center rounded-[28px] bg-[#e7f4ed] text-[#0d6b54]">
               <RefreshCw className="animate-spin" size={38} />
             </span>
@@ -258,218 +259,214 @@ export default function ClienteLoginPage() {
   return (
     <PublicLayout>
       <main className="overflow-hidden bg-[#fffdf7] text-[#12382f]">
-        <section className="relative isolate min-h-[calc(100vh-128px)] overflow-hidden bg-[#eef8f1] px-5 py-10 md:px-8 lg:py-14">
-          <div className="absolute inset-x-0 top-0 -z-10 h-36 bg-[#fffdf7]" />
-          <div className="absolute left-0 top-24 -z-10 h-[440px] w-[440px] rounded-full bg-[#c8f4da]/50 blur-3xl" />
-          <div className="absolute bottom-0 right-0 -z-10 h-[520px] w-[520px] rounded-full bg-[#f6e3bd]/60 blur-3xl" />
+        <section className="relative min-h-[calc(100vh-128px)] overflow-hidden bg-[#e9f6ee]">
+          <img src={heroImage} alt="Área do cliente SPA do Doguinho" className="home-hero-image absolute inset-0 h-full w-full object-cover object-center" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#edf8f1]/98 via-[#edf8f1]/88 to-[#fffdf7]/72 xl:to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-[#fffdf7] to-transparent" />
 
-          <div className="mx-auto grid max-w-[1680px] gap-10 lg:grid-cols-[minmax(0,.95fr)_minmax(620px,1.05fr)] lg:items-center">
-            <div className="py-4 lg:py-10 lg:pr-4">
-              <div className="flex flex-wrap items-center gap-3">
+          <div className="relative mx-auto grid min-h-[calc(100vh-128px)] max-w-[1880px] items-center gap-9 px-6 py-10 md:px-10 lg:grid-cols-[minmax(0,1fr)_minmax(420px,520px)] xl:pr-[170px] 2xl:pr-[190px]">
+            <div className="max-w-4xl py-4">
+              <div className="home-animate-fade flex flex-wrap items-center gap-3">
                 <Link
                   to="/"
-                  className="inline-flex min-h-[48px] items-center gap-2 rounded-full border border-emerald-900/10 bg-white px-5 py-3 font-black text-emerald-950 shadow-sm transition hover:border-emerald-700 hover:text-emerald-700"
+                  className="inline-flex min-h-[48px] items-center gap-2 rounded-full border border-white/80 bg-white/85 px-5 py-3 font-black text-emerald-950 shadow-sm backdrop-blur transition hover:border-emerald-700 hover:text-emerald-700"
                 >
                   <ArrowLeft size={18} />
                   Voltar ao site
                 </Link>
-                <span className="inline-flex min-h-[48px] items-center gap-2 rounded-full bg-emerald-100 px-5 py-3 text-sm font-black text-emerald-900">
+                <span className="inline-flex min-h-[48px] items-center gap-2 rounded-full bg-[#d1f5df] px-5 py-3 text-sm font-black text-emerald-900 shadow-sm">
                   <ShieldCheck size={18} />
                   Área exclusiva para tutores
                 </span>
               </div>
 
-              <span className="mt-10 inline-flex items-center gap-2 rounded-full bg-white/85 px-5 py-2 text-sm font-black text-[#0d6b54] shadow-sm ring-1 ring-[#dbeade]">
-                <KeyRound size={18} />
+              <span className="home-animate-fade-delay-1 mt-10 inline-flex items-center gap-2 rounded-full bg-white/88 px-5 py-2 text-sm font-black uppercase tracking-[.12em] text-[#0d6b54] shadow-sm backdrop-blur">
+                <KeyRound size={17} />
                 Cliente SPA do Doguinho
               </span>
 
-              <h1 className="mt-7 max-w-4xl text-5xl font-black leading-[.95] md:text-7xl xl:text-[86px]">
-                Seu painel para cuidar do pet com carinho.
+              <h1 className="home-animate-fade-delay-1 mt-5 max-w-4xl text-4xl font-black leading-[.92] tracking-[-.05em] text-[#12382f] sm:text-5xl md:text-6xl xl:text-[4.5rem] 2xl:text-[5rem]">
+                Entre, agende e acompanhe
+                <span className="home-shimmer-text block font-serif italic tracking-normal">o cuidado do seu pet.</span>
               </h1>
 
-              <p className="mt-6 max-w-2xl text-lg leading-relaxed text-slate-600 md:text-xl">
-                Entre para acompanhar seus pets, agendamentos, pagamentos e próximos atendimentos em uma experiência simples e bonita.
+              <p className="home-animate-fade-delay-2 mt-5 max-w-2xl text-sm leading-relaxed text-slate-700 md:text-base lg:text-lg">
+                Sua área exclusiva reúne pets, horários, pagamentos e histórico em uma experiência simples, bonita e segura.
               </p>
 
-              <div className="mt-9 grid max-w-3xl gap-4 sm:grid-cols-3">
-                {accessHighlights.map(({ icon: Icon, title, text }) => (
-                  <div key={title} className="rounded-[26px] border border-[#dbeade] bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
-                    <Icon className="mb-4 text-[#0d6b54]" size={26} />
-                    <b className="text-lg">{title}</b>
-                    <p className="mt-1 text-sm leading-relaxed text-slate-500">{text}</p>
-                  </div>
-                ))}
+              <div className="home-animate-fade-delay-3 mt-7 flex flex-wrap gap-3">
+                <button
+                  type="button"
+                  onClick={() => setMode("login")}
+                  className="home-pulse-glow inline-flex items-center gap-3 rounded-2xl bg-[#0d6b54] px-6 py-3 font-black text-white shadow-xl transition hover:-translate-y-1 hover:bg-[#095642]"
+                >
+                  <User size={20} /> Já sou cliente
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setMode("register")}
+                  className="inline-flex items-center gap-3 rounded-2xl border border-[#0d6b54]/25 bg-white/85 px-6 py-3 font-black text-[#0d6b54] shadow-sm backdrop-blur transition hover:-translate-y-1"
+                >
+                  <Sparkles size={20} /> Criar cadastro
+                </button>
               </div>
 
-              <div className="mt-7 grid max-w-3xl gap-3 md:grid-cols-2">
-                {trustHighlights.map(({ icon: Icon, title, text }) => (
-                  <div key={title} className="flex items-center gap-4 rounded-[24px] border border-emerald-900/10 bg-white/70 p-4 shadow-sm backdrop-blur">
-                    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#0d6b54] text-white">
-                      <Icon size={22} />
-                    </span>
-                    <div>
-                      <b>{title}</b>
-                      <p className="text-sm text-slate-500">{text}</p>
-                    </div>
+              <div className="home-animate-fade-delay-3 mt-7 grid max-w-3xl gap-3 sm:grid-cols-3">
+                {accessHighlights.map(({ icon: Icon, title, text }, index) => (
+                  <div key={title} className="home-card-animate rounded-[24px] border border-white/80 bg-white/82 p-5 shadow-lg backdrop-blur" style={{ animationDelay: `${index * 80}ms` }}>
+                    <Icon className="mb-3 text-[#0d6b54]" size={25} />
+                    <h3 className="text-base font-black text-[#12382f]">{title}</h3>
+                    <p className="mt-1 text-sm leading-relaxed text-slate-600">{text}</p>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="grid gap-6 xl:grid-cols-[.88fr_1fr] xl:items-stretch">
-              <div className="relative hidden min-h-[640px] overflow-hidden rounded-[42px] bg-white shadow-2xl ring-1 ring-[#dbeade] xl:block">
-                <img
-                  src="/images/sobre-hero.webp"
-                  alt="Área do cliente SPA do Doguinho"
-                  className="h-full w-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/55 via-transparent to-transparent" />
-                <div className="absolute bottom-6 left-6 right-6 rounded-[30px] border border-white/45 bg-white/86 p-5 shadow-xl backdrop-blur-md">
-                  <div className="flex items-center gap-4">
-                    <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#0d6b54] text-white">
-                      <BadgeCheck size={28} />
-                    </span>
-                    <div>
-                      <b className="text-lg text-[#12382f]">Atendimento acompanhado</b>
-                      <p className="mt-1 text-sm leading-relaxed text-slate-600">
-                        Tudo que você precisa para agendar e acompanhar o cuidado do seu pet.
-                      </p>
-                    </div>
-                  </div>
+            <div className="home-animate-fade-delay-2 w-full rounded-[38px] border border-white/80 bg-white/92 p-5 shadow-[0_28px_80px_rgba(20,56,47,.18)] backdrop-blur-xl md:p-7">
+              <div className="mb-6 flex items-start gap-4">
+                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-[22px] bg-[#d1f5df] text-[#0d6b54] shadow-sm">
+                  <PawPrint size={34} />
+                </div>
+                <div>
+                  <span className="text-xs font-black uppercase tracking-[.14em] text-[#0d6b54]">Área do cliente</span>
+                  <h2 className="mt-1 text-3xl font-black leading-tight md:text-4xl">
+                    {mode === "login" ? "Entrar" : "Criar conta"}
+                  </h2>
+                  <p className="mt-1 text-sm leading-relaxed text-slate-500">Acesse o painel do tutor com segurança.</p>
                 </div>
               </div>
 
-              <div className="rounded-[38px] border border-[#dbeade] bg-white p-6 shadow-2xl md:p-8 xl:p-10">
-                <div className="mb-8 flex items-start gap-4">
-                  <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-800">
-                    <PawPrint size={34} />
-                  </div>
-                  <div>
-                    <span className="text-sm font-black uppercase text-[#0d6b54]">Área do cliente</span>
-                    <h2 className="mt-1 text-3xl font-black leading-tight md:text-4xl">
-                      {mode === "login" ? "Entrar" : "Criar conta"}
-                    </h2>
-                    <p className="mt-1 text-slate-500">Acesse sua rotina no SPA do Doguinho.</p>
-                  </div>
-                </div>
+              <div className="mb-5 grid grid-cols-2 gap-2 rounded-[24px] bg-[#eaf7ef] p-2 shadow-inner">
+                <button
+                  type="button"
+                  onClick={() => setMode("login")}
+                  className={`min-h-[52px] rounded-[18px] px-4 font-black transition ${
+                    mode === "login" ? "bg-[#0d6b54] text-white shadow-lg" : "text-slate-600 hover:bg-white"
+                  }`}
+                >
+                  Login
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setMode("register")}
+                  className={`min-h-[52px] rounded-[18px] px-4 font-black transition ${
+                    mode === "register" ? "bg-[#0d6b54] text-white shadow-lg" : "text-slate-600 hover:bg-white"
+                  }`}
+                >
+                  Cadastro
+                </button>
+              </div>
 
-                <div className="mb-6 grid grid-cols-2 gap-2 rounded-[22px] bg-[#eef8f1] p-2">
-                  <button
-                    type="button"
-                    onClick={() => setMode("login")}
-                    className={`min-h-[54px] rounded-[18px] px-4 font-black transition ${
-                      mode === "login" ? "bg-[#0d6b54] text-white shadow-lg" : "text-slate-600 hover:bg-white"
-                    }`}
-                  >
-                    Login
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setMode("register")}
-                    className={`min-h-[54px] rounded-[18px] px-4 font-black transition ${
-                      mode === "register" ? "bg-[#0d6b54] text-white shadow-lg" : "text-slate-600 hover:bg-white"
-                    }`}
-                  >
-                    Cadastro
-                  </button>
-                </div>
+              <div className="mb-5 rounded-[22px] border border-[#d7eadf] bg-white p-2 shadow-sm">
+                <div
+                  className={`flex min-h-[44px] items-center justify-center ${googleLoading ? "opacity-60" : ""}`}
+                  ref={googleButtonRef}
+                />
+              </div>
 
-                <div className="mb-6 rounded-[22px] border border-[#dbeade] bg-[#fbfffc] p-2">
-                  <div
-                    className={`flex min-h-[46px] items-center justify-center ${googleLoading ? "opacity-60" : ""}`}
-                    ref={googleButtonRef}
+              <div className="mb-5 flex items-center gap-3 text-xs font-black uppercase tracking-[.08em] text-slate-400">
+                <span className="h-px flex-1 bg-[#e2eadf]" />
+                ou use e-mail
+                <span className="h-px flex-1 bg-[#e2eadf]" />
+              </div>
+
+              <form onSubmit={handleSubmit} className="grid gap-3.5">
+                {mode === "register" && (
+                  <div className={inputWrapClass}>
+                    <User className="mr-3 shrink-0 text-slate-400" />
+                    <input
+                      value={form.name}
+                      onChange={(event) => updateField("name", event.target.value)}
+                      placeholder="Nome completo"
+                      required
+                      className={inputClass}
+                    />
+                  </div>
+                )}
+
+                <div className={inputWrapClass}>
+                  <Mail className="mr-3 shrink-0 text-slate-400" />
+                  <input
+                    type="email"
+                    value={form.email}
+                    onChange={(event) => updateField("email", event.target.value)}
+                    placeholder="E-mail"
+                    required
+                    className={inputClass}
                   />
                 </div>
 
-                <div className="mb-6 flex items-center gap-3 text-xs font-black uppercase text-slate-400">
-                  <span className="h-px flex-1 bg-slate-100" />
-                  ou use e-mail
-                  <span className="h-px flex-1 bg-slate-100" />
-                </div>
-
-                <form onSubmit={handleSubmit} className="grid gap-4">
-                  {mode === "register" && (
-                    <div className="flex min-h-[62px] items-center rounded-[22px] border border-[#dbeade] bg-[#fbfffc] px-5 transition focus-within:border-[#0d6b54] focus-within:ring-4 focus-within:ring-emerald-100">
-                      <User className="mr-3 shrink-0 text-slate-400" />
-                      <input
-                        value={form.name}
-                        onChange={(event) => updateField("name", event.target.value)}
-                        placeholder="Nome completo"
-                        required
-                        className="w-full bg-transparent text-slate-900 outline-none placeholder:text-slate-400"
-                      />
-                    </div>
-                  )}
-
-                  <div className="flex min-h-[62px] items-center rounded-[22px] border border-[#dbeade] bg-[#fbfffc] px-5 transition focus-within:border-[#0d6b54] focus-within:ring-4 focus-within:ring-emerald-100">
-                    <Mail className="mr-3 shrink-0 text-slate-400" />
+                {mode === "register" && (
+                  <div className={inputWrapClass}>
+                    <Phone className="mr-3 shrink-0 text-slate-400" />
                     <input
-                      type="email"
-                      value={form.email}
-                      onChange={(event) => updateField("email", event.target.value)}
-                      placeholder="E-mail"
-                      required
-                      className="w-full bg-transparent text-slate-900 outline-none placeholder:text-slate-400"
+                      value={form.phone}
+                      onChange={(event) => updateField("phone", event.target.value)}
+                      placeholder="Telefone / WhatsApp"
+                      className={inputClass}
                     />
                   </div>
+                )}
 
-                  {mode === "register" && (
-                    <div className="flex min-h-[62px] items-center rounded-[22px] border border-[#dbeade] bg-[#fbfffc] px-5 transition focus-within:border-[#0d6b54] focus-within:ring-4 focus-within:ring-emerald-100">
-                      <Phone className="mr-3 shrink-0 text-slate-400" />
-                      <input
-                        value={form.phone}
-                        onChange={(event) => updateField("phone", event.target.value)}
-                        placeholder="Telefone / WhatsApp"
-                        className="w-full bg-transparent text-slate-900 outline-none placeholder:text-slate-400"
-                      />
-                    </div>
-                  )}
-
-                  <div className="flex min-h-[62px] items-center rounded-[22px] border border-[#dbeade] bg-[#fbfffc] px-5 transition focus-within:border-[#0d6b54] focus-within:ring-4 focus-within:ring-emerald-100">
-                    <Lock className="mr-3 shrink-0 text-slate-400" />
-                    <input
-                      type={showPassword ? "text" : "password"}
-                      value={form.password}
-                      onChange={(event) => updateField("password", event.target.value)}
-                      placeholder="Senha"
-                      required
-                      className="w-full bg-transparent text-slate-900 outline-none placeholder:text-slate-400"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword((current) => !current)}
-                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-slate-400 transition hover:bg-emerald-50 hover:text-emerald-800"
-                      aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
-                    >
-                      {showPassword ? <EyeOff size={21} /> : <Eye size={21} />}
-                    </button>
-                  </div>
-
-                  {error && (
-                    <div className="rounded-[20px] border border-red-200 bg-red-50 p-4 text-sm font-bold text-red-700">
-                      {error}
-                    </div>
-                  )}
-
+                <div className={inputWrapClass}>
+                  <Lock className="mr-3 shrink-0 text-slate-400" />
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    value={form.password}
+                    onChange={(event) => updateField("password", event.target.value)}
+                    placeholder="Senha"
+                    required
+                    className={inputClass}
+                  />
                   <button
-                    disabled={loading || googleLoading}
-                    className="min-h-[62px] rounded-[22px] bg-[#0d6b54] px-6 text-lg font-black text-white shadow-xl shadow-emerald-900/15 transition hover:-translate-y-0.5 hover:bg-[#095642] disabled:translate-y-0 disabled:opacity-60"
+                    type="button"
+                    onClick={() => setShowPassword((current) => !current)}
+                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-slate-400 transition hover:bg-emerald-50 hover:text-emerald-800"
+                    aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
                   >
-                    {loading ? "Processando..." : mode === "login" ? "Entrar na minha conta" : "Criar minha conta"}
+                    {showPassword ? <EyeOff size={21} /> : <Eye size={21} />}
                   </button>
-                </form>
-
-                <div className="mt-6 flex items-start gap-3 rounded-[22px] bg-[#f4fbf6] p-4 text-sm leading-relaxed text-slate-600 ring-1 ring-[#dbeade]">
-                  <ShieldCheck className="mt-0.5 shrink-0 text-[#0d6b54]" size={20} />
-                  <p>
-                    {mode === "login"
-                      ? "Use o mesmo e-mail do cadastro para continuar direto para sua área do cliente."
-                      : "Depois do cadastro você já entra logado e pode agendar o primeiro atendimento."}
-                  </p>
                 </div>
+
+                {error && (
+                  <div className="rounded-[20px] border border-red-200 bg-red-50 p-4 text-sm font-bold text-red-700">
+                    {error}
+                  </div>
+                )}
+
+                <button
+                  disabled={loading || googleLoading}
+                  className="min-h-[60px] rounded-[22px] bg-[#0d6b54] px-6 text-lg font-black text-white shadow-xl shadow-emerald-900/18 transition hover:-translate-y-0.5 hover:bg-[#095642] disabled:translate-y-0 disabled:opacity-60"
+                >
+                  {loading ? "Processando..." : mode === "login" ? "Entrar na minha conta" : "Criar minha conta"}
+                </button>
+              </form>
+
+              <div className="mt-5 grid gap-2 sm:grid-cols-3">
+                {trustHighlights.map(([Icon, title]) => (
+                  <div key={title} className="flex items-center justify-center gap-2 rounded-2xl bg-[#f4fbf6] px-3 py-3 text-center text-xs font-black text-[#0d6b54] ring-1 ring-[#d7eadf]">
+                    <Icon size={16} />
+                    <span>{title}</span>
+                  </div>
+                ))}
               </div>
             </div>
+          </div>
+        </section>
+
+        <section className="px-5 py-10 md:px-8">
+          <div className="mx-auto grid max-w-[1760px] gap-5 rounded-[34px] bg-white p-5 shadow-xl ring-1 ring-[#e2eadf] md:grid-cols-3 md:p-6">
+            {accessHighlights.map(({ icon: Icon, title, text }, index) => (
+              <div key={title} className="home-card-animate flex items-center gap-4 rounded-[26px] bg-[#fffdf7] p-6 ring-1 ring-[#e2eadf]" style={{ animationDelay: `${index * 90}ms` }}>
+                <div className="home-icon-pop flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-[#d9eee3] text-[#0d6b54] ring-1 ring-[#c8e5d6]">
+                  <Icon size={32} />
+                </div>
+                <div>
+                  <h3 className="text-lg font-black text-[#0d6b54]">{title}</h3>
+                  <p className="mt-1 text-sm leading-relaxed text-slate-600">{text}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </section>
       </main>
