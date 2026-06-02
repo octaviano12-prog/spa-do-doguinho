@@ -38,7 +38,7 @@ const heroStats = [
   {
     icon: Star,
     value: "4,9/5",
-    label: "avaliacao dos tutores"
+    label: "avaliação dos tutores"
   },
   {
     icon: BadgeCheck,
@@ -56,17 +56,17 @@ const accessHighlights = [
   {
     icon: CalendarDays,
     title: "Agenda inteligente",
-    text: "Horarios e historico em um so lugar."
+    text: "Horários e histórico em um só lugar."
   },
   {
     icon: CreditCard,
     title: "Pagamentos online",
-    text: "Acompanhe valores e confirmacoes."
+    text: "Acompanhe valores e confirmações."
   },
   {
     icon: Camera,
-    title: "Historico com fotos",
-    text: "Registros do cuidado sempre a mao."
+    title: "Histórico com fotos",
+    text: "Registros do cuidado sempre à mão."
   }
 ];
 
@@ -130,7 +130,7 @@ export default function ClienteLoginPage() {
         const data = await response.json().catch(() => null);
 
         if (!response.ok || !data?.id) {
-          throw new Error("Sessao invalida");
+          throw new Error("Sessão inválida");
         }
 
         localStorage.setItem("spa_customer", JSON.stringify(data));
@@ -139,7 +139,7 @@ export default function ClienteLoginPage() {
         localStorage.removeItem("spa_customer_token");
         localStorage.removeItem("spa_customer");
         if (!cancelled) {
-          setError("Sua sessao expirou. Entre novamente para continuar.");
+          setError("Sua sessão expirou. Entre novamente para continuar.");
           setCheckingSession(false);
         }
       }
@@ -156,7 +156,7 @@ export default function ClienteLoginPage() {
     const credential = response?.credential;
 
     if (!credential) {
-      setError("Nao foi possivel receber o login do Google.");
+      setError("Não foi possível receber o login do Google.");
       return;
     }
 
@@ -223,7 +223,7 @@ export default function ClienteLoginPage() {
       script.async = true;
       script.defer = true;
       script.onload = renderGoogleButton;
-      script.onerror = () => setError("Nao foi possivel carregar o login do Google.");
+      script.onerror = () => setError("Não foi possível carregar o login do Google.");
       document.head.appendChild(script);
     }
 
@@ -254,12 +254,12 @@ export default function ClienteLoginPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Erro ao acessar area do cliente.");
+        throw new Error(data.error || "Erro ao acessar área do cliente.");
       }
 
       await finishCustomerLogin(data);
     } catch (err) {
-      setError(err.message || "Erro ao acessar area do cliente.");
+      setError(err.message || "Erro ao acessar área do cliente.");
     } finally {
       setLoading(false);
     }
@@ -275,8 +275,8 @@ export default function ClienteLoginPage() {
             <span className="flex h-20 w-20 items-center justify-center rounded-[28px] bg-[#e7f4ed] text-[#0d6b54]">
               <RefreshCw className="animate-spin" size={38} />
             </span>
-            <h1 className="mt-6 text-3xl font-black md:text-4xl">Verificando sua sessao</h1>
-            <p className="mt-3 text-slate-500">Se voce ja estiver logado, vamos te levar direto para sua area.</p>
+            <h1 className="mt-6 text-3xl font-black md:text-4xl">Verificando sua sessão</h1>
+            <p className="mt-3 text-slate-500">Se você já estiver logado, vamos te levar direto para sua área.</p>
           </section>
         </main>
       </PublicLayout>
@@ -287,7 +287,7 @@ export default function ClienteLoginPage() {
     <PublicLayout>
       <main className="overflow-hidden bg-[#fffdf7] text-[#12382f]">
         <section className="relative min-h-[calc(100vh-128px)] overflow-hidden bg-[#e9f6ee]">
-          <img src={heroImage} alt="Area de agendamento SPA do Doguinho" className="home-hero-image absolute inset-0 h-full w-full object-cover object-center opacity-90" />
+          <img src={heroImage} alt="Área de agendamento SPA do Doguinho" className="home-hero-image absolute inset-0 h-full w-full object-cover object-center opacity-90" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#edf8f1]/98 via-[#edf8f1]/88 to-[#fffdf7]/82 xl:to-[#fffdf7]/30" />
           <div className="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-[#fffdf7] to-transparent" />
 
@@ -303,7 +303,7 @@ export default function ClienteLoginPage() {
                 </Link>
                 <span className="inline-flex min-h-[48px] items-center gap-2 rounded-full bg-[#d1f5df] px-5 py-3 text-sm font-black text-emerald-900 shadow-sm">
                   <ShieldCheck size={18} />
-                  Area exclusiva para tutores
+                  Área exclusiva para tutores
                 </span>
               </div>
 
@@ -318,7 +318,7 @@ export default function ClienteLoginPage() {
               </h1>
 
               <p className="home-animate-fade-delay-2 mt-5 max-w-2xl text-sm leading-relaxed text-slate-700 md:text-base lg:text-lg">
-                Bem-vindo de volta! Acompanhe seus agendamentos, pets e historico em uma experiencia simples, bonita e segura.
+                Bem-vindo de volta! Acompanhe seus agendamentos, pets e histórico em uma experiência simples, bonita e segura.
               </p>
 
               <div className="home-animate-fade-delay-2 mt-6 grid max-w-3xl gap-3 sm:grid-cols-3">
@@ -337,7 +337,7 @@ export default function ClienteLoginPage() {
                   onClick={() => setMode("login")}
                   className="home-pulse-glow inline-flex items-center gap-3 rounded-2xl bg-[#0d6b54] px-6 py-3 font-black text-white shadow-xl transition hover:-translate-y-1 hover:bg-[#095642]"
                 >
-                  <User size={20} /> Ja sou cliente
+                  <User size={20} /> Já sou cliente
                 </button>
                 <button
                   type="button"
@@ -366,16 +366,16 @@ export default function ClienteLoginPage() {
               <div className="pointer-events-none absolute -right-20 -top-24 h-48 w-48 rounded-full bg-[#f7df9b]/35 blur-3xl" />
               <div className="relative">
                 <div className="mb-6 flex items-start gap-4">
-                  <div className="flex h-18 w-18 shrink-0 items-center justify-center rounded-[24px] bg-[#d1f5df] p-4 text-[#0d6b54] shadow-sm">
+                  <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-[24px] bg-[#d1f5df] p-4 text-[#0d6b54] shadow-sm">
                     <PawPrint size={38} />
                   </div>
                   <div>
-                    <span className="text-xs font-black uppercase tracking-[.14em] text-[#0d6b54]">Area do cliente</span>
+                    <span className="text-xs font-black uppercase tracking-[.14em] text-[#0d6b54]">Área do cliente</span>
                     <h2 className="mt-1 text-3xl font-black leading-tight md:text-4xl">
                       {mode === "login" ? "Entrar" : "Criar conta"}
                     </h2>
                     <p className="mt-2 text-sm leading-relaxed text-slate-500">
-                      Bem-vindo de volta! Acompanhe seus agendamentos, pets e historico.
+                      Bem-vindo de volta! Acompanhe seus agendamentos, pets e histórico.
                     </p>
                   </div>
                 </div>
@@ -404,7 +404,7 @@ export default function ClienteLoginPage() {
                 <div className="mb-5 rounded-[26px] border-2 border-[#d7eadf] bg-gradient-to-r from-white to-[#f2fff6] p-3 shadow-lg shadow-emerald-900/5">
                   <div className="mb-2 flex items-center gap-2 px-2 text-xs font-black uppercase tracking-[.1em] text-[#0d6b54]">
                     <BadgeCheck size={16} />
-                    Login rapido com Google
+                    Login rápido com Google
                   </div>
                   <div
                     className={`flex min-h-[48px] items-center justify-center rounded-[20px] bg-white ${googleLoading ? "opacity-60" : ""}`}
