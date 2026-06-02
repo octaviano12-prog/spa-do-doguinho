@@ -7,6 +7,8 @@ const authRoutes = require("./routes/authRoutes");
 const resourceRoutes = require("./routes/resourceRoutes");
 const customerRoutes = require("./routes/customerRoutes");
 const webhookRoutes = require("./routes/webhookRoutes");
+const uploadRoutes = require("./routes/uploadRoutes");
+const upload = require("./middlewares/uploadMiddleware");
 const db = require("./config/db");
 
 const app = express();
@@ -37,17 +39,19 @@ app.use("/api/auth", authRoutes);
 app.use("/api/public", publicRoutes);
 app.use("/api/customer", customerRoutes);
 app.use("/api/webhooks", webhookRoutes);
+app.use("/api/upload", uploadRoutes);
 app.use("/api", resourceRoutes);
 
 app.use("/api", (req, res) => {
   res.status(404).json({
-    error: "Rota API não encontrada"
+    error: "Rota API nao encontrada"
   });
 });
 
 /* FRONTEND REACT */
 const publicPath = path.join(__dirname, "../../public_html");
 
+app.use("/uploads", express.static(upload.uploadRoot));
 app.use(express.static(publicPath));
 
 app.get("*", (req, res) => {
