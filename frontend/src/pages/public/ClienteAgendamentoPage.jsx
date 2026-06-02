@@ -1,7 +1,8 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   AlertCircle,
+  ArrowRight,
   BadgeCheck,
   CalendarDays,
   Check,
@@ -12,6 +13,7 @@ import {
   CreditCard,
   ExternalLink,
   Heart,
+  MessageCircle,
   PawPrint,
   QrCode,
   RefreshCw,
@@ -24,6 +26,8 @@ import PublicLayout from "../../components/public/PublicLayout";
 
 const API_URL = import.meta.env.VITE_API_URL || "https://spadodoguinho.com.br/api";
 const API_PUBLIC = `${API_URL}/public`;
+const whatsappUrl = "https://wa.me/5518997493722?text=Olá! Gostaria de ajuda para agendar no SPA do Doguinho.";
+const bookingHeroImage = "/images/banho-pet-home.webp";
 
 const steps = [
   { title: "Serviço", text: "Escolha o cuidado" },
@@ -125,6 +129,7 @@ function authHeaders(token) {
 export default function ClienteAgendamentoPage() {
   const token = localStorage.getItem("spa_customer_token");
   const savedCustomer = JSON.parse(localStorage.getItem("spa_customer") || "null");
+  const wizardRef = useRef(null);
   const [step, setStep] = useState(0);
   const [form, setForm] = useState(emptyForm);
   const [pets, setPets] = useState([]);
@@ -155,6 +160,10 @@ export default function ClienteAgendamentoPage() {
     Number(paymentSettings.card_enabled ?? 1) ? ["card", CreditCard, "Cartão", "Crédito ou débito"] : null,
     Number(paymentSettings.cash_enabled ?? 1) ? ["presencial", Wallet, "Na loja", "Pague no atendimento"] : null
   ].filter(Boolean), [paymentSettings]);
+
+  function scrollToWizard() {
+    wizardRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 
   async function loadData() {
     setLoading(true);
@@ -365,25 +374,38 @@ export default function ClienteAgendamentoPage() {
   return (
     <PublicLayout>
       <main className="overflow-hidden bg-[#fffdf7] text-[#12382f]">
-        <section className="bg-[#f3faf6] px-5 py-10 md:px-8">
-          <div className="mx-auto grid max-w-[1680px] gap-8 lg:grid-cols-[1fr_460px] lg:items-stretch">
-            <div className="flex flex-col justify-center rounded-[34px] bg-white p-7 shadow-xl ring-1 ring-[#e2eadf] md:p-10">
-              <span className="inline-flex w-fit items-center gap-2 rounded-full bg-[#e7f4ed] px-5 py-2 text-sm font-black uppercase tracking-[.12em] text-[#0d6b54]">
+        <section className="relative h-[calc(100vh-128px)] min-h-[620px] overflow-hidden bg-[#e9f6ee]">
+          <img src={bookingHeroImage} alt="Agendamento SPA do Doguinho" className="home-hero-image absolute inset-0 h-full w-full object-cover object-center" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#edf8f1]/96 via-[#edf8f1]/72 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-[#fffdf7] to-transparent" />
+
+          <div className="relative mx-auto flex h-full max-w-[1880px] items-center px-6 py-5 md:px-10">
+            <div className="max-w-4xl -translate-y-1">
+              <span className="home-animate-fade inline-flex items-center gap-2 rounded-full bg-white/85 px-5 py-2 text-sm font-black uppercase tracking-[.14em] text-[#0d6b54] shadow-sm backdrop-blur">
                 <CalendarDays size={16} /> Agendamento online
               </span>
-              <h1 className="mt-6 max-w-4xl text-4xl font-black leading-tight md:text-6xl">
-                Vamos cuidar do seu doguinho com hora marcada.
+              <h1 className="home-animate-fade-delay-1 mt-5 text-4xl font-black leading-[.92] tracking-[-.05em] text-[#12382f] sm:text-5xl md:text-6xl xl:text-[4.65rem] 2xl:text-[5.15rem]">
+                Vamos cuidar do seu doguinho
+                <span className="home-shimmer-text block font-serif italic">com hora marcada.</span>
               </h1>
-              <p className="mt-5 max-w-2xl text-lg leading-relaxed text-slate-600">
-                Olá{savedCustomer?.name ? `, ${savedCustomer.name.split(" ")[0]}` : ""}! Escolha o serviço, selecione o pet, veja os horários livres e confirme o atendimento em poucos passos.
+              <p className="home-animate-fade-delay-2 mt-5 max-w-2xl text-sm leading-relaxed text-slate-700 md:text-base lg:text-lg">
+                Olá{savedCustomer?.name ? `, ${savedCustomer.name.split(" ")[0]}` : ""}! Escolha o serviço, selecione o pet, veja os horários livres e finalize com segurança em poucos passos.
               </p>
-              <div className="mt-8 grid gap-3 sm:grid-cols-3">
+              <div className="home-animate-fade-delay-3 mt-7 flex flex-wrap gap-3">
+                <button type="button" onClick={scrollToWizard} className="home-pulse-glow inline-flex items-center gap-3 rounded-2xl bg-[#0d6b54] px-6 py-3 font-black text-white shadow-xl transition hover:-translate-y-1 hover:bg-[#095642]">
+                  Escolher serviço <ArrowRight size={18} />
+                </button>
+                <a href={whatsappUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-3 rounded-2xl border border-[#25D366]/30 bg-[#e9fff2] px-6 py-3 font-black text-[#128c4b] shadow-sm backdrop-blur transition hover:-translate-y-1">
+                  <MessageCircle size={20} /> Ajuda no WhatsApp
+                </a>
+              </div>
+              <div className="home-animate-fade-delay-3 mt-8 grid max-w-3xl gap-3 sm:grid-cols-3">
                 {[
                   [ShieldCheck, "Seguro", "seus dados protegidos"],
                   [PawPrint, "Pet certo", "vínculo automático"],
                   [QrCode, "PIX", "QR Code ao finalizar"]
                 ].map(([Icon, title, text]) => (
-                  <div key={title} className="rounded-2xl bg-[#f6faf7] p-4 ring-1 ring-[#e2eadf]">
+                  <div key={title} className="rounded-2xl bg-white/82 p-4 shadow-sm ring-1 ring-[#e2eadf] backdrop-blur">
                     <Icon className="text-[#0d6b54]" size={24} />
                     <b className="mt-3 block text-lg">{title}</b>
                     <p className="mt-1 text-sm font-semibold text-slate-500">{text}</p>
@@ -391,34 +413,29 @@ export default function ClienteAgendamentoPage() {
                 ))}
               </div>
             </div>
+          </div>
 
-            <div className="overflow-hidden rounded-[34px] bg-[#12382f] text-white shadow-2xl">
-              <img src="/images/sobre-hero.webp" alt="Atendimento SPA do Doguinho" className="h-52 w-full object-cover" />
-              <div className="p-6">
-                <div className="flex items-center gap-4">
-                  <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/12 text-white"><Sparkles size={28} /></span>
-                  <div>
-                    <div className="text-sm font-black uppercase tracking-[.12em] text-white/60">Resumo</div>
-                    <h2 className="text-2xl font-black">Seu atendimento</h2>
-                  </div>
-                </div>
-                <div className="mt-6 grid gap-3">
-                  <InfoDark label="Serviço" value={selectedService?.name || "Escolha o serviço"} />
-                  <InfoDark label="Pet" value={selectedPet?.name || form.newPetName || "Escolha o pet"} />
-                  <InfoDark label="Data" value={form.date ? fullDate(form.date) : "Escolha a data"} />
-                  <InfoDark label="Horário" value={form.time || "Escolha o horário"} />
-                  <div className="rounded-2xl bg-white p-5 text-[#12382f]">
-                    <div className="text-sm font-bold text-slate-500">Valor estimado</div>
-                    <div className="mt-1 text-3xl font-black">{money(selectedPrice)}</div>
-                    <div className="mt-1 text-sm font-bold text-slate-500">Duração: {selectedDuration || 0} min</div>
-                  </div>
-                </div>
+          <div className="home-float absolute bottom-8 right-8 hidden w-[330px] rounded-[26px] bg-[#12382f] p-5 text-white shadow-2xl xl:block">
+            <div className="flex items-center gap-4">
+              <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/12 text-white"><Sparkles size={28} /></span>
+              <div>
+                <div className="text-sm font-black uppercase tracking-[.12em] text-white/60">Resumo</div>
+                <h2 className="text-2xl font-black">Seu atendimento</h2>
+              </div>
+            </div>
+            <div className="mt-5 grid gap-3">
+              <InfoDark label="Serviço" value={selectedService?.name || "Escolha o serviço"} />
+              <InfoDark label="Pet" value={selectedPet?.name || form.newPetName || "Escolha o pet"} />
+              <div className="rounded-2xl bg-white p-5 text-[#12382f]">
+                <div className="text-sm font-bold text-slate-500">Valor estimado</div>
+                <div className="mt-1 text-3xl font-black">{money(selectedPrice)}</div>
+                <div className="mt-1 text-sm font-bold text-slate-500">Duração: {selectedDuration || 0} min</div>
               </div>
             </div>
           </div>
         </section>
 
-        <section className="mx-auto max-w-[1680px] px-5 py-10 md:px-8">
+        <section ref={wizardRef} className="mx-auto max-w-[1880px] scroll-mt-28 px-5 py-12 md:px-8">
           <div className="mb-6 rounded-[28px] bg-white p-5 shadow-sm ring-1 ring-[#e2eadf]">
             <div className="mb-4 h-3 overflow-hidden rounded-full bg-[#e7f4ed]">
               <div className="h-full rounded-full bg-[#0d6b54] transition-all duration-300" style={{ width: `${progressPercent}%` }} />
