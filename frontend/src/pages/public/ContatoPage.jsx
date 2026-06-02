@@ -21,6 +21,8 @@ const WHATSAPP_NUMBER = "5518997493722";
 const heroImage = "/images/sobre-cta.webp";
 const contactImage = "/images/sobre-ambiente-01.webp";
 
+const fieldClass = "min-h-[58px] rounded-2xl border-2 border-[#cfe8d9] bg-[#f8fbf9] px-5 py-4 text-base font-bold text-[#12382f] shadow-sm outline-none transition placeholder:text-slate-400 focus:border-[#0d6b54] focus:bg-white focus:ring-4 focus:ring-[#0d6b54]/10";
+
 const quickBenefits = [
   [MessageCircle, "Resposta rápida", "Atendimento direto pelo WhatsApp."],
   [CalendarDays, "Agenda organizada", "Horários práticos para tutores."],
@@ -135,20 +137,26 @@ export default function ContatoPage() {
               <h2 className="mt-5 text-4xl font-black tracking-[-.04em] text-[#0d6b54] md:text-5xl">Vamos cuidar do seu melhor amigo.</h2>
               <p className="mt-3 max-w-2xl text-slate-600">Conte o que seu pet precisa e a mensagem já vai pronta para nossa equipe.</p>
 
-              <div className="mt-7 grid gap-4">
-                <input value={form.name} onChange={(event) => updateField("name", event.target.value)} placeholder="Seu nome" className="input-premium" />
-                <input value={form.phone} onChange={(event) => updateField("phone", event.target.value)} placeholder="Seu telefone" className="input-premium" />
-                <input value={form.pet} onChange={(event) => updateField("pet", event.target.value)} placeholder="Nome do pet" className="input-premium" />
+              <div className="mt-7 grid gap-4 rounded-[28px] bg-[#f4f8f5] p-4 ring-1 ring-[#e2eadf] md:p-5">
+                <ContactField label="Seu nome" value={form.name} onChange={(value) => updateField("name", value)} placeholder="Digite seu nome" />
+                <ContactField label="Telefone / WhatsApp" value={form.phone} onChange={(value) => updateField("phone", value)} placeholder="Digite seu telefone" />
+                <ContactField label="Nome do pet" value={form.pet} onChange={(value) => updateField("pet", value)} placeholder="Digite o nome do pet" />
 
-                <select value={form.service} onChange={(event) => updateField("service", event.target.value)} className="input-premium">
-                  <option>Banho</option>
-                  <option>Tosa</option>
-                  <option>Vacina</option>
-                  <option>Spa Relaxante</option>
-                  <option>Outro serviço</option>
-                </select>
+                <label className="grid gap-2 text-sm font-black uppercase tracking-[.08em] text-[#0d6b54]">
+                  Serviço de interesse
+                  <select value={form.service} onChange={(event) => updateField("service", event.target.value)} className={`${fieldClass} cursor-pointer`}>
+                    <option>Banho</option>
+                    <option>Tosa</option>
+                    <option>Vacina</option>
+                    <option>Spa Relaxante</option>
+                    <option>Outro serviço</option>
+                  </select>
+                </label>
 
-                <textarea value={form.message} onChange={(event) => updateField("message", event.target.value)} rows={5} placeholder="Conte o que seu pet precisa" className="input-premium" />
+                <label className="grid gap-2 text-sm font-black uppercase tracking-[.08em] text-[#0d6b54]">
+                  Mensagem
+                  <textarea value={form.message} onChange={(event) => updateField("message", event.target.value)} rows={5} placeholder="Conte o que seu pet precisa" className={`${fieldClass} min-h-[150px] resize-none`} />
+                </label>
 
                 <a href={whatsappUrl} target="_blank" rel="noreferrer" className="flex min-h-[62px] items-center justify-center gap-3 rounded-2xl bg-[#0d6b54] px-6 text-lg font-black text-white shadow-lg transition hover:-translate-y-1 hover:bg-[#095642]">
                   <Send size={20} /> Enviar pelo WhatsApp
@@ -218,5 +226,14 @@ export default function ContatoPage() {
         </section>
       </main>
     </PublicLayout>
+  );
+}
+
+function ContactField({ label, value, onChange, placeholder }) {
+  return (
+    <label className="grid gap-2 text-sm font-black uppercase tracking-[.08em] text-[#0d6b54]">
+      {label}
+      <input value={value} onChange={(event) => onChange(event.target.value)} placeholder={placeholder} className={fieldClass} />
+    </label>
   );
 }
