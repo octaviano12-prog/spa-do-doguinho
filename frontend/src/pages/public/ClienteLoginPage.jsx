@@ -29,21 +29,55 @@ const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || DEFAULT_GOOGLE
 const GOOGLE_SCRIPT_ID = "google-identity-services";
 const heroImage = "/images/hero-doguinho-card.webp";
 
+const socialProof = [
+  "/images/galeria-pet-01.webp",
+  "/images/galeria-pet-02.webp",
+  "/images/galeria-pet-03.webp"
+];
+
+const supportBenefits = [
+  {
+    icon: ShieldCheck,
+    title: "Dados protegidos",
+    text: "Segurança total para suas informações."
+  },
+  {
+    icon: CreditCard,
+    title: "Pagamento seguro",
+    text: "Ambiente protegido e certificado."
+  },
+  {
+    icon: CalendarDays,
+    title: "Agendamento online",
+    text: "Rápido, fácil e a qualquer hora."
+  },
+  {
+    icon: MessageCircle,
+    title: "Atendimento humanizado",
+    text: "Carinho e cuidado que seu pet merece."
+  }
+];
+
 const heroStats = [
   {
-    icon: Star,
-    value: "+1.200",
-    label: "pets atendidos"
+    icon: PawPrint,
+    value: "1.200+",
+    label: "Pets atendidos"
   },
   {
     icon: Star,
     value: "4,9/5",
-    label: "avaliação dos tutores"
+    label: "Avaliação média"
   },
   {
     icon: BadgeCheck,
-    value: "Cuidado",
-    label: "personalizado"
+    value: "8 anos",
+    label: "De experiência"
+  },
+  {
+    icon: Sparkles,
+    value: "100%",
+    label: "Carinho garantido"
   }
 ];
 
@@ -79,7 +113,7 @@ const trustHighlights = [
 const inputClass =
   "w-full bg-transparent text-[#12382f] outline-none placeholder:text-slate-400";
 const inputWrapClass =
-  "flex min-h-[62px] items-center rounded-[24px] border-2 border-[#d7eadf] bg-[#fbfffc] px-5 shadow-sm transition focus-within:border-[#0d6b54] focus-within:bg-white focus-within:ring-4 focus-within:ring-[#0d6b54]/10";
+  "flex min-h-[58px] items-center rounded-[18px] border border-[#d7eadf] bg-white/88 px-4 shadow-sm backdrop-blur transition focus-within:border-[#0d6b54] focus-within:bg-white focus-within:ring-4 focus-within:ring-[#0d6b54]/10";
 
 function getSafeNextPage() {
   const next = new URLSearchParams(window.location.search).get("next");
@@ -95,6 +129,7 @@ export default function ClienteLoginPage() {
   const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState("");
   const googleButtonRef = useRef(null);
+  const emailInputRef = useRef(null);
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -104,6 +139,11 @@ export default function ClienteLoginPage() {
 
   function updateField(field, value) {
     setForm((current) => ({ ...current, [field]: value }));
+  }
+
+  function focusLoginForm(nextMode = "login") {
+    setMode(nextMode);
+    window.setTimeout(() => emailInputRef.current?.focus(), 80);
   }
 
   async function finishCustomerLogin(data) {
@@ -206,7 +246,7 @@ export default function ClienteLoginPage() {
         shape: "pill",
         text: mode === "login" ? "signin_with" : "signup_with",
         logo_alignment: "left",
-        width: Math.min(410, googleButtonRef.current.clientWidth || 360)
+        width: Math.min(390, googleButtonRef.current.clientWidth || 340)
       });
     }
 
@@ -286,219 +326,261 @@ export default function ClienteLoginPage() {
   return (
     <PublicLayout>
       <main className="overflow-hidden bg-[#fffdf7] text-[#12382f]">
-        <section className="relative min-h-[calc(100vh-128px)] overflow-hidden bg-[#e9f6ee]">
-          <img src={heroImage} alt="Área de agendamento SPA do Doguinho" className="home-hero-image absolute inset-0 h-full w-full object-cover object-center opacity-90" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#edf8f1]/98 via-[#edf8f1]/88 to-[#fffdf7]/82 xl:to-[#fffdf7]/30" />
-          <div className="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-[#fffdf7] to-transparent" />
+        <section className="relative overflow-hidden bg-[#eef8f1]">
+          <img src={heroImage} alt="Área de agendamento SPA do Doguinho" className="absolute inset-0 h-full w-full object-cover object-center opacity-95" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_56%_42%,rgba(255,247,219,.16),transparent_28%),linear-gradient(90deg,rgba(255,253,247,.98)_0%,rgba(239,250,244,.88)_36%,rgba(255,253,247,.18)_68%,rgba(255,253,247,.78)_100%)]" />
+          <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#fffdf7] to-transparent" />
 
-          <div className="relative mx-auto grid min-h-[calc(100vh-128px)] max-w-[1880px] items-center gap-9 px-6 py-10 md:px-10 lg:grid-cols-[minmax(0,1fr)_minmax(420px,520px)] xl:pr-[240px] 2xl:pr-[270px]">
-            <div className="max-w-4xl py-4">
-              <div className="home-animate-fade flex flex-wrap items-center gap-3">
-                <Link
-                  to="/"
-                  className="inline-flex min-h-[48px] items-center gap-2 rounded-full border border-white/80 bg-white/88 px-5 py-3 font-black text-emerald-950 shadow-sm backdrop-blur transition hover:border-emerald-700 hover:text-emerald-700"
-                >
-                  <ArrowLeft size={18} />
-                  Voltar ao site
-                </Link>
-                <span className="inline-flex min-h-[48px] items-center gap-2 rounded-full bg-[#d1f5df] px-5 py-3 text-sm font-black text-emerald-900 shadow-sm">
-                  <ShieldCheck size={18} />
-                  Área exclusiva para tutores
+          <div className="relative mx-auto max-w-[1880px] px-5 py-8 md:px-10 xl:pr-[240px] 2xl:pr-[270px]">
+            <div className="grid min-h-[650px] items-center gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(390px,470px)]">
+              <div className="max-w-3xl py-8">
+                <div className="home-animate-fade flex flex-wrap items-center gap-3">
+                  <Link
+                    to="/"
+                    className="inline-flex min-h-[46px] items-center gap-2 rounded-full border border-white/75 bg-white/82 px-5 py-3 font-black text-emerald-950 shadow-sm backdrop-blur-xl transition hover:border-emerald-700 hover:text-emerald-700"
+                  >
+                    <ArrowLeft size={18} />
+                    Voltar ao site
+                  </Link>
+                  <span className="inline-flex min-h-[46px] items-center gap-2 rounded-full bg-[#d1f5df]/90 px-5 py-3 text-sm font-black text-emerald-900 shadow-sm backdrop-blur-xl">
+                    <ShieldCheck size={18} />
+                    Área exclusiva para tutores
+                  </span>
+                </div>
+
+                <span className="home-animate-fade-delay-1 mt-9 inline-flex items-center gap-2 rounded-full border border-[#d7eadf] bg-white/78 px-5 py-2 text-xs font-black uppercase tracking-[.14em] text-[#0d6b54] shadow-sm backdrop-blur-xl">
+                  <KeyRound size={16} />
+                  Cliente SPA do Doguinho
                 </span>
-              </div>
 
-              <span className="home-animate-fade-delay-1 mt-10 inline-flex items-center gap-2 rounded-full bg-white/90 px-5 py-2 text-sm font-black uppercase tracking-[.12em] text-[#0d6b54] shadow-sm backdrop-blur">
-                <KeyRound size={17} />
-                Agendamento SPA do Doguinho
-              </span>
+                <h1 className="home-animate-fade-delay-1 mt-5 max-w-3xl text-4xl font-black leading-[.9] tracking-[-.045em] text-[#12382f] sm:text-5xl md:text-6xl xl:text-[4.7rem]">
+                  Seu pet merece
+                  <span className="home-shimmer-text block font-serif italic tracking-normal">uma experiência</span>
+                  especial
+                </h1>
 
-              <h1 className="home-animate-fade-delay-1 mt-5 max-w-4xl text-4xl font-black leading-[.92] tracking-[-.05em] text-[#12382f] sm:text-5xl md:text-6xl xl:text-[4.35rem] 2xl:text-[4.85rem]">
-                Entre, agende e acompanhe
-                <span className="home-shimmer-text block font-serif italic tracking-normal">o cuidado do seu pet.</span>
-              </h1>
+                <p className="home-animate-fade-delay-2 mt-5 max-w-xl text-sm leading-relaxed text-slate-700 md:text-base lg:text-lg">
+                  Banho, tosa e acompanhamento completo em um único lugar, com carinho, segurança e tecnologia para seu pet.
+                </p>
 
-              <p className="home-animate-fade-delay-2 mt-5 max-w-2xl text-sm leading-relaxed text-slate-700 md:text-base lg:text-lg">
-                Bem-vindo de volta! Acompanhe seus agendamentos, pets e histórico em uma experiência simples, bonita e segura.
-              </p>
+                <div className="home-animate-fade-delay-3 mt-7 flex flex-wrap gap-3">
+                  <button
+                    type="button"
+                    onClick={() => focusLoginForm("login")}
+                    className="home-pulse-glow inline-flex items-center gap-3 rounded-2xl bg-[#0d6b54] px-6 py-3 font-black text-white shadow-xl transition hover:-translate-y-1 hover:bg-[#095642]"
+                  >
+                    <CalendarDays size={20} /> Agendar agora
+                  </button>
+                  <Link
+                    to="/servicos"
+                    className="inline-flex items-center gap-3 rounded-2xl border border-[#0d6b54]/25 bg-white/82 px-6 py-3 font-black text-[#0d6b54] shadow-sm backdrop-blur-xl transition hover:-translate-y-1"
+                  >
+                    <PawPrint size={20} /> Conhecer serviços
+                  </Link>
+                </div>
 
-              <div className="home-animate-fade-delay-2 mt-6 grid max-w-3xl gap-3 sm:grid-cols-3">
-                {heroStats.map(({ icon: Icon, value, label }, index) => (
-                  <div key={label} className="rounded-[24px] border border-white/80 bg-white/72 p-4 shadow-lg backdrop-blur-xl" style={{ animationDelay: `${index * 80}ms` }}>
-                    <Icon className="mb-2 text-[#d6a62d]" size={24} fill="currentColor" />
-                    <strong className="block text-2xl font-black text-[#12382f]">{value}</strong>
-                    <span className="text-sm font-bold text-slate-600">{label}</span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="home-animate-fade-delay-3 mt-7 flex flex-wrap gap-3">
-                <button
-                  type="button"
-                  onClick={() => setMode("login")}
-                  className="home-pulse-glow inline-flex items-center gap-3 rounded-2xl bg-[#0d6b54] px-6 py-3 font-black text-white shadow-xl transition hover:-translate-y-1 hover:bg-[#095642]"
-                >
-                  <User size={20} /> Já sou cliente
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setMode("register")}
-                  className="inline-flex items-center gap-3 rounded-2xl border border-[#0d6b54]/25 bg-white/88 px-6 py-3 font-black text-[#0d6b54] shadow-sm backdrop-blur transition hover:-translate-y-1"
-                >
-                  <Sparkles size={20} /> Criar cadastro
-                </button>
-              </div>
-
-              <div className="home-animate-fade-delay-3 mt-7 grid max-w-4xl gap-3 sm:grid-cols-2 xl:grid-cols-4">
-                {accessHighlights.map(({ icon: Icon, title, text }, index) => (
-                  <div key={title} className="home-card-animate rounded-[24px] border border-white/85 bg-white/82 p-5 shadow-lg backdrop-blur-xl" style={{ animationDelay: `${index * 80}ms` }}>
-                    <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#d1f5df] text-[#0d6b54]">
-                      <Icon size={27} />
-                    </div>
-                    <h3 className="text-base font-black text-[#12382f]">{title}</h3>
-                    <p className="mt-1 text-sm leading-relaxed text-slate-600">{text}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="home-animate-fade-delay-2 relative w-full overflow-hidden rounded-[38px] border border-[#e2eadf] bg-white p-5 shadow-[0_30px_90px_rgba(20,56,47,.22)] md:p-7">
-              <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,#ffffff_0%,#ffffff_58%,#eef8f1_100%)]" />
-              <div className="pointer-events-none absolute -right-20 -top-24 h-48 w-48 rounded-full bg-[#f7df9b]/35 blur-3xl" />
-              <div className="relative">
-                <div className="mb-6 flex items-start gap-4">
-                  <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-[24px] bg-[#d1f5df] p-4 text-[#0d6b54] shadow-sm">
-                    <PawPrint size={38} />
+                <div className="home-animate-fade-delay-3 mt-8 flex flex-wrap items-center gap-4 rounded-[28px] border border-white/70 bg-white/72 p-4 shadow-lg backdrop-blur-xl sm:w-fit">
+                  <div className="flex -space-x-3">
+                    {socialProof.map((image, index) => (
+                      <img
+                        key={image}
+                        src={image}
+                        alt={`Cliente satisfeito ${index + 1}`}
+                        className="h-12 w-12 rounded-full border-2 border-white object-cover shadow-md"
+                      />
+                    ))}
                   </div>
                   <div>
-                    <span className="text-xs font-black uppercase tracking-[.14em] text-[#0d6b54]">Área do cliente</span>
-                    <h2 className="mt-1 text-3xl font-black leading-tight md:text-4xl">
-                      {mode === "login" ? "Entrar" : "Criar conta"}
-                    </h2>
-                    <p className="mt-2 text-sm leading-relaxed text-slate-500">
-                      Bem-vindo de volta! Acompanhe seus agendamentos, pets e histórico.
-                    </p>
+                    <div className="flex items-center gap-1 text-[#d6a62d]">
+                      {Array.from({ length: 5 }).map((_, index) => (
+                        <Star key={index} size={17} fill="currentColor" />
+                      ))}
+                      <strong className="ml-2 text-sm text-[#12382f]">4,9/5</strong>
+                    </div>
+                    <p className="mt-1 text-sm font-bold text-slate-600">Mais de 1.200 clientes satisfeitos</p>
                   </div>
                 </div>
+              </div>
 
-                <div className="mb-5 grid grid-cols-2 gap-2 rounded-[24px] bg-[#eaf7ef] p-2 shadow-inner">
-                  <button
-                    type="button"
-                    onClick={() => setMode("login")}
-                    className={`min-h-[54px] rounded-[18px] px-4 font-black transition ${
-                      mode === "login" ? "bg-[#0d6b54] text-white shadow-lg" : "text-slate-600 hover:bg-white"
-                    }`}
-                  >
-                    Login
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setMode("register")}
-                    className={`min-h-[54px] rounded-[18px] px-4 font-black transition ${
-                      mode === "register" ? "bg-[#0d6b54] text-white shadow-lg" : "text-slate-600 hover:bg-white"
-                    }`}
-                  >
-                    Cadastro
-                  </button>
-                </div>
-
-                <div className="mb-5 rounded-[26px] border-2 border-[#d7eadf] bg-gradient-to-r from-white to-[#f2fff6] p-3 shadow-lg shadow-emerald-900/5">
-                  <div className="mb-2 flex items-center gap-2 px-2 text-xs font-black uppercase tracking-[.1em] text-[#0d6b54]">
-                    <BadgeCheck size={16} />
-                    Login rápido com Google
+              <div className="home-animate-fade-delay-2 relative w-full overflow-hidden rounded-[30px] border border-white/70 bg-white/78 p-5 shadow-[0_24px_70px_rgba(20,56,47,.22)] backdrop-blur-2xl md:p-7">
+                <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,.92)_0%,rgba(255,255,255,.74)_58%,rgba(238,248,241,.68)_100%)]" />
+                <div className="pointer-events-none absolute -right-16 -top-20 h-40 w-40 rounded-full bg-[#f7df9b]/35 blur-3xl" />
+                <div className="relative">
+                  <div className="mb-5 flex items-start gap-4">
+                    <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-[22px] bg-[#d1f5df] text-[#0d6b54] shadow-sm">
+                      <PawPrint size={34} />
+                    </div>
+                    <div>
+                      <span className="text-xs font-black uppercase tracking-[.14em] text-[#0d6b54]">Área do cliente</span>
+                      <h2 className="mt-1 text-3xl font-black leading-tight">
+                        {mode === "login" ? "Entrar" : "Criar conta"}
+                      </h2>
+                      <p className="mt-1 text-sm leading-relaxed text-slate-500">
+                        Bem-vindo de volta! Acompanhe seus agendamentos, pets e histórico.
+                      </p>
+                    </div>
                   </div>
-                  <div
-                    className={`flex min-h-[48px] items-center justify-center rounded-[20px] bg-white ${googleLoading ? "opacity-60" : ""}`}
-                    ref={googleButtonRef}
-                  />
-                </div>
 
-                <div className="mb-5 flex items-center gap-3 text-xs font-black uppercase tracking-[.08em] text-slate-400">
-                  <span className="h-px flex-1 bg-[#e2eadf]" />
-                  ou use e-mail
-                  <span className="h-px flex-1 bg-[#e2eadf]" />
-                </div>
+                  <div className="mb-4 grid grid-cols-2 gap-2 rounded-[20px] bg-[#eaf7ef]/85 p-2 shadow-inner backdrop-blur">
+                    <button
+                      type="button"
+                      onClick={() => setMode("login")}
+                      className={`min-h-[50px] rounded-[16px] px-4 font-black transition ${
+                        mode === "login" ? "bg-[#0d6b54] text-white shadow-lg" : "text-slate-600 hover:bg-white"
+                      }`}
+                    >
+                      Login
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setMode("register")}
+                      className={`min-h-[50px] rounded-[16px] px-4 font-black transition ${
+                        mode === "register" ? "bg-[#0d6b54] text-white shadow-lg" : "text-slate-600 hover:bg-white"
+                      }`}
+                    >
+                      Cadastro
+                    </button>
+                  </div>
 
-                <form onSubmit={handleSubmit} className="grid gap-3.5">
-                  {mode === "register" && (
+                  <div className="mb-4 rounded-[22px] border border-white/80 bg-white/72 p-3 shadow-lg shadow-emerald-900/5 backdrop-blur">
+                    <div className="mb-2 flex items-center justify-center gap-3 text-xs font-black uppercase tracking-[.08em] text-slate-400">
+                      <span className="h-px flex-1 bg-[#d7eadf]" />
+                      Entrar com
+                      <span className="h-px flex-1 bg-[#d7eadf]" />
+                    </div>
+                    <div
+                      className={`flex min-h-[46px] items-center justify-center rounded-[18px] bg-white ${googleLoading ? "opacity-60" : ""}`}
+                      ref={googleButtonRef}
+                    />
+                  </div>
+
+                  <div className="mb-4 flex items-center gap-3 text-xs font-black uppercase tracking-[.08em] text-slate-400">
+                    <span className="h-px flex-1 bg-[#d7eadf]" />
+                    ou use seu e-mail
+                    <span className="h-px flex-1 bg-[#d7eadf]" />
+                  </div>
+
+                  <form onSubmit={handleSubmit} className="grid gap-3">
+                    {mode === "register" && (
+                      <div className={inputWrapClass}>
+                        <User className="mr-3 shrink-0 text-slate-400" size={22} />
+                        <input
+                          value={form.name}
+                          onChange={(event) => updateField("name", event.target.value)}
+                          placeholder="Nome completo"
+                          required
+                          className={inputClass}
+                        />
+                      </div>
+                    )}
+
                     <div className={inputWrapClass}>
-                      <User className="mr-3 shrink-0 text-slate-400" size={24} />
+                      <Mail className="mr-3 shrink-0 text-slate-400" size={22} />
                       <input
-                        value={form.name}
-                        onChange={(event) => updateField("name", event.target.value)}
-                        placeholder="Nome completo"
+                        ref={emailInputRef}
+                        type="email"
+                        value={form.email}
+                        onChange={(event) => updateField("email", event.target.value)}
+                        placeholder="E-mail"
                         required
                         className={inputClass}
                       />
                     </div>
-                  )}
 
-                  <div className={inputWrapClass}>
-                    <Mail className="mr-3 shrink-0 text-slate-400" size={24} />
-                    <input
-                      type="email"
-                      value={form.email}
-                      onChange={(event) => updateField("email", event.target.value)}
-                      placeholder="E-mail"
-                      required
-                      className={inputClass}
-                    />
-                  </div>
+                    {mode === "register" && (
+                      <div className={inputWrapClass}>
+                        <Phone className="mr-3 shrink-0 text-slate-400" size={22} />
+                        <input
+                          value={form.phone}
+                          onChange={(event) => updateField("phone", event.target.value)}
+                          placeholder="Telefone / WhatsApp"
+                          className={inputClass}
+                        />
+                      </div>
+                    )}
 
-                  {mode === "register" && (
                     <div className={inputWrapClass}>
-                      <Phone className="mr-3 shrink-0 text-slate-400" size={24} />
+                      <Lock className="mr-3 shrink-0 text-slate-400" size={22} />
                       <input
-                        value={form.phone}
-                        onChange={(event) => updateField("phone", event.target.value)}
-                        placeholder="Telefone / WhatsApp"
+                        type={showPassword ? "text" : "password"}
+                        value={form.password}
+                        onChange={(event) => updateField("password", event.target.value)}
+                        placeholder="Senha"
+                        required
                         className={inputClass}
                       />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword((current) => !current)}
+                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-slate-400 transition hover:bg-emerald-50 hover:text-emerald-800"
+                        aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
+                      >
+                        {showPassword ? <EyeOff size={22} /> : <Eye size={22} />}
+                      </button>
                     </div>
-                  )}
 
-                  <div className={inputWrapClass}>
-                    <Lock className="mr-3 shrink-0 text-slate-400" size={24} />
-                    <input
-                      type={showPassword ? "text" : "password"}
-                      value={form.password}
-                      onChange={(event) => updateField("password", event.target.value)}
-                      placeholder="Senha"
-                      required
-                      className={inputClass}
-                    />
+                    {error && (
+                      <div className="rounded-[18px] border border-red-200 bg-red-50 p-4 text-sm font-bold text-red-700">
+                        {error}
+                      </div>
+                    )}
+
                     <button
-                      type="button"
-                      onClick={() => setShowPassword((current) => !current)}
-                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-slate-400 transition hover:bg-emerald-50 hover:text-emerald-800"
-                      aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
+                      disabled={loading || googleLoading}
+                      className="min-h-[58px] rounded-[18px] bg-[#0d6b54] px-6 text-base font-black text-white shadow-xl shadow-emerald-900/18 transition hover:-translate-y-0.5 hover:bg-[#095642] disabled:translate-y-0 disabled:opacity-60"
                     >
-                      {showPassword ? <EyeOff size={22} /> : <Eye size={22} />}
+                      {loading ? "Processando..." : mode === "login" ? "Entrar na minha conta" : "Criar minha conta"}
                     </button>
+                  </form>
+
+                  <div className="mt-4 rounded-[20px] border border-[#d7eadf] bg-[#f4fbf6]/86 p-3 backdrop-blur">
+                    <div className="flex items-start gap-3">
+                      <ShieldCheck className="mt-1 shrink-0 text-[#0d6b54]" size={24} />
+                      <div>
+                        <strong className="text-sm font-black text-[#0d6b54]">Acesso seguro e criptografado</strong>
+                        <p className="mt-1 text-xs leading-relaxed text-slate-500">Seus dados ficam protegidos com tecnologia de ponta.</p>
+                      </div>
+                    </div>
                   </div>
 
-                  {error && (
-                    <div className="rounded-[20px] border border-red-200 bg-red-50 p-4 text-sm font-bold text-red-700">
-                      {error}
-                    </div>
-                  )}
-
-                  <button
-                    disabled={loading || googleLoading}
-                    className="min-h-[62px] rounded-[22px] bg-[#0d6b54] px-6 text-lg font-black text-white shadow-xl shadow-emerald-900/18 transition hover:-translate-y-0.5 hover:bg-[#095642] disabled:translate-y-0 disabled:opacity-60"
-                  >
-                    {loading ? "Processando..." : mode === "login" ? "Entrar na minha conta" : "Criar minha conta"}
-                  </button>
-                </form>
-
-                <div className="mt-5 grid gap-2 sm:grid-cols-3">
-                  {trustHighlights.map(([Icon, title]) => (
-                    <div key={title} className="flex items-center justify-center gap-2 rounded-2xl bg-[#f4fbf6] px-3 py-3 text-center text-xs font-black text-[#0d6b54] ring-1 ring-[#d7eadf]">
-                      <Icon size={17} />
-                      <span>{title}</span>
-                    </div>
-                  ))}
+                  <div className="mt-4 grid gap-2 sm:grid-cols-3">
+                    {trustHighlights.map(([Icon, title]) => (
+                      <div key={title} className="flex items-center justify-center gap-2 rounded-2xl bg-white/72 px-3 py-3 text-center text-xs font-black text-[#0d6b54] ring-1 ring-[#d7eadf]">
+                        <Icon size={16} />
+                        <span>{title}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
+            </div>
+
+            <div className="relative z-10 -mt-3 grid gap-0 overflow-hidden rounded-[30px] border border-white/80 bg-white/78 shadow-xl backdrop-blur-2xl md:grid-cols-4">
+              {supportBenefits.map(({ icon: Icon, title, text }, index) => (
+                <div key={title} className="flex items-center gap-4 border-[#d7eadf] p-5 md:border-l md:first:border-l-0">
+                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-[#d1f5df] text-[#0d6b54] shadow-sm">
+                    <Icon size={27} />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-black text-[#12382f]">{title}</h3>
+                    <p className="mt-1 text-xs leading-relaxed text-slate-600">{text}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="relative z-10 mt-5 grid overflow-hidden rounded-[30px] bg-gradient-to-r from-[#064231] via-[#0d6b54] to-[#064231] p-2 shadow-2xl shadow-emerald-950/25 md:grid-cols-4">
+              {heroStats.map(({ icon: Icon, value, label }) => (
+                <div key={label} className="flex items-center justify-center gap-4 border-white/15 px-6 py-5 text-white md:border-l md:first:border-l-0">
+                  <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-white/14 text-[#f4d676] ring-1 ring-white/15">
+                    <Icon size={32} />
+                  </span>
+                  <span>
+                    <strong className="block text-2xl font-black leading-none md:text-3xl">{value}</strong>
+                    <small className="mt-1 block text-sm font-bold text-white/80">{label}</small>
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
         </section>
