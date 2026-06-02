@@ -17,7 +17,8 @@ import {
 import PublicLayout from "../../components/public/PublicLayout";
 
 const API_URL = "https://spadodoguinho.com.br/api";
-const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || "";
+const DEFAULT_GOOGLE_CLIENT_ID = "453503592700-lu67c7lqje2cnla2mdj6111qrkluq2gu.apps.googleusercontent.com";
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || DEFAULT_GOOGLE_CLIENT_ID;
 const GOOGLE_SCRIPT_ID = "google-identity-services";
 
 function getSafeNextPage() {
@@ -306,29 +307,12 @@ export default function ClienteLoginPage() {
                 </div>
 
                 <div className="mb-6">
-                  {GOOGLE_CLIENT_ID ? (
-                    <div
-                      className={`flex min-h-[46px] items-center justify-center rounded-full border border-slate-200 bg-white ${
-                        googleLoading ? "opacity-60" : ""
-                      }`}
-                      ref={googleButtonRef}
-                    />
-                  ) : (
-                    <button
-                      type="button"
-                      disabled
-                      className="flex w-full items-center justify-center gap-3 rounded-full border border-slate-200 bg-slate-50 px-5 py-3 font-black text-slate-400"
-                    >
-                      <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white font-black text-slate-500">G</span>
-                      Google em breve
-                    </button>
-                  )}
-
-                  {!GOOGLE_CLIENT_ID && (
-                    <p className="mt-3 text-center text-xs font-bold text-slate-400">
-                      Configure VITE_GOOGLE_CLIENT_ID no site e GOOGLE_CLIENT_ID no servidor.
-                    </p>
-                  )}
+                  <div
+                    className={`flex min-h-[46px] items-center justify-center rounded-full border border-slate-200 bg-white ${
+                      googleLoading ? "opacity-60" : ""
+                    }`}
+                    ref={googleButtonRef}
+                  />
                 </div>
 
                 <div className="mb-6 flex items-center gap-3 text-xs font-black uppercase text-slate-400">
