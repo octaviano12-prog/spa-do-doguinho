@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Camera, CalendarDays, CheckCircle2, Heart, Image as ImageIcon, MessageCircle, PawPrint, ShieldCheck, Sparkles, Star } from "lucide-react";
 import { motion } from "framer-motion";
@@ -7,12 +7,21 @@ import PublicLayout from "../../components/public/PublicLayout";
 const API_PUBLIC = "https://spadodoguinho.com.br/api/public";
 const whatsappUrl = "https://wa.me/5518997493722?text=Olá! Gostaria de conhecer a galeria e agendar um atendimento no SPA do Doguinho.";
 const heroImage = "/images/galeria-pet-04.webp";
+const categoryOptions = ["Todos", "Antes e depois", "Banho", "Tosa", "Spa", "Vacinas", "Ambiente"];
 
 const highlights = [
   [ImageIcon, "Registros reais", "Fotos cadastradas pelo painel do SPA."],
   [Heart, "Pets felizes", "Banho, tosa e cuidado com carinho."],
   [ShieldCheck, "Confiança visual", "Veja o capricho antes de agendar."]
 ];
+
+function normalizeCategory(value) {
+  return String(value || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .toLowerCase();
+}
 
 function GalleryImage({ item, index, className = "" }) {
   const title = item.title || `Atendimento #${index + 1}`;
@@ -43,6 +52,7 @@ function GalleryImage({ item, index, className = "" }) {
 
 export default function GaleriaPublicPage() {
   const [gallery, setGallery] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("Todos");
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
 
@@ -70,6 +80,20 @@ export default function GaleriaPublicPage() {
   }, []);
 
   const totalItems = gallery.length;
+  const selectedCategoryKey = normalizeCategory(selectedCategory);
+
+  const categoryCounts = useMemo(() => {
+    return gallery.reduce((counts, item) => {
+      const key = normalizeCategory(item.category || "Sem categoria");
+      counts[key] = (counts[key] || 0) + 1;
+      return counts;
+    }, {});
+  }, [gallery]);
+
+  const visibleGallery = useMemo(() => {
+    if (selectedCategory === "Todos") return gallery;
+    return gallery.filter((item) => normalizeCategory(item.category) === selectedCategoryKey);
+  }, [gallery, selectedCategory, selectedCategoryKey]);
 
   return (
     <PublicLayout>
@@ -132,33 +156,56 @@ export default function GaleriaPublicPage() {
         </section>
 
         <section className="mx-auto max-w-[1880px] px-5 py-14 md:px-8">
-          <div className="home-animate-fade mb-10 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+          <div className="home-animate-fade mb-8 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
             <div>
               <span className="inline-flex items-center gap-2 rounded-full bg-[#e7f4ed] px-5 py-2 text-sm font-black text-[#0d6b54]"><Sparkles size={16} /> Galeria</span>
               <h2 className="mt-5 text-4xl font-black leading-tight tracking-[-.04em] text-[#0d6b54] md:text-5xl">Cuidado que fica bonito na foto.</h2>
               <p className="mt-3 max-w-3xl text-lg text-slate-600">Banho, tosa e bem-estar com acabamento caprichado e uma experiência acolhedora.</p>
             </div>
-            <div className="rounded-2xl border border-[#e2eadf] bg-white px-6 py-4 font-black text-[#0d6b54] shadow-sm">{gallery.length} registros</div>
+            <div className="rounded-2xl border border-[#e2eadf] bg-white px-6 py-4 font-black text-[#0d6b54] shadow-sm">{visibleGallery.length} registros</div>
+          </div>
+
+          <div className="home-animate-fade mb-10 flex flex-wrap gap-3 rounded-[28px] border border-[#e2eadf] bg-white p-3 shadow-sm">
+            {categoryOptions.map((category) => {
+              const categoryKey = normalizeCategory(category);
+              const count = category === "Todos" ? gallery.length : categoryCounts[categoryKey] || 0;
+              const isActive = selectedCategory === category;
+
+              return (
+                <button
+                  key={category}
+                  type="button"
+                  onClick={() => setSelectedCategory(category)}
+                  className={`inline-flex min-h-[44px] items-center gap-2 rounded-2xl px-5 py-2 text-sm font-black transition ${isActive ? "bg-[#0d6b54] text-white shadow-lg" : "bg-[#fffdf7] text-[#0d6b54] ring-1 ring-[#e2eadf] hover:-translate-y-0.5 hover:bg-[#e7f4ed]"}`}
+                >
+                  <span>{category}</span>
+                  <span className={`rounded-full px-2 py-0.5 text-xs ${isActive ? "bg-white/18 text-white" : "bg-[#e7f4ed] text-[#0d6b54]"}`}>{count}</span>
+                </button>
+              );
+            })}
           </div>
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
             {isLoading && [1, 2, 3, 4, 5, 6].map((item) => <div key={item} className="h-[420px] animate-pulse rounded-[30px] bg-white shadow-sm" />)}
 
-            {!isLoading && gallery.length === 0 && (
+            {!isLoading && visibleGallery.length === 0 && (
               <div className="md:col-span-2 xl:col-span-3 rounded-[34px] border border-[#e2eadf] bg-white p-10 text-center shadow-xl">
                 <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-[28px] bg-[#e7f4ed] text-[#0d6b54]"><ImageIcon size={42} /></div>
-                <h3 className="mt-6 text-3xl font-black text-[#0d6b54]">Nenhuma foto cadastrada ainda.</h3>
+                <h3 className="mt-6 text-3xl font-black text-[#0d6b54]">{gallery.length ? "Nenhuma foto nessa categoria ainda." : "Nenhuma foto cadastrada ainda."}</h3>
                 <p className="mx-auto mt-3 max-w-xl text-slate-600">
-                  {loadError ? "Não foi possível carregar a galeria agora." : "As imagens adicionadas no painel administrativo aparecerão aqui automaticamente."}
+                  {loadError ? "Não foi possível carregar a galeria agora." : gallery.length ? "Quando novas imagens forem marcadas nessa categoria, elas aparecerão aqui." : "As imagens adicionadas no painel administrativo aparecerão aqui automaticamente."}
                 </p>
               </div>
             )}
 
-            {!isLoading && gallery.map((item, index) => (
+            {!isLoading && visibleGallery.map((item, index) => (
               <motion.article key={item.id || index} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.04 }} className="home-card-animate group overflow-hidden rounded-[30px] bg-white shadow-xl ring-1 ring-black/5 transition hover:-translate-y-1" style={{ animationDelay: `${index * 70}ms` }}>
                 <GalleryImage item={item} index={index} className="h-[340px]" />
                 <div className="p-7">
-                  <div className="mb-4 flex gap-1 text-[#f4b942]">{[1, 2, 3, 4, 5].map((star) => <Star key={star} size={17} fill="currentColor" />)}</div>
+                  <div className="mb-4 flex items-center justify-between gap-3">
+                    <div className="flex gap-1 text-[#f4b942]">{[1, 2, 3, 4, 5].map((star) => <Star key={star} size={17} fill="currentColor" />)}</div>
+                    <span className="rounded-full bg-[#e7f4ed] px-3 py-1 text-xs font-black uppercase tracking-[.06em] text-[#0d6b54]">{item.category || "Galeria"}</span>
+                  </div>
                   <h2 className="text-2xl font-black text-[#12382f]">{item.title || `Atendimento #${index + 1}`}</h2>
                   <p className="mt-3 min-h-[52px] text-slate-600">{item.description || "Resultado incrível para nossos clientes pets."}</p>
                 </div>
