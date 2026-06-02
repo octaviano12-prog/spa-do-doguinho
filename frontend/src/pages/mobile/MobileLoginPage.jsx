@@ -4,7 +4,8 @@ import { Eye, EyeOff, Lock, Mail, PawPrint, Phone, RefreshCw, ShieldCheck, User 
 import MobileShell from "../../components/mobile/MobileShell";
 
 const API_URL = "https://spadodoguinho.com.br/api";
-const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || "";
+const DEFAULT_GOOGLE_CLIENT_ID = "453503592700-lu67c7lqje2cnla2mdj6111qrkluq2gu.apps.googleusercontent.com";
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || DEFAULT_GOOGLE_CLIENT_ID;
 const GOOGLE_SCRIPT_ID = "google-identity-services";
 const safeNextPages = ["/mobile/agendar", "/mobile/conta", "/mobile/agendamentos", "/mobile/pets", "/mobile/perfil"];
 
@@ -97,7 +98,12 @@ export default function MobileLoginPage() {
     let cancelled = false;
     function renderButton() {
       if (cancelled || !window.google?.accounts?.id || !googleButtonRef.current) return;
-      window.google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleGoogleCredential });
+      window.google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID,
+        callback: handleGoogleCredential,
+        auto_select: false,
+        use_fedcm_for_prompt: true
+      });
       googleButtonRef.current.innerHTML = "";
       window.google.accounts.id.renderButton(googleButtonRef.current, {
         theme: "outline",
@@ -117,6 +123,7 @@ export default function MobileLoginPage() {
       script.async = true;
       script.defer = true;
       script.onload = renderButton;
+      script.onerror = () => setError("Não foi possível carregar o login do Google.");
       document.head.appendChild(script);
     }
     return () => {
@@ -176,7 +183,7 @@ export default function MobileLoginPage() {
             </button>
           ))}
         </div>
-        {GOOGLE_CLIENT_ID && <div ref={googleButtonRef} className={`mb-5 flex min-h-[48px] justify-center ${googleLoading ? "opacity-60" : ""}`} />}
+        <div ref={googleButtonRef} className={`mb-5 flex min-h-[48px] justify-center ${googleLoading ? "opacity-60" : ""}`} />
         <div className="mb-5 flex items-center gap-3 text-xs font-black uppercase text-slate-400"><span className="h-px flex-1 bg-slate-200" />ou e-mail<span className="h-px flex-1 bg-slate-200" /></div>
         <form onSubmit={handleSubmit} className="grid gap-3">
           {mode === "register" && <Input icon={User} value={form.name} onChange={(value) => updateField("name", value)} placeholder="Nome completo" />}
