@@ -29,7 +29,20 @@ jobs:
         working-directory: frontend
         run: npm run build
 
-      - name: Publicar via FTP
+      - name: Publicar backend via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
+        with:
+          server: 82.25.67.85
+          username: u953887285
+          password: Octa1599512369@
+          port: 21
+          protocol: ftp
+          timeout: 120000
+          local-dir: backend/
+          server-dir: /domains/spadodoguinho.com.br/backend/
+          dangerous-clean-slate: false
+
+      - name: Publicar frontend via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.4.0
         with:
           server: 82.25.67.85
