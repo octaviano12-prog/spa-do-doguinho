@@ -9,8 +9,11 @@ const customerRoutes = require("./routes/customerRoutes");
 const webhookRoutes = require("./routes/webhookRoutes");
 const uploadRoutes = require("./routes/uploadRoutes");
 const cascadeRoutes = require("./routes/cascadeRoutes");
+const loyaltyRoutes = require("./routes/loyaltyRoutes");
 const upload = require("./middlewares/uploadMiddleware");
 const db = require("./config/db");
+const { durationForService } = require("./utils/pricing");
+const { addMinutes, ensureLoyaltyTables, getLoyaltyBusySlots, hasOverlap } = require("./services/loyaltyService");
 
 const app = express();
 
@@ -63,6 +66,48 @@ function blockPastCustomerAppointment(req, res, next) {
   return next();
 }
 
+async function blockLoyaltyCustomerAppointment(req, res, next) {
+  if (req.method !== "POST" || req.path !== "/appointments") return next();
+
+  const selectedDate = String(req.body?.date || "").slice(0, 10);
+  const selectedTime = padTime(req.body?.time);
+  const serviceId = Number(req.body?.service_id);
+  const petId = Number(req.body?.pet_id);
+
+  if (!selectedDate || !selectedTime || !serviceId || !petId) return next();
+
+  try {
+    await ensureLoyaltyTables();
+
+    const [[services], [pets]] = await Promise.all([
+      db.query(
+        `SELECT id, duration_minutes, duration_small, duration_medium, duration_large, duration_giant
+         FROM services
+         WHERE id = ?
+         LIMIT 1`,
+        [serviceId]
+      ),
+      db.query("SELECT id, weight, size_category, estimated_bath_time FROM pets WHERE id = ? LIMIT 1", [petId])
+    ]);
+
+    const duration = durationForService(services[0], pets[0]);
+    const selectedEnd = addMinutes(selectedTime, duration);
+    const busy = await getLoyaltyBusySlots(selectedDate);
+    const occupied = busy.some((slot) => hasOverlap(selectedTime, selectedEnd, slot.start, slot.end));
+
+    if (occupied) {
+      return res.status(409).json({
+        error: "Este horário está reservado para um pacote fidelidade. Escolha outro horário."
+      });
+    }
+
+    return next();
+  } catch (error) {
+    console.error("Validar pacote fidelidade no agendamento:", error);
+    return next();
+  }
+}
+
 app.use(cors());
 app.use(express.json({ limit: "10mb" }));
 
@@ -87,10 +132,11 @@ app.get("/api/health", async (req, res) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/public", publicRoutes);
-app.use("/api/customer", blockPastCustomerAppointment, customerRoutes);
+app.use("/api/customer", blockPastCustomerAppointment, blockLoyaltyCustomerAppointment, customerRoutes);
 app.use("/api/webhooks", webhookRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api", cascadeRoutes);
+app.use("/api", loyaltyRoutes);
 app.use("/api", resourceRoutes);
 
 app.use("/api", (req, res) => {
