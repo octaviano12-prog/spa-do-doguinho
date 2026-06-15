@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const db = require("../config/db");
 const { durationForService } = require("../utils/pricing");
+const { ensureLoyaltyTables, getLoyaltyBusySlots } = require("../services/loyaltyService");
 
 function padTime(value) {
   return String(value || "").slice(0, 5);
@@ -148,6 +149,8 @@ router.get("/available-slots", async (req, res) => {
 
     if (!rules.length) return res.json({ date, blocked: false, reason: "Sem regra de disponibilidade para este dia", slots: [] });
 
+    await ensureLoyaltyTables().catch((error) => console.warn("Nao foi possivel preparar pacotes fidelidade:", error.message));
+
     const [appointments] = await db.query(
       `SELECT a.id, a.time, a.scheduled_at, a.service_id, a.pet_id, a.status,
               s.duration_minutes, s.duration_small, s.duration_medium, s.duration_large, s.duration_giant,
@@ -167,6 +170,12 @@ router.get("/available-slots", async (req, res) => {
       busy.push({ start: appointmentTime, end: addMinutes(appointmentTime, appointmentDuration) });
     }
 
+    const loyaltyBusy = await getLoyaltyBusySlots(date).catch((error) => {
+      console.warn("Nao foi possivel carregar pacotes fidelidade:", error.message);
+      return [];
+    });
+    busy.push(...loyaltyBusy.map((item) => ({ start: item.start, end: item.end })));
+
     const slots = [];
     for (const rule of rules) {
       const start = padTime(rule.start_time || "08:00");
@@ -181,7 +190,7 @@ router.get("/available-slots", async (req, res) => {
       }
     }
 
-    const reason = slots.length ? null : (String(date).slice(0, 10) === today ? "Não há horários disponíveis restantes para hoje. Escolha outro dia." : null);
+    const reason = slots.length ? null : (String(date).slice(0, 10) === today ? "Não há horários disponíveis restantes para hoje. Escolha outro dia." : "Não há horários disponíveis nesta data. Escolha outro dia.");
     return res.json({ date, blocked: false, duration: finalDuration, reason, slots });
   } catch (error) {
     return res.status(500).json({ error: error.message });
