@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const db = require("../config/db");
+const { durationForService } = require("../utils/pricing");
 
 function padTime(value) {
   return String(value || "").slice(0, 5);
@@ -84,7 +85,7 @@ router.get("/payment-settings", async (req, res) => {
 
 router.get("/available-slots", async (req, res) => {
   try {
-    const { service_id, date } = req.query;
+    const { service_id, date, duration } = req.query;
 
     if (!service_id || !date) return res.status(400).json({ error: "service_id e date são obrigatórios." });
 
@@ -95,9 +96,16 @@ router.get("/available-slots", async (req, res) => {
     const [blocked] = await db.query("SELECT id, reason FROM blocked_dates WHERE date = ? AND active = 1 LIMIT 1", [date]);
     if (blocked.length) return res.json({ date, blocked: true, reason: blocked[0].reason || "Data bloqueada", slots: [] });
 
-    const [services] = await db.query("SELECT id, duration_minutes FROM services WHERE id = ? LIMIT 1", [service_id]);
+    const [services] = await db.query(
+      `SELECT id, duration_minutes, duration_small, duration_medium, duration_large, duration_giant
+       FROM services
+       WHERE id = ?
+       LIMIT 1`,
+      [service_id]
+    );
     const service = services[0];
-    const duration = Number(service?.duration_minutes || 60);
+    const requestedDuration = Number(duration || 0);
+    const finalDuration = requestedDuration > 0 ? requestedDuration : durationForService(service, null);
 
     const [rules] = await db.query(
       `SELECT * FROM availability WHERE active = 1 AND (weekday = ? OR day_of_week = ?) ORDER BY start_time ASC`,
@@ -107,7 +115,13 @@ router.get("/available-slots", async (req, res) => {
     if (!rules.length) return res.json({ date, blocked: false, reason: "Sem regra de disponibilidade para este dia", slots: [] });
 
     const [appointments] = await db.query(
-      `SELECT id, time, scheduled_at, service_id, status FROM appointments WHERE date = ? AND status NOT IN ('canceled', 'cancelado')`,
+      `SELECT a.id, a.time, a.scheduled_at, a.service_id, a.pet_id, a.status,
+              s.duration_minutes, s.duration_small, s.duration_medium, s.duration_large, s.duration_giant,
+              p.weight, p.size_category, p.estimated_bath_time
+       FROM appointments a
+       LEFT JOIN services s ON s.id = a.service_id
+       LEFT JOIN pets p ON p.id = a.pet_id
+       WHERE a.date = ? AND a.status NOT IN ('canceled', 'cancelado')`,
       [date]
     );
 
@@ -115,11 +129,7 @@ router.get("/available-slots", async (req, res) => {
     for (const appointment of appointments) {
       const appointmentTime = appointment.time ? padTime(appointment.time) : padTime(String(appointment.scheduled_at || "").slice(11, 16));
       if (!appointmentTime) continue;
-      let appointmentDuration = 60;
-      if (appointment.service_id) {
-        const [appointmentServices] = await db.query("SELECT duration_minutes FROM services WHERE id = ? LIMIT 1", [appointment.service_id]);
-        appointmentDuration = Number(appointmentServices[0]?.duration_minutes || 60);
-      }
+      const appointmentDuration = durationForService(appointment, appointment);
       busy.push({ start: appointmentTime, end: addMinutes(appointmentTime, appointmentDuration) });
     }
 
@@ -129,15 +139,15 @@ router.get("/available-slots", async (req, res) => {
       const end = padTime(rule.end_time || "18:00");
       const interval = Number(rule.interval_minutes || 60);
       let current = start;
-      while (timeToMinutes(addMinutes(current, duration)) <= timeToMinutes(end)) {
-        const slotEnd = addMinutes(current, duration);
+      while (timeToMinutes(addMinutes(current, finalDuration)) <= timeToMinutes(end)) {
+        const slotEnd = addMinutes(current, finalDuration);
         const occupied = busy.some((item) => hasOverlap(current, slotEnd, item.start, item.end));
         if (!occupied) slots.push({ time: current, label: current });
         current = addMinutes(current, interval);
       }
     }
 
-    return res.json({ date, blocked: false, duration, slots });
+    return res.json({ date, blocked: false, duration: finalDuration, slots });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
