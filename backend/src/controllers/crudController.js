@@ -9,7 +9,7 @@ const allowed = {
   payments: ["appointment_id", "customer_id", "amount", "method", "payment_method", "type", "status", "description", "paid_at", "mercado_pago_id", "external_reference", "transaction_id", "qr_code", "notes"],
   payment_settings: ["provider", "access_token", "public_key", "pix_enabled", "card_enabled", "cash_enabled", "deposit_required", "deposit_percent", "active"],
   cash_movements: ["type", "amount", "method", "payment_method", "category", "description", "responsible", "operator", "created_by", "movement_date", "date", "status"],
-  cash_closings: ["closing_date", "date", "opening_amount", "initial_amount", "total_income", "total_expense", "final_amount", "closing_amount", "expected_amount", "difference_amount", "responsible", "operator", "status", "opened_at", "closed_at", "notes"],
+  cash_closings: ["closing_date", "date", "opening_amount", "initial_amount", "opening_balance", "total_income", "total_entries", "total_expense", "total_exits", "final_amount", "final_balance", "closing_amount", "expected_amount", "difference_amount", "responsible", "operator", "created_by", "status", "opened_at", "closed_at", "notes"],
   stock_items: ["name", "category", "quantity", "min_quantity", "minimum_quantity", "cost_price", "sale_price", "price", "unit", "supplier", "barcode", "notes", "active"],
   stock_movements: ["stock_item_id", "type", "quantity", "reason", "description", "responsible"],
   vaccines: ["pet_id", "name", "vaccine_name", "applied_at", "date", "next_due", "next_date", "next_dose_date", "notes"],
@@ -251,8 +251,16 @@ function normalizeCashClosingPayload(body) {
   if (payload.responsible && !payload.operator) payload.operator = payload.responsible;
   if (payload.initial_amount !== undefined && payload.opening_amount === undefined) payload.opening_amount = payload.initial_amount;
   if (payload.opening_amount !== undefined && payload.initial_amount === undefined) payload.initial_amount = payload.opening_amount;
+  if (payload.opening_balance !== undefined && payload.opening_amount === undefined) payload.opening_amount = payload.opening_balance;
+  if (payload.opening_amount !== undefined && payload.opening_balance === undefined) payload.opening_balance = payload.opening_amount;
   if (payload.closing_amount !== undefined && payload.final_amount === undefined) payload.final_amount = payload.closing_amount;
   if (payload.final_amount !== undefined && payload.closing_amount === undefined) payload.closing_amount = payload.final_amount;
+  if (payload.final_balance !== undefined && payload.final_amount === undefined) payload.final_amount = payload.final_balance;
+  if (payload.final_amount !== undefined && payload.final_balance === undefined) payload.final_balance = payload.final_amount;
+  if (payload.total_entries !== undefined && payload.total_income === undefined) payload.total_income = payload.total_entries;
+  if (payload.total_income !== undefined && payload.total_entries === undefined) payload.total_entries = payload.total_income;
+  if (payload.total_exits !== undefined && payload.total_expense === undefined) payload.total_expense = payload.total_exits;
+  if (payload.total_expense !== undefined && payload.total_exits === undefined) payload.total_exits = payload.total_expense;
   if (payload.expected_amount !== undefined && payload.total_income === undefined) payload.total_income = payload.expected_amount;
 
   return payload;
@@ -276,6 +284,16 @@ function normalizePayload(table, body) {
   if (table === "cash_closings") return normalizeCashClosingPayload(body || {});
   if (table === "cash_movements") return normalizeCashMovementPayload(body || {});
   return { ...(body || {}) };
+}
+
+function sanitizeRecord(table, row) {
+  if (!row || table !== "users") return row;
+  const { password, ...safeRow } = row;
+  return safeRow;
+}
+
+function sanitizeRows(table, rows) {
+  return table === "users" ? rows.map((row) => sanitizeRecord(table, row)) : rows;
 }
 
 function toRecord(keys, values) {
@@ -423,7 +441,7 @@ exports.list = (table) => async (req, res) => {
     if (order) sql += ` ORDER BY ${order}`;
 
     const [rows] = await db.query(sql, params);
-    return res.json(rows);
+    return res.json(sanitizeRows(table, rows));
   } catch (error) {
     console.error("Erro ao listar:", table, error);
     return res.status(500).json({ message: "Erro ao listar registros", detail: error.message });
@@ -436,7 +454,7 @@ exports.getOne = (table) => async (req, res) => {
     const sql = `${getBaseSelect(table)} WHERE ${qualify(table, "id")} = ?`;
     const [rows] = await db.query(sql, [req.params.id]);
     if (!rows.length) return res.status(404).json({ message: "Registro nao encontrado" });
-    return res.json(rows[0]);
+    return res.json(sanitizeRecord(table, rows[0]));
   } catch (error) {
     console.error("Erro ao buscar:", table, error);
     return res.status(500).json({ message: "Erro ao buscar registro", detail: error.message });
@@ -458,7 +476,7 @@ exports.create = (table) => async (req, res) => {
 
     const sql = `INSERT INTO ${quoteTable(table)} (${keys.map(quoteIdentifier).join(",")}) VALUES (${keys.map(() => "?").join(",")})`;
     const [result] = await db.query(sql, values);
-    return res.status(201).json({ id: result.insertId, ...toRecord(keys, values) });
+    return res.status(201).json(sanitizeRecord(table, { id: result.insertId, ...toRecord(keys, values) }));
   } catch (error) {
     console.error("Erro ao criar:", table, error);
     return res.status(500).json({ message: "Erro ao criar registro", detail: error.message });
