@@ -8,8 +8,8 @@ const allowed = {
   appointments: ["customer_id", "pet_id", "service_id", "scheduled_at", "date", "time", "status", "notes", "total_price", "price", "payment_status", "payment_method", "paid_at", "mercado_pago_id"],
   payments: ["appointment_id", "customer_id", "amount", "method", "payment_method", "type", "status", "description", "paid_at", "mercado_pago_id", "external_reference", "transaction_id", "qr_code", "notes"],
   payment_settings: ["provider", "access_token", "public_key", "pix_enabled", "card_enabled", "cash_enabled", "deposit_required", "deposit_percent", "active"],
-  cash_movements: ["type", "amount", "method", "payment_method", "category", "description", "responsible", "created_by", "movement_date"],
-  cash_closings: ["closing_date", "opening_amount", "total_income", "total_expense", "final_amount", "responsible", "notes"],
+  cash_movements: ["type", "amount", "method", "payment_method", "category", "description", "responsible", "operator", "created_by", "movement_date", "date", "status"],
+  cash_closings: ["closing_date", "date", "opening_amount", "initial_amount", "total_income", "total_expense", "final_amount", "closing_amount", "expected_amount", "difference_amount", "responsible", "operator", "status", "opened_at", "closed_at", "notes"],
   stock_items: ["name", "category", "quantity", "min_quantity", "minimum_quantity", "cost_price", "sale_price", "price", "unit", "supplier", "barcode", "notes", "active"],
   stock_movements: ["stock_item_id", "type", "quantity", "reason", "description", "responsible"],
   vaccines: ["pet_id", "name", "vaccine_name", "applied_at", "date", "next_due", "next_date", "next_dose_date", "notes"],
@@ -107,6 +107,8 @@ const orderCandidates = {
   appointments: [["scheduled_at", "DESC"], ["date", "DESC"], ["time", "DESC"], ["id", "DESC"]],
   pets: [["id", "DESC"]],
   payments: [["paid_at", "DESC"], ["id", "DESC"]],
+  cash_movements: [["movement_date", "DESC"], ["date", "DESC"], ["id", "DESC"]],
+  cash_closings: [["closing_date", "DESC"], ["date", "DESC"], ["id", "DESC"]],
   service_history: [["date", "DESC"], ["id", "DESC"]],
   vaccinations: [["next_dose_date", "ASC"], ["next_date", "ASC"], ["date", "DESC"], ["id", "DESC"]],
   vaccines: [["next_due", "ASC"], ["next_date", "ASC"], ["applied_at", "DESC"], ["date", "DESC"], ["id", "DESC"]],
@@ -238,6 +240,42 @@ function validateAppointmentPayload(payload) {
   }
 
   return "";
+}
+
+function normalizeCashClosingPayload(body) {
+  const payload = { ...body };
+
+  if (payload.date && !payload.closing_date) payload.closing_date = payload.date;
+  if (payload.closing_date && !payload.date) payload.date = payload.closing_date;
+  if (payload.operator && !payload.responsible) payload.responsible = payload.operator;
+  if (payload.responsible && !payload.operator) payload.operator = payload.responsible;
+  if (payload.initial_amount !== undefined && payload.opening_amount === undefined) payload.opening_amount = payload.initial_amount;
+  if (payload.opening_amount !== undefined && payload.initial_amount === undefined) payload.initial_amount = payload.opening_amount;
+  if (payload.closing_amount !== undefined && payload.final_amount === undefined) payload.final_amount = payload.closing_amount;
+  if (payload.final_amount !== undefined && payload.closing_amount === undefined) payload.closing_amount = payload.final_amount;
+  if (payload.expected_amount !== undefined && payload.total_income === undefined) payload.total_income = payload.expected_amount;
+
+  return payload;
+}
+
+function normalizeCashMovementPayload(body) {
+  const payload = { ...body };
+
+  if (payload.date && !payload.movement_date) payload.movement_date = payload.date;
+  if (payload.movement_date && !payload.date) payload.date = payload.movement_date;
+  if (payload.operator && !payload.responsible) payload.responsible = payload.operator;
+  if (payload.responsible && !payload.operator) payload.operator = payload.responsible;
+  if (payload.payment_method && !payload.method) payload.method = payload.payment_method;
+  if (payload.method && !payload.payment_method) payload.payment_method = payload.method;
+
+  return payload;
+}
+
+function normalizePayload(table, body) {
+  if (table === "appointments") return normalizeAppointmentPayload(body || {});
+  if (table === "cash_closings") return normalizeCashClosingPayload(body || {});
+  if (table === "cash_movements") return normalizeCashMovementPayload(body || {});
+  return { ...(body || {}) };
 }
 
 function toRecord(keys, values) {
@@ -408,7 +446,7 @@ exports.getOne = (table) => async (req, res) => {
 exports.create = (table) => async (req, res) => {
   try {
     tableOrFail(table);
-    const payload = table === "appointments" ? normalizeAppointmentPayload(req.body || {}) : { ...(req.body || {}) };
+    const payload = normalizePayload(table, req.body || {});
 
     if (table === "appointments") {
       const validation = validateAppointmentPayload(payload);
@@ -430,7 +468,7 @@ exports.create = (table) => async (req, res) => {
 exports.update = (table) => async (req, res) => {
   try {
     tableOrFail(table);
-    const payload = table === "appointments" ? normalizeAppointmentPayload(req.body || {}) : { ...(req.body || {}) };
+    const payload = normalizePayload(table, req.body || {});
     const { keys, values } = await pickBody(table, payload);
     if (!keys.length) return res.status(400).json({ message: "Nenhum campo valido enviado" });
 
