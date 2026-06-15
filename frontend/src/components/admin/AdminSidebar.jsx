@@ -12,7 +12,8 @@ import {
   Syringe,
   Image,
   Settings,
-  Clock
+  Clock,
+  Gift
 } from "lucide-react";
 
 import { NavLink } from "react-router-dom";
@@ -23,6 +24,7 @@ const links = [
   { to: "/admin/pets", label: "Pets", icon: PawPrint },
   { to: "/admin/servicos", label: "Serviços", icon: Scissors },
   { to: "/admin/agendamentos", label: "Agendamentos", icon: Calendar },
+  { to: "/admin/fidelidade", label: "Fidelidade", icon: Gift },
   { to: "/admin/financeiro", label: "Financeiro", icon: Wallet },
   { to: "/admin/caixa", label: "Caixa", icon: Briefcase },
   { to: "/admin/estoque", label: "Estoque", icon: Package },
