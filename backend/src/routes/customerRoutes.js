@@ -25,6 +25,10 @@ function hasOverlap(startA, endA, startB, endB) {
   return timeToMinutes(startA) < timeToMinutes(endB) && timeToMinutes(endA) > timeToMinutes(startB);
 }
 
+function hasValue(value) {
+  return value !== undefined && value !== null && String(value).trim() !== "";
+}
+
 function normalizeMethod(method) {
   const value = String(method || "presencial").toLowerCase();
   if (["pix", "card", "presencial"].includes(value)) return value;
@@ -95,6 +99,9 @@ router.post("/pets", async (req, res) => {
   try {
     const { name, species, breed, age, weight, notes, size_category, estimated_bath_time } = req.body || {};
     if (!name) return res.status(400).json({ error: "Informe o nome do pet." });
+    if (!hasValue(weight) && !hasValue(size_category)) {
+      return res.status(400).json({ error: "Informe o peso ou porte do pet para calcular o valor correto do banho." });
+    }
 
     const finalSize = sizeForDatabase(size_category, weight);
     const finalBathTime = Number(estimated_bath_time || 0) || estimatedBathTime(finalSize);
