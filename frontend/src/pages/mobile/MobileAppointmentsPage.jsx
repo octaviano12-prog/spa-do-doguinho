@@ -13,10 +13,27 @@ async function getData(path) {
   return data;
 }
 
+function parseLocalDateTime(dateValue, timeValue = "00:00") {
+  const dateText = String(dateValue || "").slice(0, 10);
+  const timeText = String(timeValue || "00:00").slice(0, 5);
+  const [year, month, day] = dateText.split("-").map(Number);
+  const [hour, minute] = timeText.split(":").map(Number);
+
+  if (!year || !month || !day) return null;
+  return new Date(year, month - 1, day, hour || 0, minute || 0, 0);
+}
+
 function parseDate(item) {
-  const value = item?.scheduled_at || (item?.date && item?.time ? `${item.date}T${item.time}` : item?.date);
+  if (item?.date) return parseLocalDateTime(item.date, item.time);
+
+  const value = item?.scheduled_at;
   if (!value) return null;
-  const date = new Date(String(value).replace(" ", "T"));
+
+  const text = String(value).replace(" ", "T");
+  const match = text.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/);
+  if (match) return parseLocalDateTime(`${match[1]}-${match[2]}-${match[3]}`, `${match[4]}:${match[5]}`);
+
+  const date = new Date(text);
   return Number.isNaN(date.getTime()) ? null : date;
 }
 
