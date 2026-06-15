@@ -2,11 +2,14 @@ import React, { useEffect, useMemo, useState } from "react";
 import {
   ArrowDownCircle,
   ArrowUpCircle,
+  Banknote,
   BarChart3,
   CalendarDays,
   CheckCircle,
   Clock,
+  CreditCard,
   DollarSign,
+  QrCode,
   RefreshCw,
   TrendingUp,
   Wallet
@@ -22,12 +25,46 @@ function normalize(value) {
   return String(value || "pending").toLowerCase();
 }
 
+const methodLabels = {
+  pix: "PIX",
+  card: "Cartão",
+  cartao: "Cartão",
+  cartão: "Cartão",
+  cash: "Dinheiro",
+  dinheiro: "Dinheiro",
+  presencial: "Na loja"
+};
+
+const statusLabels = {
+  paid: "Pago",
+  approved: "Pago",
+  pago: "Pago",
+  pending: "Pendente",
+  pendente: "Pendente",
+  canceled: "Cancelado",
+  cancelled: "Cancelado",
+  cancelado: "Cancelado",
+  refunded: "Estornado"
+};
+
+function statusClass(value) {
+  const status = normalize(value);
+  if (["paid", "approved", "pago"].includes(status)) return "bg-emerald-100 text-emerald-700";
+  if (["canceled", "cancelled", "cancelado", "refunded"].includes(status)) return "bg-red-100 text-red-700";
+  return "bg-amber-100 text-amber-700";
+}
+
+function isPendingPayment(item) {
+  return ["pending", "pendente", ""].includes(normalize(item.status || item.payment_status));
+}
+
 export default function FinanceiroPage() {
   const [payments, setPayments] = useState([]);
   const [cash, setCash] = useState([]);
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [savingPayment, setSavingPayment] = useState("");
 
   async function loadFinancial() {
     setLoading(true);
@@ -50,6 +87,22 @@ export default function FinanceiroPage() {
 
   useEffect(() => { loadFinancial(); }, []);
 
+  async function markPaymentPaid(item, method) {
+    setError("");
+    setSavingPayment(`${item.id}-${method}`);
+    try {
+      await apiRequest(`/payments/${item.id}/mark-paid`, {
+        method: "POST",
+        body: JSON.stringify({ method })
+      });
+      await loadFinancial();
+    } catch (err) {
+      setError(err.message || "Erro ao marcar pagamento como pago.");
+    } finally {
+      setSavingPayment("");
+    }
+  }
+
   const summary = useMemo(() => {
     const paid = payments.filter((item) => ["paid", "approved", "pago"].includes(normalize(item.status || item.payment_status))).reduce((sum, item) => sum + Number(item.amount || 0), 0);
     const pending = payments.filter((item) => ["pending", "pendente"].includes(normalize(item.status || item.payment_status))).reduce((sum, item) => sum + Number(item.amount || 0), 0);
@@ -61,6 +114,12 @@ export default function FinanceiroPage() {
   }, [payments, cash, appointments]);
 
   const recentPayments = useMemo(() => payments.slice(0, 8), [payments]);
+
+  const paymentActions = [
+    ["cash", "Pago dinheiro", Banknote],
+    ["card", "Pago cartão", CreditCard],
+    ["pix", "Pago PIX manual", QrCode]
+  ];
 
   return (
     <AdminLayout>
@@ -116,12 +175,44 @@ export default function FinanceiroPage() {
           <div className="space-y-4">
             {loading && <div className="text-slate-500">Carregando financeiro...</div>}
             {!loading && recentPayments.length === 0 && <div className="bg-white rounded-2xl p-8 text-center text-slate-500 border">Nenhum pagamento registrado.</div>}
-            {!loading && recentPayments.map((item) => (
-              <div key={item.id} className="bg-white rounded-2xl p-5 border border-slate-100 flex flex-col md:flex-row md:items-center md:justify-between gap-4 min-w-0">
-                <div className="min-w-0"><div className="font-black text-slate-900 break-words">Pagamento #{item.id}</div><div className="text-slate-500 mt-1 break-words">Método: {item.method || item.payment_method || "Não informado"} • Status: {item.status || item.payment_status || "Pendente"}</div></div>
-                <div className="text-2xl font-black text-green-700 break-words shrink-0">{formatCurrency(item.amount)}</div>
-              </div>
-            ))}
+            {!loading && recentPayments.map((item) => {
+              const status = normalize(item.status || item.payment_status);
+              const method = normalize(item.method || item.payment_method || "pix");
+              return (
+                <div key={item.id} className="bg-white rounded-2xl p-5 border border-slate-100 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4 min-w-0">
+                  <div className="min-w-0">
+                    <div className="font-black text-slate-900 break-words">Pagamento #{item.id}</div>
+                    <div className="mt-2 flex flex-wrap items-center gap-2 text-sm font-bold text-slate-500">
+                      <span>Método: {methodLabels[method] || item.method || item.payment_method || "Não informado"}</span>
+                      <span className={`rounded-full px-3 py-1 text-xs font-black ${statusClass(status)}`}>{statusLabels[status] || item.status || item.payment_status || "Pendente"}</span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col lg:flex-row lg:items-center gap-3 shrink-0">
+                    <div className="text-2xl font-black text-green-700 break-words lg:text-right">{formatCurrency(item.amount)}</div>
+                    {isPendingPayment(item) && (
+                      <div className="grid sm:grid-cols-3 gap-2">
+                        {paymentActions.map(([actionMethod, label, Icon]) => {
+                          const saving = savingPayment === `${item.id}-${actionMethod}`;
+                          return (
+                            <button
+                              key={actionMethod}
+                              type="button"
+                              onClick={() => markPaymentPaid(item, actionMethod)}
+                              disabled={Boolean(savingPayment)}
+                              className="inline-flex items-center justify-center gap-2 rounded-2xl border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm font-black text-emerald-800 transition hover:bg-emerald-100 disabled:cursor-wait disabled:opacity-60"
+                            >
+                              <Icon size={17} />
+                              {saving ? "Salvando..." : label}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
