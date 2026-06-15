@@ -14,6 +14,55 @@ const db = require("./config/db");
 
 const app = express();
 
+function padTime(value) {
+  return String(value || "").slice(0, 5);
+}
+
+function timeToMinutes(time) {
+  const [hour, minute] = padTime(time).split(":").map(Number);
+  return (hour || 0) * 60 + (minute || 0);
+}
+
+function saoPauloNow() {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Sao_Paulo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false
+  }).formatToParts(new Date()).reduce((map, part) => {
+    map[part.type] = part.value;
+    return map;
+  }, {});
+
+  return {
+    date: `${parts.year}-${parts.month}-${parts.day}`,
+    minutes: Number(parts.hour || 0) * 60 + Number(parts.minute || 0)
+  };
+}
+
+function blockPastCustomerAppointment(req, res, next) {
+  if (req.method !== "POST" || req.path !== "/appointments") return next();
+
+  const selectedDate = String(req.body?.date || "").slice(0, 10);
+  const selectedTime = padTime(req.body?.time);
+  if (!selectedDate || !selectedTime) return next();
+
+  const now = saoPauloNow();
+  const isPastDate = selectedDate < now.date;
+  const isPastTodaySlot = selectedDate === now.date && timeToMinutes(selectedTime) <= now.minutes;
+
+  if (isPastDate || isPastTodaySlot) {
+    return res.status(409).json({
+      error: "Este horário já passou. Escolha outro horário disponível ou agende para outro dia."
+    });
+  }
+
+  return next();
+}
+
 app.use(cors());
 app.use(express.json({ limit: "10mb" }));
 
@@ -38,7 +87,7 @@ app.get("/api/health", async (req, res) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/public", publicRoutes);
-app.use("/api/customer", customerRoutes);
+app.use("/api/customer", blockPastCustomerAppointment, customerRoutes);
 app.use("/api/webhooks", webhookRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api", cascadeRoutes);
