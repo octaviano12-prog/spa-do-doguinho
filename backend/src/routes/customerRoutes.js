@@ -3,6 +3,7 @@ const router = require("express").Router();
 const db = require("../config/db");
 const customerAuth = require("../middlewares/customerAuth");
 const { createPixPayment } = require("../services/mercadoPagoService");
+const { durationForService, estimatedBathTime, priceForService, sizeForDatabase } = require("../utils/pricing");
 
 function padTime(value) {
   return String(value || "").slice(0, 5);
@@ -40,7 +41,7 @@ function paymentMethodAllowed(method, settings) {
 function calculatePaymentAmount(price, settings) {
   const fullPrice = Number(price || 0);
   if (Number(settings.deposit_required || 0) === 1 && Number(settings.deposit_percent || 0) > 0) {
-    return Number((fullPrice * Number(settings.deposit_percent || 0) / 100).toFixed(2));
+    return Number(((fullPrice * Number(settings.deposit_percent || 0)) / 100).toFixed(2));
   }
   return fullPrice;
 }
@@ -92,12 +93,15 @@ router.get("/pets", async (req, res) => {
 
 router.post("/pets", async (req, res) => {
   try {
-    const { name, species, breed, age, weight, notes } = req.body || {};
+    const { name, species, breed, age, weight, notes, size_category, estimated_bath_time } = req.body || {};
     if (!name) return res.status(400).json({ error: "Informe o nome do pet." });
 
+    const finalSize = sizeForDatabase(size_category, weight);
+    const finalBathTime = Number(estimated_bath_time || 0) || estimatedBathTime(finalSize);
+
     const [result] = await db.query(
-      "INSERT INTO pets (customer_id, name, species, breed, age, weight, notes, active) VALUES (?, ?, ?, ?, ?, ?, ?, 1)",
-      [req.customer.id, name, species || "Cachorro", breed || null, age || null, weight || null, notes || null]
+      "INSERT INTO pets (customer_id, name, species, breed, age, weight, size_category, estimated_bath_time, notes, active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1)",
+      [req.customer.id, name, species || "Cachorro", breed || null, age || null, weight || null, finalSize, finalBathTime, notes || null]
     );
 
     const [rows] = await db.query("SELECT * FROM pets WHERE id = ? LIMIT 1", [result.insertId]);
@@ -129,6 +133,11 @@ router.post("/appointments", async (req, res) => {
       return res.status(400).json({ error: "Serviço, data e horário são obrigatórios." });
     }
 
+    if (!pet_id) {
+      await connection.rollback();
+      return res.status(400).json({ error: "Escolha ou cadastre um pet antes de agendar." });
+    }
+
     const [settingsRows] = await connection.query("SELECT * FROM payment_settings WHERE active = 1 ORDER BY id DESC LIMIT 1");
     const paymentSettings = settingsRows[0] || { pix_enabled: 1, card_enabled: 1, cash_enabled: 1, deposit_required: 0, deposit_percent: 0 };
     const normalizedPaymentMethod = normalizeMethod(payment_method);
@@ -141,7 +150,14 @@ router.post("/appointments", async (req, res) => {
     const [customers] = await connection.query("SELECT id, name, email FROM customers WHERE id = ? LIMIT 1", [req.customer.id]);
     const customer = customers[0];
 
-    const [services] = await connection.query("SELECT id, name, price, duration_minutes FROM services WHERE id = ? LIMIT 1", [service_id]);
+    const [services] = await connection.query(
+      `SELECT id, name, price, duration_minutes, price_small, price_medium, price_large, price_giant,
+              duration_small, duration_medium, duration_large, duration_giant
+       FROM services
+       WHERE id = ?
+       LIMIT 1`,
+      [service_id]
+    );
     const service = services[0];
 
     if (!service) {
@@ -149,7 +165,20 @@ router.post("/appointments", async (req, res) => {
       return res.status(404).json({ error: "Serviço não encontrado." });
     }
 
-    const duration = Number(service.duration_minutes || 60);
+    const [pets] = await connection.query(
+      "SELECT id, name, weight, size_category, estimated_bath_time FROM pets WHERE id = ? AND customer_id = ? LIMIT 1",
+      [pet_id, req.customer.id]
+    );
+
+    if (!pets.length) {
+      await connection.rollback();
+      return res.status(403).json({ error: "Pet não pertence ao cliente." });
+    }
+
+    const petRecord = pets[0];
+    const finalPetName = petRecord.name || pet_name || null;
+    const calculatedPrice = priceForService(service, petRecord);
+    const duration = durationForService(service, petRecord);
     const startTime = padTime(time);
     const endTime = addMinutes(startTime, duration);
 
@@ -160,18 +189,21 @@ router.post("/appointments", async (req, res) => {
     }
 
     const [existingAppointments] = await connection.query(
-      `SELECT id, time, service_id FROM appointments WHERE date = ? AND status NOT IN ('canceled', 'cancelado') FOR UPDATE`,
+      `SELECT a.id, a.time, a.scheduled_at, a.service_id, a.pet_id,
+              s.duration_minutes, s.duration_small, s.duration_medium, s.duration_large, s.duration_giant,
+              p.weight, p.size_category, p.estimated_bath_time
+       FROM appointments a
+       LEFT JOIN services s ON s.id = a.service_id
+       LEFT JOIN pets p ON p.id = a.pet_id
+       WHERE a.date = ? AND a.status NOT IN ('canceled', 'cancelado')
+       FOR UPDATE`,
       [date]
     );
 
     for (const item of existingAppointments) {
-      const otherStart = padTime(item.time);
+      const otherStart = item.time ? padTime(item.time) : padTime(String(item.scheduled_at || "").slice(11, 16));
       if (!otherStart) continue;
-      let otherDuration = 60;
-      if (item.service_id) {
-        const [otherServices] = await connection.query("SELECT duration_minutes FROM services WHERE id = ? LIMIT 1", [item.service_id]);
-        otherDuration = Number(otherServices[0]?.duration_minutes || 60);
-      }
+      const otherDuration = durationForService(item, item);
       const otherEnd = addMinutes(otherStart, otherDuration);
       if (hasOverlap(startTime, endTime, otherStart, otherEnd)) {
         await connection.rollback();
@@ -179,18 +211,8 @@ router.post("/appointments", async (req, res) => {
       }
     }
 
-    let finalPetName = pet_name || null;
-    if (pet_id) {
-      const [pets] = await connection.query("SELECT id, name FROM pets WHERE id = ? AND customer_id = ? LIMIT 1", [pet_id, req.customer.id]);
-      if (!pets.length) {
-        await connection.rollback();
-        return res.status(403).json({ error: "Pet não pertence ao cliente." });
-      }
-      finalPetName = pets[0].name;
-    }
-
     const scheduledAt = `${date} ${startTime}:00`;
-    const paymentAmount = calculatePaymentAmount(service.price, paymentSettings);
+    const paymentAmount = calculatePaymentAmount(calculatedPrice, paymentSettings);
     const isDeposit = Number(paymentSettings.deposit_required || 0) === 1;
     const paymentDescriptionPrefix = isDeposit ? "Sinal do agendamento #" : "Pagamento do agendamento #";
 
@@ -198,7 +220,7 @@ router.post("/appointments", async (req, res) => {
       `INSERT INTO appointments
       (customer_id, pet_id, service_id, customer_name, pet_name, service_name, scheduled_at, date, time, status, payment_method, payment_status, price, notes, active)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?, 'pending', ?, ?, 1)`,
-      [req.customer.id, pet_id || null, service.id, customer?.name || null, finalPetName, service.name, scheduledAt, date, startTime, normalizedPaymentMethod, service.price || 0, notes || null]
+      [req.customer.id, petRecord.id, service.id, customer?.name || null, finalPetName, service.name, scheduledAt, date, startTime, normalizedPaymentMethod, calculatedPrice, notes || null]
     );
 
     const appointmentId = result.insertId;
