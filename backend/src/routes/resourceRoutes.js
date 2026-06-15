@@ -70,6 +70,10 @@ function normalizePaymentMethod(method) {
   return methods[value] || "";
 }
 
+function padTime(value) {
+  return String(value || "").slice(0, 5);
+}
+
 async function updateKnownColumns(table, whereSql, whereParams, payload) {
   const columns = await crud.getTableColumns(table);
   const keys = Object.keys(payload).filter((key) => columns.has(key));
@@ -80,6 +84,38 @@ async function updateKnownColumns(table, whereSql, whereParams, payload) {
   const values = keys.map((key) => payload[key] === "" ? null : payload[key]);
   await db.query(`UPDATE ${quoteIdentifier(table)} SET ${setSql} WHERE ${whereSql}`, [...values, ...whereParams]);
   return true;
+}
+
+async function insertKnownColumns(table, payload) {
+  const columns = await crud.getTableColumns(table);
+  const keys = Object.keys(payload).filter((key) => columns.has(key));
+
+  if (!keys.length) return 0;
+
+  const values = keys.map((key) => payload[key] === "" ? null : payload[key]);
+  const sql = `INSERT INTO ${quoteIdentifier(table)} (${keys.map(quoteIdentifier).join(",")}) VALUES (${keys.map(() => "?").join(",")})`;
+  const [result] = await db.query(sql, values);
+  return result.insertId;
+}
+
+async function findAvailabilityRuleId(day, columns) {
+  const where = [];
+  const params = [];
+
+  if (columns.has("day_of_week")) {
+    where.push("day_of_week = ?");
+    params.push(day);
+  }
+
+  if (columns.has("weekday")) {
+    where.push("weekday = ?");
+    params.push(day);
+  }
+
+  if (!where.length) return null;
+
+  const [rows] = await db.query(`SELECT id FROM availability WHERE ${where.join(" OR ")} ORDER BY id DESC LIMIT 1`, params);
+  return rows[0]?.id || null;
 }
 
 router.patch("/appointments/:id/status", auth, async (req, res) => {
@@ -137,6 +173,55 @@ router.post("/payments/:id/mark-paid", auth, async (req, res) => {
   } catch (error) {
     console.error("Marcar pagamento como pago:", error);
     return res.status(500).json({ error: "Erro ao marcar pagamento como pago." });
+  }
+});
+
+router.post("/availability", auth, async (req, res) => {
+  try {
+    const body = req.body || {};
+    const day = Number(body.day_of_week ?? body.weekday);
+    const startTime = padTime(body.start_time || "08:00");
+    const endTime = padTime(body.end_time || "18:00");
+    const interval = Math.max(15, Number(body.interval_minutes || 60));
+
+    if (!Number.isInteger(day) || day < 0 || day > 6) {
+      return res.status(400).json({ error: "Dia da semana invalido." });
+    }
+
+    if (!startTime || !endTime || startTime >= endTime) {
+      return res.status(400).json({ error: "Informe horario de inicio e fim validos." });
+    }
+
+    const columns = await crud.getTableColumns("availability");
+    if (!columns.size) return res.status(400).json({ error: "Tabela de disponibilidade nao encontrada." });
+
+    const payload = {
+      weekday: day,
+      day_of_week: day,
+      enabled: Number(body.enabled ?? body.active ?? 1) ? 1 : 0,
+      active: Number(body.active ?? body.enabled ?? 1) ? 1 : 0,
+      start_time: startTime,
+      end_time: endTime,
+      interval_minutes: interval,
+      max_appointments_per_slot: Number(body.max_appointments_per_slot || 1),
+      notes: body.notes || null
+    };
+
+    const existingId = await findAvailabilityRuleId(day, columns);
+    if (existingId) {
+      await updateKnownColumns("availability", "id = ?", [existingId], payload);
+      const [rows] = await db.query("SELECT * FROM availability WHERE id = ? LIMIT 1", [existingId]);
+      return res.json(rows[0] || { id: existingId, ...payload });
+    }
+
+    const insertId = await insertKnownColumns("availability", payload);
+    if (!insertId) return res.status(400).json({ error: "Nenhum campo valido enviado para disponibilidade." });
+
+    const [rows] = await db.query("SELECT * FROM availability WHERE id = ? LIMIT 1", [insertId]);
+    return res.status(201).json(rows[0] || { id: insertId, ...payload });
+  } catch (error) {
+    console.error("Salvar disponibilidade:", error);
+    return res.status(500).json({ error: "Erro ao salvar regra de disponibilidade.", detail: error.message });
   }
 });
 
