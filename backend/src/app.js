@@ -8,6 +8,7 @@ const resourceRoutes = require("./routes/resourceRoutes");
 const customerRoutes = require("./routes/customerRoutes");
 const webhookRoutes = require("./routes/webhookRoutes");
 const uploadRoutes = require("./routes/uploadRoutes");
+const cascadeRoutes = require("./routes/cascadeRoutes");
 const upload = require("./middlewares/uploadMiddleware");
 const db = require("./config/db");
 
@@ -40,6 +41,7 @@ app.use("/api/public", publicRoutes);
 app.use("/api/customer", customerRoutes);
 app.use("/api/webhooks", webhookRoutes);
 app.use("/api/upload", uploadRoutes);
+app.use("/api", cascadeRoutes);
 app.use("/api", resourceRoutes);
 
 app.use("/api", (req, res) => {
