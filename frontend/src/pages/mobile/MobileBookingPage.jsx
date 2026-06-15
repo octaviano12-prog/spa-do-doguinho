@@ -6,6 +6,12 @@ import MobileShell from "../../components/mobile/MobileShell";
 const API_PUBLIC = "/api/public";
 const API_URL = "/api";
 const steps = ["Pet", "Serviço", "Horário", "Finalizar"];
+const sizeOptions = [
+  ["pequeno", "Pequeno", "até 10 kg"],
+  ["medio", "Médio", "11 a 25 kg"],
+  ["grande", "Grande", "26 a 40 kg"],
+  ["gigante", "Gigante", "acima de 40 kg"]
+];
 
 function isoDate(date) {
   return date.toISOString().slice(0, 10);
@@ -42,6 +48,19 @@ function petSize(pet) {
   return "giant";
 }
 
+function suggestSizeFromWeight(weight) {
+  const value = Number(String(weight || "").replace(",", "."));
+  if (!value) return "";
+  if (value <= 10) return "pequeno";
+  if (value <= 25) return "medio";
+  if (value <= 40) return "grande";
+  return "gigante";
+}
+
+function sizeLabel(value) {
+  return sizeOptions.find(([key]) => key === value)?.[1] || "Porte";
+}
+
 function servicePrice(service, pet) {
   const size = petSize(pet);
   return Number(service?.[`price_${size}`] || service?.price || 0);
@@ -69,7 +88,17 @@ export default function MobileBookingPage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [done, setDone] = useState(null);
-  const [form, setForm] = useState({ petId: "", petName: "", serviceId: "", date: "", time: "", paymentMethod: "pix", notes: "" });
+  const [form, setForm] = useState({
+    petId: "",
+    petName: "",
+    petWeight: "",
+    petSize: "",
+    serviceId: "",
+    date: "",
+    time: "",
+    paymentMethod: "pix",
+    notes: ""
+  });
   const days = useMemo(() => Array.from({ length: 7 }, (_, index) => {
     const date = new Date();
     date.setDate(date.getDate() + index);
@@ -77,8 +106,9 @@ export default function MobileBookingPage() {
   }), []);
   const service = services.find((item) => String(item.id) === String(form.serviceId));
   const pet = pets.find((item) => String(item.id) === String(form.petId));
-  const selectedPrice = servicePrice(service, pet);
-  const selectedDuration = serviceDuration(service, pet);
+  const draftPet = pet || { name: form.petName, species: "Cachorro", weight: form.petWeight, size_category: form.petSize };
+  const selectedPrice = servicePrice(service, draftPet);
+  const selectedDuration = serviceDuration(service, draftPet);
 
   useEffect(() => {
     async function load() {
@@ -142,6 +172,7 @@ export default function MobileBookingPage() {
 
   function next() {
     if (step === 0 && !(form.petId || form.petName.trim())) return setError("Escolha ou informe seu pet.");
+    if (step === 0 && !form.petId && !(form.petWeight || form.petSize)) return setError("Informe o peso ou porte do pet para calcular o valor correto.");
     if (step === 1 && !form.serviceId) return setError("Escolha um serviço.");
     if (step === 2 && !(form.date && form.time)) return setError("Escolha dia e horário.");
     setError("");
@@ -158,7 +189,7 @@ export default function MobileBookingPage() {
         const petResponse = await fetch(`${API_URL}/customer/pets`, {
           method: "POST",
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-          body: JSON.stringify({ name: form.petName, species: "Cachorro" })
+          body: JSON.stringify({ name: form.petName, species: "Cachorro", weight: form.petWeight || null, size_category: form.petSize || null })
         });
         const petData = await petResponse.json();
         if (!petResponse.ok) throw new Error(petData.error || "Erro ao salvar seu pet.");
@@ -230,9 +261,9 @@ export default function MobileBookingPage() {
           {loading ? <p className="py-8 text-center font-bold text-slate-400">Carregando...</p> : (
             <>
               {step === 0 && <PetStep pets={pets} form={form} choose={choose} />}
-              {step === 1 && <ServiceStep services={services} pet={pet} form={form} choose={choose} />}
+              {step === 1 && <ServiceStep services={services} pet={draftPet} form={form} choose={choose} />}
               {step === 2 && <TimeStep days={days} form={form} choose={choose} slots={slots} loading={slotsLoading} />}
-              {step === 3 && <ReviewStep form={form} pet={pet} service={service} amount={selectedPrice} paymentOptions={paymentOptions} choose={choose} />}
+              {step === 3 && <ReviewStep form={form} pet={draftPet} service={service} amount={selectedPrice} duration={selectedDuration} paymentOptions={paymentOptions} choose={choose} />}
             </>
           )}
         </div>
@@ -249,22 +280,67 @@ export default function MobileBookingPage() {
 }
 
 function PetStep({ pets, form, choose }) {
+  function selectExisting(petId) {
+    choose("petId", petId);
+    choose("petName", "");
+    choose("petWeight", "");
+    choose("petSize", "");
+  }
+
+  function updateNewPet(field, value) {
+    choose(field, value);
+    choose("petId", "");
+  }
+
+  function updateWeight(value) {
+    updateNewPet("petWeight", value);
+    const suggested = suggestSizeFromWeight(value);
+    if (suggested) choose("petSize", suggested);
+  }
+
   return (
     <div>
       <h2 className="mb-4 text-xl font-black">Qual pet será cuidado?</h2>
       <div className="grid gap-3">
-        {pets.map((pet) => <Choice key={pet.id} active={String(form.petId) === String(pet.id)} icon={PawPrint} title={pet.name} detail={pet.breed || pet.species || "Pet"} onClick={() => choose("petId", pet.id)} />)}
-        <label className="rounded-xl border border-[#e2eadf] px-4 py-3">
+        {pets.map((pet) => (
+          <Choice
+            key={pet.id}
+            active={String(form.petId) === String(pet.id)}
+            icon={PawPrint}
+            title={pet.name}
+            detail={`${pet.breed || pet.species || "Pet"}${pet.weight ? ` • ${pet.weight} kg` : ""}`}
+            onClick={() => selectExisting(pet.id)}
+          />
+        ))}
+        <div className="rounded-xl border border-[#e2eadf] px-4 py-3">
           <span className="mb-2 block text-xs font-black uppercase text-slate-400">Novo pet</span>
-          <input value={form.petName} onChange={(event) => { choose("petName", event.target.value); choose("petId", ""); }} placeholder="Nome do pet" className="w-full bg-transparent font-bold outline-none" />
-        </label>
+          <input value={form.petName} onChange={(event) => updateNewPet("petName", event.target.value)} placeholder="Nome do pet" className="w-full bg-transparent font-bold outline-none" />
+          <div className="mt-3 grid grid-cols-2 gap-2">
+            <input
+              value={form.petWeight}
+              onChange={(event) => updateWeight(event.target.value)}
+              inputMode="decimal"
+              placeholder="Peso kg"
+              className="min-h-[46px] rounded-xl border border-[#e2eadf] px-3 text-sm font-bold outline-none focus:border-[#0d6b54]"
+            />
+            <select
+              value={form.petSize}
+              onChange={(event) => updateNewPet("petSize", event.target.value)}
+              className="min-h-[46px] rounded-xl border border-[#e2eadf] bg-white px-3 text-sm font-bold outline-none focus:border-[#0d6b54]"
+            >
+              <option value="">Porte</option>
+              {sizeOptions.map(([key, label, detail]) => <option key={key} value={key}>{label} - {detail}</option>)}
+            </select>
+          </div>
+          {form.petSize && <p className="mt-2 text-xs font-bold text-[#0d6b54]">Porte selecionado: {sizeLabel(form.petSize)}</p>}
+        </div>
       </div>
     </div>
   );
 }
 
 function ServiceStep({ services, pet, form, choose }) {
-  return <div><h2 className="mb-4 text-xl font-black">Escolha o serviço</h2><div className="grid gap-3">{services.map((item) => <Choice key={item.id} active={String(form.serviceId) === String(item.id)} icon={Sparkles} title={item.name} detail={price(servicePrice(item, pet))} onClick={() => choose("serviceId", item.id)} />)}</div></div>;
+  return <div><h2 className="mb-4 text-xl font-black">Escolha o serviço</h2><div className="grid gap-3">{services.map((item) => <Choice key={item.id} active={String(form.serviceId) === String(item.id)} icon={Sparkles} title={item.name} detail={`${price(servicePrice(item, pet))} • ${serviceDuration(item, pet)} min`} onClick={() => choose("serviceId", item.id)} />)}</div></div>;
 }
 
 function TimeStep({ days, form, choose, slots, loading }) {
@@ -293,13 +369,15 @@ function TimeStep({ days, form, choose, slots, loading }) {
   );
 }
 
-function ReviewStep({ form, pet, service, amount, paymentOptions, choose }) {
+function ReviewStep({ form, pet, service, amount, duration, paymentOptions, choose }) {
   return (
     <div>
       <h2 className="mb-4 text-xl font-black">Confirme a reserva</h2>
       <Info label="Pet" value={pet?.name || form.petName} />
+      <Info label="Porte" value={pet?.size_category ? sizeLabel(pet.size_category) : pet?.weight ? `Pelo peso: ${pet.weight} kg` : "A informar"} />
       <Info label="Serviço" value={service?.name} />
       <Info label="Data e hora" value={`${form.date} às ${form.time}`} />
+      <Info label="Duração" value={`${duration} min`} />
       <Info label="Valor" value={price(amount)} />
       <h3 className="mb-3 mt-5 text-sm font-black uppercase text-slate-400">Pagamento</h3>
       <div className="grid grid-cols-2 gap-2">
