@@ -36,6 +36,7 @@ import EstoquePage from "./pages/admin/EstoquePage";
 import VacinasPage from "./pages/admin/VacinasPage";
 import GaleriaPage from "./pages/admin/GaleriaPage";
 import DisponibilidadePage from "./pages/admin/DisponibilidadePage";
+import FidelidadePage from "./pages/admin/FidelidadePage";
 import ConfiguracoesPage from "./pages/admin/ConfiguracoesPage";
 
 function PrivateRoute({ children }) {
@@ -102,6 +103,7 @@ export default function App() {
         <Route path="/admin/vacinas" element={<PrivateRoute><VacinasPage /></PrivateRoute>} />
         <Route path="/admin/galeria" element={<PrivateRoute><GaleriaPage /></PrivateRoute>} />
         <Route path="/admin/disponibilidade" element={<PrivateRoute><DisponibilidadePage /></PrivateRoute>} />
+        <Route path="/admin/fidelidade" element={<PrivateRoute><FidelidadePage /></PrivateRoute>} />
         <Route path="/admin/configuracoes" element={<PrivateRoute><ConfiguracoesPage /></PrivateRoute>} />
 
         <Route path="*" element={<Navigate to="/" replace />} />
