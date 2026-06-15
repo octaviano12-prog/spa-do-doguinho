@@ -1,5 +1,7 @@
 const db = require("../config/db");
 
+let financePrepared = false;
+
 function padTime(value) {
   return String(value || "").slice(0, 5);
 }
@@ -18,6 +20,18 @@ function timeToMinutes(time) {
 
 function hasOverlap(startA, endA, startB, endB) {
   return timeToMinutes(startA) < timeToMinutes(endB) && timeToMinutes(endA) > timeToMinutes(startB);
+}
+
+async function ensurePaymentTableSupportsPackages(conn = db) {
+  if (financePrepared) return;
+
+  try {
+    await conn.query("ALTER TABLE payments MODIFY appointment_id INT NULL");
+  } catch (error) {
+    console.warn("Nao foi possivel ajustar pagamentos para pacotes:", error.message);
+  } finally {
+    financePrepared = true;
+  }
 }
 
 async function ensureLoyaltyTables(conn = db) {
@@ -61,6 +75,8 @@ async function ensureLoyaltyTables(conn = db) {
       FOREIGN KEY (package_id) REFERENCES loyalty_packages(id)
       ON DELETE CASCADE
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
+
+  await ensurePaymentTableSupportsPackages(conn);
 }
 
 async function getLoyaltyBusySlots(date, conn = db) {
