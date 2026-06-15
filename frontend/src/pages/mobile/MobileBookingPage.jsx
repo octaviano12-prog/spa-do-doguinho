@@ -3,8 +3,8 @@ import { CalendarDays, Check, ChevronRight, Clock, Copy, CreditCard, ExternalLin
 import { Link } from "react-router-dom";
 import MobileShell from "../../components/mobile/MobileShell";
 
-const API_PUBLIC = "https://spadodoguinho.com.br/api/public";
-const API_URL = "https://spadodoguinho.com.br/api";
+const API_PUBLIC = "/api/public";
+const API_URL = "/api";
 const steps = ["Pet", "Serviço", "Horário", "Finalizar"];
 
 function isoDate(date) {
@@ -272,7 +272,23 @@ function TimeStep({ days, form, choose, slots, loading }) {
     <div>
       <h2 className="mb-4 text-xl font-black">Dia e horário</h2>
       <div className="flex gap-2 overflow-x-auto pb-3">{days.map((day) => <button key={day} onClick={() => { choose("date", day); choose("time", ""); }} className={`min-h-[62px] min-w-[74px] rounded-xl text-sm font-black ${form.date === day ? "bg-[#0d6b54] text-white" : "bg-[#e7f4ed] text-[#0d6b54]"}`}><CalendarDays size={16} className="mx-auto mb-1" />{shortDay(day)}</button>)}</div>
-      {form.date && <div className="mt-4 grid grid-cols-3 gap-2">{loading ? <p className="col-span-3 py-4 text-center text-sm font-bold text-slate-400">Buscando horários...</p> : slots.map((slot) => <button key={slot.time} onClick={() => choose("time", slot.time)} className={`min-h-[54px] rounded-xl text-sm font-black ${form.time === slot.time ? "bg-[#0d6b54] text-white" : "bg-slate-50"}`}><Clock size={15} className="mx-auto mb-1" />{slot.label}</button>)}</div>}
+      {form.date && (
+        <div className="mt-4">
+          {loading ? (
+            <p className="rounded-2xl bg-slate-50 px-4 py-5 text-center text-sm font-bold text-slate-400">Buscando horários...</p>
+          ) : slots.length === 0 ? (
+            <div className="rounded-2xl border border-amber-100 bg-amber-50 px-4 py-5 text-center">
+              <Clock className="mx-auto mb-2 text-amber-600" size={24} />
+              <p className="font-black text-amber-800">Não temos horários disponíveis nesta data.</p>
+              <p className="mt-1 text-sm font-semibold text-amber-700">Escolha outro dia para continuar o agendamento.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-3 gap-2">
+              {slots.map((slot) => <button key={slot.time} onClick={() => choose("time", slot.time)} className={`min-h-[54px] rounded-xl text-sm font-black ${form.time === slot.time ? "bg-[#0d6b54] text-white" : "bg-slate-50"}`}><Clock size={15} className="mx-auto mb-1" />{slot.label}</button>)}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
