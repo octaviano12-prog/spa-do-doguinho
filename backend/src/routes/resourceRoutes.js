@@ -13,6 +13,7 @@ const resources = {
   cash: "cash_movements",
   cashClosings: "cash_closings",
   stock: "stock_items",
+  stock_items: "stock_items",
   stockMovements: "stock_movements",
   vaccines: "vaccines",
   vaccinations: "vaccinations",
