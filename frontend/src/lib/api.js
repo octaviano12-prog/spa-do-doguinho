@@ -1,5 +1,5 @@
 const API_URL =
-  "https://spadodoguinho.com.br/api";
+  "/api";
 
 function isFormDataBody(body) {
   return typeof FormData !== "undefined" && body instanceof FormData;
