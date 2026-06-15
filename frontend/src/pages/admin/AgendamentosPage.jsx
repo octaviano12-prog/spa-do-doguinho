@@ -83,7 +83,7 @@ export default function AgendamentosPage() {
   async function updateStatus(item, status) {
     setError("");
     try {
-      await apiRequest(`/appointments/${item.id}`, { method: "PUT", body: JSON.stringify({ status }) });
+      await apiRequest(`/appointments/${item.id}/status`, { method: "PATCH", body: JSON.stringify({ status }) });
       await loadAppointments();
     } catch (err) {
       setError(err.message || "Erro ao atualizar agendamento.");
