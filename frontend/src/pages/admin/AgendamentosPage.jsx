@@ -42,10 +42,26 @@ function money(value) {
   return Number(value || 0).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 }
 
+function formatLocalDateTime(dateValue, timeValue) {
+  const dateText = String(dateValue || "").slice(0, 10);
+  const timeText = String(timeValue || "00:00").slice(0, 5);
+  const [year, month, day] = dateText.split("-");
+
+  if (year && month && day) return `${day}/${month}/${year}, ${timeText}`;
+  return `${dateText || "Data"}, ${timeText}`;
+}
+
 function formatDate(value, fallbackDate, fallbackTime) {
+  if (fallbackDate && fallbackTime) return formatLocalDateTime(fallbackDate, fallbackTime);
+
   const raw = value || (fallbackDate ? `${fallbackDate}T${fallbackTime || "00:00"}` : null);
   if (!raw) return "Sem data";
-  const date = new Date(String(raw).replace(" ", "T"));
+
+  const text = String(raw).replace(" ", "T");
+  const match = text.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/);
+  if (match) return `${match[3]}/${match[2]}/${match[1]}, ${match[4]}:${match[5]}`;
+
+  const date = new Date(text);
   if (Number.isNaN(date.getTime())) return `${fallbackDate || raw} ${fallbackTime || ""}`;
   return date.toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" });
 }
