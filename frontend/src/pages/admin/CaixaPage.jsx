@@ -47,7 +47,7 @@ export default function CaixaPage() {
   const dayMovements = useMemo(() => cash.filter((item) => recordDate(item) === date), [cash, date]);
   const dayPayments = useMemo(() => payments.filter((item) => String(item.paid_at || item.created_at || "").slice(0, 10) === date), [payments, date]);
   const dayClosing = useMemo(() => closings.find((item) => recordDate(item) === date), [closings, date]);
-  const isClosed = Boolean(dayClosing?.closed_at || ["closed", "fechado"].includes(norm(dayClosing?.status)) || norm(dayClosing?.notes).includes("fechado"));
+  const isClosed = Boolean(dayClosing?.closed_at || ["closed", "fechado"].includes(norm(dayClosing?.status)));
   const isOpen = Boolean(dayClosing) && !isClosed;
 
   const summary = useMemo(() => {
@@ -123,6 +123,27 @@ export default function CaixaPage() {
       setSaving(false);
     }
   }
+  async function reopenCash() {
+    if (!dayClosing || !isClosed) return;
+    if (!window.confirm("Reabrir o caixa deste dia para novos lançamentos?")) return;
+    setSaving(true);
+    setError("");
+    try {
+      await apiRequest(`/cashClosings/${dayClosing.id}`, {
+        method: "PUT",
+        body: JSON.stringify({
+          status: "open",
+          closed_at: null,
+          notes: `Reaberto em ${new Date().toLocaleString("pt-BR")}`
+        })
+      });
+      await loadData();
+    } catch (err) {
+      setError(err.message || "Erro ao reabrir caixa.");
+    } finally {
+      setSaving(false);
+    }
+  }
 
   async function addMovement(event) {
     event.preventDefault();
@@ -184,7 +205,7 @@ export default function CaixaPage() {
           </section>
 
           <section className="space-y-6">
-            <div className="glass rounded-[32px] p-7 border border-white/30 shadow-2xl"><div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4"><div><h2 className="text-2xl font-black text-slate-900">Fechamento do dia</h2><p className="text-slate-500">Confira o valor previsto antes de fechar.</p></div><button onClick={closeCash} disabled={!isOpen || saving} className="bg-slate-900 hover:bg-slate-800 text-white px-6 py-4 rounded-2xl font-black flex items-center gap-2 disabled:opacity-50"><Lock size={20}/> Fechar caixa</button></div><div className="grid md:grid-cols-2 xl:grid-cols-4 gap-4 mt-6"><div className="bg-white rounded-2xl p-5 border"><b>Recebimentos</b><div className="text-2xl font-black text-green-700 mt-2">{money(summary.paid)}</div></div><div className="bg-white rounded-2xl p-5 border"><b>Entrada manual</b><div className="text-2xl font-black text-green-700 mt-2">{money(summary.entries)}</div></div><div className="bg-white rounded-2xl p-5 border"><b>Saída manual</b><div className="text-2xl font-black text-red-700 mt-2">{money(summary.exits)}</div></div><div className="bg-white rounded-2xl p-5 border"><b>Valor previsto</b><div className="text-2xl font-black text-slate-900 mt-2">{money(summary.expected)}</div></div></div>{isClosed && <div className="mt-5 bg-green-50 border border-green-100 text-green-800 rounded-2xl p-4 font-bold flex items-center gap-2"><CheckCircle/> Caixa fechado por {recordOperator(dayClosing)}: contado {money(dayClosing.closing_amount || dayClosing.final_amount || dayClosing.final_balance)} • diferença {money(dayClosing.difference_amount)}</div>}</div>
+            <div className="glass rounded-[32px] p-7 border border-white/30 shadow-2xl"><div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4"><div><h2 className="text-2xl font-black text-slate-900">Fechamento do dia</h2><p className="text-slate-500">Confira o valor previsto antes de fechar.</p></div><div className="flex flex-wrap gap-3"><button onClick={closeCash} disabled={!isOpen || saving} className="bg-slate-900 hover:bg-slate-800 text-white px-6 py-4 rounded-2xl font-black flex items-center gap-2 disabled:opacity-50"><Lock size={20}/> Fechar caixa</button>{isClosed && <button type="button" onClick={reopenCash} disabled={saving} className="bg-green-600 hover:bg-green-700 text-white px-6 py-4 rounded-2xl font-black flex items-center gap-2 disabled:opacity-50"><Unlock size={20}/> Reabrir caixa</button>}</div></div><div className="grid md:grid-cols-2 xl:grid-cols-4 gap-4 mt-6"><div className="bg-white rounded-2xl p-5 border"><b>Recebimentos</b><div className="text-2xl font-black text-green-700 mt-2">{money(summary.paid)}</div></div><div className="bg-white rounded-2xl p-5 border"><b>Entrada manual</b><div className="text-2xl font-black text-green-700 mt-2">{money(summary.entries)}</div></div><div className="bg-white rounded-2xl p-5 border"><b>Saída manual</b><div className="text-2xl font-black text-red-700 mt-2">{money(summary.exits)}</div></div><div className="bg-white rounded-2xl p-5 border"><b>Valor previsto</b><div className="text-2xl font-black text-slate-900 mt-2">{money(summary.expected)}</div></div></div>{isClosed && <div className="mt-5 bg-green-50 border border-green-100 text-green-800 rounded-2xl p-4 font-bold flex items-center gap-2"><CheckCircle/> Caixa fechado por {recordOperator(dayClosing)}: contado {money(dayClosing.closing_amount || dayClosing.final_amount || dayClosing.final_balance)} • diferença {money(dayClosing.difference_amount)}</div>}</div>
 
             <div className="glass rounded-[32px] p-7 border border-white/30 shadow-2xl"><h2 className="text-2xl font-black text-slate-900 mb-5">Movimentações do dia</h2><div className="space-y-3">{loading && <div className="text-slate-500">Carregando...</div>}{!loading && dayMovements.length === 0 && dayPayments.length === 0 && <div className="bg-white rounded-2xl p-8 text-center text-slate-500 border">Nenhuma movimentação neste dia.</div>}{dayPayments.map((p)=><div key={`p-${p.id}`} className="bg-white rounded-2xl p-4 border flex justify-between gap-4"><div><b>Recebimento #{p.id}</b><div className="text-slate-500 text-sm">{p.method || "pagamento"} • {p.status || "pendente"}</div></div><div className="font-black text-green-700">{money(p.amount)}</div></div>)}{dayMovements.map((m)=><div key={`m-${m.id}`} className="bg-white rounded-2xl p-4 border flex justify-between gap-4"><div><b>{norm(m.type).includes("saida") ? "Saída" : "Entrada"}</b><div className="text-slate-500 text-sm">{m.description || "Sem descrição"} • {m.method || m.payment_method || "-"}</div></div><div className={`font-black ${norm(m.type).includes("saida") ? "text-red-700" : "text-green-700"}`}>{money(m.amount)}</div></div>)}</div></div>
           </section>
